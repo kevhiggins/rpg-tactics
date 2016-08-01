@@ -29,3 +29,5 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+rpg-tactics_Data/
+rpg-tactics.exe

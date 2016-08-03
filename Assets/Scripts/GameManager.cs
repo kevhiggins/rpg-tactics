@@ -10,8 +10,8 @@ public class GameManager : MonoBehaviour
     public LevelManager levelManager;
     [HideInInspector]
     public InputManager inputManager;
-
-    private GameObject hero;
+    [HideInInspector]
+    public GameObject hero;
 
     // Use this for initialization
     void Awake()

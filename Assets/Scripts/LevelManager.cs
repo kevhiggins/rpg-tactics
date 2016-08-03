@@ -1,5 +1,6 @@
 ﻿using Tiled2Unity;
 using UnityEngine;
+using DG.Tweening;
 
 public class LevelManager : MonoBehaviour
 {
@@ -48,7 +49,6 @@ public class LevelManager : MonoBehaviour
     public void PlaceHero(GameObject hero, int x, int y)
     {
         var newHeroPosition = GetTileIndexPosition(x, y);
-        var heroRenderer = hero.GetComponentInChildren<SpriteRenderer>();
 
         newHeroPosition.x += tiledMapScript.TileWidth/2;
         newHeroPosition.y -= tiledMapScript.TileHeight/2;
@@ -56,8 +56,25 @@ public class LevelManager : MonoBehaviour
         hero.transform.position = newHeroPosition;
     }
 
+
     public Vector3 GetTileIndexPosition(int x, int y)
     {
         return new Vector3(x*tiledMapScript.TileWidth, -y*tiledMapScript.TileHeight, 0);
+    }
+
+    public void MoveHeroToSelectedTile(GameObject hero)
+    {
+        var tileIndexes = GetSelectedTileIndex();
+        var newHeroPosition = GetTileIndexPosition((int)tileIndexes.x, (int)tileIndexes.y);
+        newHeroPosition.x += tiledMapScript.TileWidth / 2;
+        newHeroPosition.y -= tiledMapScript.TileHeight / 2;
+
+        hero.transform.DOMove(newHeroPosition, 0.5f);
+    }
+
+    public Vector2 GetSelectedTileIndex()
+    {
+        var cursorPosition = tileSelectionCursorInstance.transform.position;
+        return new Vector2(cursorPosition.x / tiledMapScript.TileWidth, -cursorPosition.y / tiledMapScript.TileHeight);
     }
 }

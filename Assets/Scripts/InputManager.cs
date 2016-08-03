@@ -28,6 +28,11 @@ public class InputManager : MonoBehaviour
             levelManager.MoveTileCursor(0, axisValue > 0 ? 1 : -1);
         }
 
+        if (Input.GetButton("Accept"))
+        {
+            levelManager.MoveHeroToSelectedTile(GameManager.instance.hero);
+        }
+
         if (Input.GetButton("Cancel"))
         {
             Application.Quit();

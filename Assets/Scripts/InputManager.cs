@@ -25,7 +25,7 @@ public class InputManager : MonoBehaviour
         else if (GetVerticalDown())
         {
             var axisValue = Input.GetAxis("Vertical");
-            levelManager.MoveTileCursor(0, axisValue > 0 ? 1 : -1);
+            levelManager.MoveTileCursor(0, axisValue > 0 ? -1 : 1);
         }
 
         if (Input.GetButton("Accept"))

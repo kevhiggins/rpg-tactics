@@ -1,5 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
@@ -14,29 +13,12 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var levelManager = GameManager.instance.levelManager;
-
-        // Move the tile cursor depending on axis position
-        if (GetHorizontalDown())
-        {
-            var axisValue = Input.GetAxis("Horizontal");
-            levelManager.MoveTileCursor(axisValue > 0 ? 1 : -1, 0);
-        }
-        else if (GetVerticalDown())
-        {
-            var axisValue = Input.GetAxis("Vertical");
-            levelManager.MoveTileCursor(0, axisValue > 0 ? -1 : 1);
-        }
-
-        if (Input.GetButton("Accept"))
-        {
-            levelManager.MoveHeroToSelectedTile(GameManager.instance.hero);
-        }
-
         if (Input.GetButton("Cancel"))
         {
             Application.Quit();
         }
+
+        GameManager.instance.gameState.HandleInput();
     }
 
     /**

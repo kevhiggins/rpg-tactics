@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Rpg.GameState;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class GameManager : MonoBehaviour
     public InputManager inputManager;
     [HideInInspector]
     public GameObject hero;
+
+    public IGameState gameState;
 
     // Use this for initialization
     void Awake()
@@ -29,6 +32,8 @@ public class GameManager : MonoBehaviour
 
         levelManager = GetComponent<LevelManager>();
         inputManager = GetComponent<InputManager>();
+
+        gameState = new TestGameState();
 
         hero = Instantiate(heroReference, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
 

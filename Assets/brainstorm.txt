@@ -1,0 +1,20 @@
+Need to research the actual tactics game to get a better idea of how to structure.
+
+Modes:
+Game Mode - Nothing selected
+	Can move cursor
+	Can try to select
+		If object selected, then move to next state
+		
+Game Mode - Friendly unit select - In menu
+Game Mode - Enemy unit selected - In menu?
+Game Mode - Menu action selected
+	Attack
+		Can move cursor (limited to attack tiles?)
+		can accept
+	Move
+		Can move cursor (limited to movement area?)
+		Can accept
+	Item - More menus
+	
+	

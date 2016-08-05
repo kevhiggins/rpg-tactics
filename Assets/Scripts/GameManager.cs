@@ -21,7 +21,6 @@ public class GameManager : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
-        Debug.Log("GRAWR");
         if (instance == null)
         {
             instance = this;

@@ -7,24 +7,24 @@ namespace Rpg.GameState
     {
         public void HandleInput()
         {
-            var levelManager = GameManager.instance.levelManager;
+            var map = GameManager.instance.levelManager.GetMap();
             var inputManager = GameManager.instance.inputManager;
 
             // Move the tile cursor depending on axis position
             if (inputManager.GetHorizontalDown())
             {
                 var axisValue = Input.GetAxis("Horizontal");
-                levelManager.MoveTileCursor(axisValue > 0 ? 1 : -1, 0);
+                map.MoveTileCursor(axisValue > 0 ? 1 : -1, 0);
             }
             else if (inputManager.GetVerticalDown())
             {
                 var axisValue = Input.GetAxis("Vertical");
-                levelManager.MoveTileCursor(0, axisValue > 0 ? -1 : 1);
+                map.MoveTileCursor(0, axisValue > 0 ? -1 : 1);
             }
 
             if (Input.GetButton("Accept"))
             {
-                levelManager.MoveHeroToSelectedTile(GameManager.instance.hero);
+                map.MoveUnitToSelectedTile(GameManager.instance.hero);
             }
         }
     }

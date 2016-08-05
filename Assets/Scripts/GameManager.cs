@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.GameState;
+using UnityEngine;
 using Rpg.GameState;
+using Rpg.Unit;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,13 +14,14 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public InputManager inputManager;
     [HideInInspector]
-    public GameObject hero;
+    public IFriendlyUnit hero;
 
     public IGameState gameState;
 
     // Use this for initialization
     void Awake()
     {
+        Debug.Log("GRAWR");
         if (instance == null)
         {
             instance = this;
@@ -33,9 +36,11 @@ public class GameManager : MonoBehaviour
         levelManager = GetComponent<LevelManager>();
         inputManager = GetComponent<InputManager>();
 
+        //gameState = new MapNoSelectionGameState();
         gameState = new TestGameState();
 
-        hero = Instantiate(heroReference, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        var heroGameObject = Instantiate(heroReference, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        hero = new FriendlyUnit(heroGameObject);
 
         InitGame();
     }
@@ -44,7 +49,7 @@ public class GameManager : MonoBehaviour
     {
         // Load the level here
         levelManager.LoadMap();
-        levelManager.PlaceHero(hero, 1, 1);
+        levelManager.GetMap().PlaceUnit(hero, 1, 1);
     }
 
     // Update is called once per frame

@@ -2,18 +2,13 @@
 using DG.Tweening;
 using Rpg.Map;
 using UnityEngine;
+using Rpg.Unit;
 
 namespace Rpg.Unit
 {
-    class Unit : IUnit
+    public abstract class AbstractUnit : MonoBehaviour, IUnit
     {
-        private GameObject gameObject;
         private Tile tile;
-
-        public Unit(GameObject gameObject)
-        {
-            this.gameObject = gameObject;
-        }
 
         public GameObject GetGameObject()
         {

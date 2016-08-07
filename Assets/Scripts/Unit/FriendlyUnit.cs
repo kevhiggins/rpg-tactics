@@ -2,10 +2,7 @@
 
 namespace Rpg.Unit
 {
-    class FriendlyUnit : Unit, IFriendlyUnit
+    class FriendlyUnit : AbstractUnit, IFriendlyUnit
     {
-        public FriendlyUnit(GameObject gameObject) : base(gameObject)
-        {
-        }
     }
 }

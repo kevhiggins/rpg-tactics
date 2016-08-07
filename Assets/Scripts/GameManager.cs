@@ -39,7 +39,10 @@ public class GameManager : MonoBehaviour
         gameState = new TestGameState();
 
         var heroGameObject = Instantiate(heroReference, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-        hero = new FriendlyUnit(heroGameObject);
+
+        hero = heroGameObject.GetComponent<FriendlyUnit>();
+
+        Debug.Log(hero);
 
         InitGame();
     }

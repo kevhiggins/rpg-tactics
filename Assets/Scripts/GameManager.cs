@@ -42,8 +42,6 @@ public class GameManager : MonoBehaviour
 
         hero = heroGameObject.GetComponent<FriendlyUnit>();
 
-        Debug.Log(hero);
-
         InitGame();
     }
 

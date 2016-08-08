@@ -8,7 +8,18 @@ namespace Rpg.Unit
 {
     public abstract class AbstractUnit : MonoBehaviour, IUnit
     {
+        public int movementSpeed = 4;
+
+
         private Tile tile;
+
+        public int MovementSpeed
+        {
+            get
+            {
+                return movementSpeed;
+            }
+        }
 
         public GameObject GetGameObject()
         {

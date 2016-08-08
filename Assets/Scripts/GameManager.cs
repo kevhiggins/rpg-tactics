@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
 
     public GameObject heroReference;
+    public GameObject activeUnitMenu;
 
     [HideInInspector]
     public LevelManager levelManager;

@@ -39,7 +39,7 @@ namespace Rpg.Map
             }
 
             // Set cursor position
-            var cursorTile = GetTile(0, 0);
+            var cursorTile = GetTile(1, 1);
             cursorGameObject.transform.position = cursorTile.GetPosition();
             cursorTilePosition = cursorTile.tilePosition;
         }

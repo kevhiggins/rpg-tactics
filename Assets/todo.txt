@@ -1,0 +1,2 @@
+Fix issue with how the main menu expands on window resize
+Fix issue with menu items looks opaque

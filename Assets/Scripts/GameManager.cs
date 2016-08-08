@@ -35,12 +35,14 @@ public class GameManager : MonoBehaviour
         levelManager = GetComponent<LevelManager>();
         inputManager = GetComponent<InputManager>();
 
-        //gameState = new MapNoSelectionGameState();
-        gameState = new TestGameState();
+        //gameState = new TestGameState();
+
 
         var heroGameObject = Instantiate(heroReference, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
 
         hero = heroGameObject.GetComponent<FriendlyUnit>();
+
+        gameState = new ActiveUnitMenuState(hero);
 
         InitGame();
     }

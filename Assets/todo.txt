@@ -1,3 +1,5 @@
+Fix move cancel doing weird stuff to the active unit position.
+
 When Move is clicked
 
 Add cancel button

@@ -19,12 +19,22 @@ public class InputManager : MonoBehaviour
         isHorizontalDown = false;
         isVerticalDown = false;
 
-        if (Input.GetButton("Cancel"))
+        if (Input.GetButton("Escape"))
         {
             Application.Quit();
         }
 
-        GameManager.instance.gameState.HandleInput();
+        GameManager.instance.GameState.HandleInput();
+    }
+
+    public bool Accept()
+    {
+        return Input.GetButton("Accept");
+    }
+
+    public bool Cancel()
+    {
+        return Input.GetButton("Cancel");
     }
 
     public bool Right()

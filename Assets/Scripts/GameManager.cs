@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public IFriendlyUnit hero;
 
-    public IGameState gameState;
+    public IGameState GameState { get; set; }
 
     // Use this for initialization
     void Awake()
@@ -36,14 +36,14 @@ public class GameManager : MonoBehaviour
         levelManager = GetComponent<LevelManager>();
         inputManager = GetComponent<InputManager>();
 
-        //gameState = new TestGameState();
+        //GameState = new TestGameState();
 
 
         var heroGameObject = Instantiate(heroReference, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
 
         hero = heroGameObject.GetComponent<FriendlyUnit>();
 
-        gameState = new ActiveUnitMenuState(hero);
+        GameState = new ActiveUnitMenuState(hero);
 
         InitGame();
     }

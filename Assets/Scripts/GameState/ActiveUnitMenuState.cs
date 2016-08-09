@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Rpg.GameState;
+﻿using Rpg.GameState;
 using Rpg.Unit;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +18,12 @@ namespace Assets.Scripts.GameState
         public ActiveUnitMenuState(IUnit unit)
         {
             activeUnit = unit;
-            activeUnitMenu = UnityEngine.Object.Instantiate(GameManager.instance.activeUnitMenu);
+            activeUnitMenu = Object.Instantiate(GameManager.instance.activeUnitMenu);
+
+            // Set the camera for the canvas.
+            var canvasScript = activeUnitMenu.GetComponent<Canvas>();
+            canvasScript.worldCamera = Camera.main;
+
             menuItems = activeUnitMenu.transform.GetChild(0).GetChild(1).gameObject;
            // menuItems = GameObject.Find("/ActiveUnitMenu/Panel/Menu Items");
 
@@ -56,6 +57,11 @@ namespace Assets.Scripts.GameState
                 ActivateMenuItem(menuItemIndex);
             }
 
+            if (inputManager.Accept())
+            {
+                TriggerCurrentMenuItem();
+            }
+
             // Display Menu
             // Move
             // Act
@@ -82,6 +88,17 @@ namespace Assets.Scripts.GameState
         {
             var textScript = menuItem.GetComponent<Text>();
             textScript.fontStyle = FontStyle.Normal;
+        }
+
+        // TODO Figure out a better way to configure which states correspond to which menu item.
+        // TODO implement some sort of parent state system, so we can store the old data?
+        public void TriggerCurrentMenuItem()
+        {
+            if (activeMenuItem.name == "Move")
+            {
+                activeUnitMenu.SetActive(false);
+                GameManager.instance.GameState = new SelectUnitMovementState(activeUnit);
+            }
         }
     }
 }

@@ -1,2 +1,8 @@
-Fix issue with how the main menu expands on window resize
-Fix issue with menu items looks opaque
+When Move is clicked
+
+Add cancel button
+When Move is selected, then get the tiles within MovementSpeed and highlight them
+
+Setup XBox Controller
+
+Look into proper garbage collection

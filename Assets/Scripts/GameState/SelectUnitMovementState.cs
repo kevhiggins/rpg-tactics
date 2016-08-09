@@ -61,8 +61,9 @@ namespace Assets.Scripts.GameState
                 Object.Destroy(highlightedTile);
             }
 
+            
             Debug.Log(unit.GetTile().tilePosition);
-            GameManager.instance.levelManager.GetMap().MoveTileCursor(unit.GetTile().tilePosition);
+            GameManager.instance.levelManager.GetMap().SetTileCursor(unit.GetTile().tilePosition);
         }
 
         private void BackToParentState()

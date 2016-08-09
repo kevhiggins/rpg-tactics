@@ -6,7 +6,7 @@ namespace Rpg.Map
 {
     public class Tile
     {
-        public TilePosition tilePosition;
+        public TilePosition tilePosition { get; private set; }
         private Map map;
         private IUnit unit;
 

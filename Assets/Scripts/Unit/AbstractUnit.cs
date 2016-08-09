@@ -64,7 +64,7 @@ namespace Rpg.Unit
             {
                 throw new Exception("Cannot place a unit that is already on a tile.");
             }
-            this.tile = tile;
+
             tile.AddUnit(this);
             GetGameObject().transform.position = tile.GetPosition();
         }

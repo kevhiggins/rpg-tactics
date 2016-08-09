@@ -44,9 +44,9 @@ namespace Rpg.Map
             cursorTilePosition = cursorTile.tilePosition;
         }
 
-        public void MoveTileCursor(TilePosition tilePosition)
+        public void SetTileCursor(TilePosition tilePosition)
         {
-            MoveTileCursor(tilePosition.x, tilePosition.y);
+            MoveTileCursor(tilePosition.x - cursorTilePosition.x, tilePosition.y - cursorTilePosition.y);
         }
 
         /// <summary>
@@ -67,15 +67,23 @@ namespace Rpg.Map
             // For the x and y axis, check if the new tile position is valid. If so, then update the tile position index and the cursor's position on the screen.
             if (IsValidTilePosition(newXTileIndex, 0))
             {
-                cursorTilePosition.x = newXTileIndex;
                 newPosition.x += x*tileWidth;
+            }
+            else
+            {
+                // If invalid x position, then reset to original position.
+                newXTileIndex = cursorTilePosition.x;
             }
             if (IsValidTilePosition(0, newYTileIndex))
             {
-                cursorTilePosition.y = newYTileIndex;
                 newPosition.y -= y*tileHeight;
             }
+            else
+            {
+                newYTileIndex = cursorTilePosition.y;
+            }
 
+            cursorTilePosition = new TilePosition(newXTileIndex, newYTileIndex);
 
             // Update the tile cursor position with the newly calculated info.
             cursorGameObject.transform.position = newPosition;

@@ -10,14 +10,15 @@ namespace Assets.Scripts.GameState
     {
         private IUnit unit;
         private IGameState parent;
+        private List<TilePosition> highlightedTilePositions;
         private List<GameObject> highlightedTiles;
 
         public SelectUnitMovementState(IGameState parent, IUnit unit)
         {
             this.parent = parent;
             this.unit = unit;
-            var tilePositions = GetTilePositionsInRange();
-            highlightedTiles = GameManager.instance.levelManager.HighlightTiles(tilePositions);
+            highlightedTilePositions = GetTilePositionsInRange();
+            highlightedTiles = GameManager.instance.levelManager.HighlightTiles(highlightedTilePositions);
 
 
 
@@ -43,6 +44,35 @@ namespace Assets.Scripts.GameState
             // Get the single tile and tiles 2 to the right/left
         }
 
+        public override void HandleAccept()
+        {
+            // If the tile is not the current user tile, and the tile is in the list of highlighted tiles, then move the unit.
+            var map = GameManager.instance.levelManager.GetMap();
+            var cursorTilePosition = map.GetCursorTilePosition();
+
+            if(unit.GetTile().tilePosition != cursorTilePosition)
+            {
+                if(UnitCanMoveToTilePosition(cursorTilePosition))
+                {
+                    map.MoveUnitToSelectedTile(unit);
+                }
+            }
+            // TODO override equals for tilePosition
+
+        }
+
+        protected bool UnitCanMoveToTilePosition(TilePosition tilePosition)
+        {
+            foreach (var highlightedTilePosition in highlightedTilePositions)
+            {
+                if (tilePosition == highlightedTilePosition)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public override void Enable()
         {
             foreach (var highlightedTile in highlightedTiles)
@@ -61,8 +91,6 @@ namespace Assets.Scripts.GameState
                 Object.Destroy(highlightedTile);
             }
 
-            
-            Debug.Log(unit.GetTile().tilePosition);
             GameManager.instance.levelManager.GetMap().SetTileCursor(unit.GetTile().tilePosition);
         }
 
@@ -71,17 +99,13 @@ namespace Assets.Scripts.GameState
             // Disable anything from this state
             // Tell the old state that it's time to return.
 
+            // TODO change the SET method in the game manager to disable old states and enable new states automatically??
             Disable();
             GameManager.instance.GameState = parent;
             parent.Enable();
-
-
         }
 
-        public override void HandleAccept()
-        {
-            // TODO implement me
-        }
+
 
         public List<TilePosition> GetTilePositionsInRange()
         {

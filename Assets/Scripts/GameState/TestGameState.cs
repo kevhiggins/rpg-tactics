@@ -27,6 +27,16 @@ namespace Rpg.GameState
                 map.MoveUnitToSelectedTile(GameManager.instance.hero);
             }
         }
+
+        public void Enable()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Disable()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
 

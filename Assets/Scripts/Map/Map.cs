@@ -44,6 +44,10 @@ namespace Rpg.Map
             cursorTilePosition = cursorTile.tilePosition;
         }
 
+        public void MoveTileCursor(TilePosition tilePosition)
+        {
+            MoveTileCursor(tilePosition.x, tilePosition.y);
+        }
 
         /// <summary>
         /// Moves the tile cursor x and y number of spaces from its current position.
@@ -144,6 +148,11 @@ namespace Rpg.Map
                 return tiles[x, y];
             }
             return null;
+        }
+
+        public Tile GetTile(TilePosition tilePosition)
+        {
+            return GetTile(tilePosition.x, tilePosition.y);
         }
     }
 }

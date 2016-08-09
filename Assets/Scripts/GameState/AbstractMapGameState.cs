@@ -10,27 +10,30 @@ namespace Assets.Scripts.GameState
     {
         public void HandleInput()
         {
-//            var levelManager = GameManager.instance.levelManager;
-//            var inputManager = GameManager.instance.inputManager;
-//
-//            // Move the tile cursor depending on axis position
-//            if (inputManager.GetHorizontalDown())
-//            {
-//                var axisValue = Input.GetAxis("Horizontal");
-//                levelManager.MoveTileCursor(axisValue > 0 ? 1 : -1, 0);
-//            }
-//            else if (inputManager.GetVerticalDown())
-//            {
-//                var axisValue = Input.GetAxis("Vertical");
-//                levelManager.MoveTileCursor(0, axisValue > 0 ? -1 : 1);
-//            }
-//
-//            if (Input.GetButton("Accept"))
-//            {
-//                HandleAccept();
-//            }
+            var map = GameManager.instance.levelManager.GetMap();
+            var inputManager = GameManager.instance.inputManager;
+
+            // Move the tile cursor depending on axis position
+            if (inputManager.GetHorizontalDown())
+            {
+                var axisValue = Input.GetAxis("Horizontal");
+                map.MoveTileCursor(axisValue > 0 ? 1 : -1, 0);
+            }
+            else if (inputManager.GetVerticalDown())
+            {
+                var axisValue = Input.GetAxis("Vertical");
+                map.MoveTileCursor(0, axisValue > 0 ? -1 : 1);
+            }
+
+            if (Input.GetButton("Accept"))
+            {
+                HandleAccept();
+            }
         }
 
         public abstract void HandleAccept();
+
+        public abstract void Enable();
+        public abstract void Disable();
     }
 }

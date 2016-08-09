@@ -68,6 +68,16 @@ namespace Assets.Scripts.GameState
             // Wait
         }
 
+        public void Enable()
+        {
+            activeUnitMenu.SetActive(true);
+        }
+
+        public void Disable()
+        {
+            activeUnitMenu.SetActive(false);
+        }
+
         public void ActivateMenuItem(int menuItemIndex)
         {
             if (activeMenuItem != null)
@@ -96,8 +106,8 @@ namespace Assets.Scripts.GameState
         {
             if (activeMenuItem.name == "Move")
             {
-                activeUnitMenu.SetActive(false);
-                GameManager.instance.GameState = new SelectUnitMovementState(activeUnit);
+                Disable();
+                GameManager.instance.GameState = new SelectUnitMovementState(this, activeUnit);
             }
         }
     }

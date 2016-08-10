@@ -1,5 +1,6 @@
-Allow selecting highlighted tiles. On selection, move the unit, and end their turn.
-
 Setup XBox Controller
-
 Look into proper garbage collection
+
+Add a second unit to the game
+Add a speed for initiative
+Add system to determine which units turn it is

@@ -29,12 +29,12 @@ public class InputManager : MonoBehaviour
 
     public bool Accept()
     {
-        return Input.GetButton("Accept");
+        return Input.GetButtonDown("Accept");
     }
 
     public bool Cancel()
     {
-        return Input.GetButton("Cancel");
+        return Input.GetButtonDown("Cancel");
     }
 
     public bool Right()

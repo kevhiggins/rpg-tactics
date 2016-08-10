@@ -24,11 +24,11 @@ namespace Assets.Scripts.GameState
             var canvasScript = activeUnitMenu.GetComponent<Canvas>();
             canvasScript.worldCamera = Camera.main;
 
+            // Find the menuItems game object, and the number if menu items.
             menuItems = activeUnitMenu.transform.GetChild(0).GetChild(1).gameObject;
-           // menuItems = GameObject.Find("/ActiveUnitMenu/Panel/Menu Items");
-
             menuItemCount = menuItems.transform.childCount;
 
+            // Highlight the first menu item.
             ActivateMenuItem(0);
         }
 
@@ -39,6 +39,8 @@ namespace Assets.Scripts.GameState
 
 
             var inputManager = GameManager.instance.inputManager;
+
+            // Handle moving the highlighted menu item up and down.
             if (inputManager.Up())
             {
                 menuItemIndex = (activeMenuItemIndex - 1);
@@ -52,20 +54,17 @@ namespace Assets.Scripts.GameState
                 menuItemIndex = (activeMenuItemIndex + 1)%menuItemCount;
             }
 
+            // Only try to highlight the item if it's a new item.
             if (oldMenuItemIndex != menuItemIndex)
             {
                 ActivateMenuItem(menuItemIndex);
             }
 
+            // If the accept command is sent, trigger the currently selected menu item.
             if (inputManager.Accept())
             {
                 TriggerCurrentMenuItem();
             }
-
-            // Display Menu
-            // Move
-            // Act
-            // Wait
         }
 
         public void Enable()
@@ -100,13 +99,12 @@ namespace Assets.Scripts.GameState
             textScript.fontStyle = FontStyle.Normal;
         }
 
-        // TODO Figure out a better way to configure which states correspond to which menu item.
-        // TODO implement some sort of parent state system, so we can store the old data?
+
         public void TriggerCurrentMenuItem()
         {
+            // If the Move option is selected, then switch to the SelectUnitMovement state.
             if (activeMenuItem.name == "Move")
             {
-                Disable();
                 GameManager.instance.GameState = new SelectUnitMovementState(this, activeUnit);
             }
         }

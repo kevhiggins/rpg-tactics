@@ -17,12 +17,10 @@ namespace Assets.Scripts.GameState
         {
             this.parent = parent;
             this.unit = unit;
+
+            // Find the tiles in the current units range, and highlight them to show which are available.
             highlightedTilePositions = GetTilePositionsInRange();
             highlightedTiles = GameManager.instance.levelManager.HighlightTiles(highlightedTilePositions);
-
-
-
-            // Highlight the movement tiles
         }
 
         public new void HandleInput()
@@ -30,42 +28,40 @@ namespace Assets.Scripts.GameState
             base.HandleInput();
 
             var inputManager = GameManager.instance.inputManager;
+
+            // On Cancel command, go back to the parent menu.
             if (inputManager.Cancel())
             {
                 BackToParentState();
             }
-
-
-            // Go movementspeed Up from selected tile
-            // Get single tile
-            // Go down a row
-            // Get the single tile, and tiles 1 to the right and left
-            // Go down a row
-            // Get the single tile and tiles 2 to the right/left
         }
 
         public override void HandleAccept()
         {
-            // If the tile is not the current user tile, and the tile is in the list of highlighted tiles, then move the unit.
             var map = GameManager.instance.levelManager.GetMap();
             var cursorTilePosition = map.GetCursorTilePosition();
 
-            if(unit.GetTile().tilePosition != cursorTilePosition)
+            // If the tile is not the current user tile, and the tile is in the list of highlighted tiles, then move the unit.
+            if (!unit.GetTile().tilePosition.Equals(cursorTilePosition))
             {
                 if(UnitCanMoveToTilePosition(cursorTilePosition))
                 {
                     map.MoveUnitToSelectedTile(unit);
+                    BackToParentState();
                 }
             }
-            // TODO override equals for tilePosition
-
         }
 
+        /// <summary>
+        /// Returns whether or not the unit can move to the selected tile position.
+        /// </summary>
+        /// <param name="tilePosition"></param>
+        /// <returns></returns>
         protected bool UnitCanMoveToTilePosition(TilePosition tilePosition)
         {
             foreach (var highlightedTilePosition in highlightedTilePositions)
             {
-                if (tilePosition == highlightedTilePosition)
+                if (tilePosition.Equals(highlightedTilePosition))
                 {
                     return true;
                 }
@@ -88,7 +84,7 @@ namespace Assets.Scripts.GameState
                 highlightedTile.SetActive(false);
 
                 // TODO this should be moved into a separate destroy function or something
-                Object.Destroy(highlightedTile);
+//                Object.Destroy(highlightedTile);
             }
 
             GameManager.instance.levelManager.GetMap().SetTileCursor(unit.GetTile().tilePosition);
@@ -96,17 +92,15 @@ namespace Assets.Scripts.GameState
 
         private void BackToParentState()
         {
-            // Disable anything from this state
-            // Tell the old state that it's time to return.
-
-            // TODO change the SET method in the game manager to disable old states and enable new states automatically??
-            Disable();
+            // Switch back to the parent state.
             GameManager.instance.GameState = parent;
-            parent.Enable();
         }
 
 
-
+        /// <summary>
+        /// Finds a list of the tile positions in movement range of the current unit.
+        /// </summary>
+        /// <returns></returns>
         public List<TilePosition> GetTilePositionsInRange()
         {
             var tilePosition = unit.GetTile().tilePosition;

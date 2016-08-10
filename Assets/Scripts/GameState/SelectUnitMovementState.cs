@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Rpg.GameState;
 using Rpg.Map;
 using Rpg.Unit;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.GameState
 {
-    class SelectUnitMovementState : AbstractMapGameState, IGameState
+    class SelectUnitMovementState : AbstractMapGameState, IGameState, IDisposable
     {
         private IUnit unit;
         private IGameState parent;
@@ -22,6 +24,15 @@ namespace Assets.Scripts.GameState
             highlightedTilePositions = GetTilePositionsInRange();
             highlightedTiles = GameManager.instance.levelManager.HighlightTiles(highlightedTilePositions);
         }
+
+        public void Dispose()
+        {
+            foreach (var highlightedTileObject in highlightedTiles)
+            {
+                Object.Destroy(highlightedTileObject);
+            }
+        }
+
 
         public new void HandleInput()
         {
@@ -94,6 +105,7 @@ namespace Assets.Scripts.GameState
         {
             // Switch back to the parent state.
             GameManager.instance.GameState = parent;
+            Dispose();
         }
 
 

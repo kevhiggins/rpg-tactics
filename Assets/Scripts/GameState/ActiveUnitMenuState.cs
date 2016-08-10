@@ -1,7 +1,9 @@
-﻿using Rpg.GameState;
+﻿using System;
+using Rpg.GameState;
 using Rpg.Unit;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.GameState
 {
@@ -69,6 +71,7 @@ namespace Assets.Scripts.GameState
 
         public void Enable()
         {
+            GC.Collect();
             activeUnitMenu.SetActive(true);
         }
 

@@ -56,6 +56,7 @@ namespace Rpg.Map
         /// <param name="y">The number of tiles on the y axis to move the cursor</param>
         public void MoveTileCursor(int x, int y)
         {
+            Debug.Log("X: " + x + " Y: " + y);
             var tileWidth = GetTileWidthScaled();
             var tileHeight = GetTileHeightScaled();
 
@@ -98,6 +99,11 @@ namespace Rpg.Map
             }
 
             unit.PlaceToTile(tile);
+        }
+
+        public void PlaceUnit(IUnit unit, TilePosition tilePosition)
+        {
+            PlaceUnit(unit, tilePosition.x, tilePosition.y);
         }
 
         public void MoveUnitToSelectedTile(IUnit unit)

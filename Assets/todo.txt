@@ -7,9 +7,20 @@ Allow enemy to move
 Allow enemies to die
 Add wait action
 
+Unit's should have move called on them instead of maps
 
 Setup XBox Controller
 Look into proper garbage collection
 
 
 Add system to determine which units turn it is
+
+
+Start with a unit selected
+Pressing cancel should go into a ExploreBoardState or something like that. Only the currently active unit can be truly selected though.
+Selecting Move should go into the SelectUnitMovementState
+Selecting a tile should move the Unit, and for now, force the turn to end.
+	Make sure that the unit's CP is decremented appropriately
+	Call ClockTick on the ActionQueue
+	Get the next active unit and select them. will need to filter Friently/Notfriendly units appropriately
+	

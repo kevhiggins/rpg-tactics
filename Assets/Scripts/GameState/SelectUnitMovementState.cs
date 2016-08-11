@@ -19,10 +19,6 @@ namespace Assets.Scripts.GameState
         {
             this.parent = parent;
             this.unit = unit;
-
-            // Find the tiles in the current units range, and highlight them to show which are available.
-            highlightedTilePositions = GetTilePositionsInRange();
-            highlightedTiles = GameManager.instance.levelManager.HighlightTiles(highlightedTilePositions);
         }
 
         public void Dispose()
@@ -57,8 +53,9 @@ namespace Assets.Scripts.GameState
             {
                 if(UnitCanMoveToTilePosition(cursorTilePosition))
                 {
+                    // TODO Change this to tell the unit it's moving. That way we can decrement the CT gauge appropriately.
                     map.MoveUnitToSelectedTile(unit);
-                    BackToParentState();
+                    unit.EndTurn();
                 }
             }
         }
@@ -82,6 +79,10 @@ namespace Assets.Scripts.GameState
 
         public override void Enable()
         {
+            // Find the tiles in the current units range, and highlight them to show which are available.
+            highlightedTilePositions = GetTilePositionsInRange();
+            highlightedTiles = GameManager.instance.levelManager.HighlightTiles(highlightedTilePositions);
+
             foreach (var highlightedTile in highlightedTiles)
             {
                 highlightedTile.SetActive(true);
@@ -93,19 +94,14 @@ namespace Assets.Scripts.GameState
             foreach (var highlightedTile in highlightedTiles)
             {
                 highlightedTile.SetActive(false);
-
-                // TODO this should be moved into a separate destroy function or something
-//                Object.Destroy(highlightedTile);
             }
-
-            GameManager.instance.levelManager.GetMap().SetTileCursor(unit.GetTile().tilePosition);
+            Dispose();
         }
 
         private void BackToParentState()
         {
             // Switch back to the parent state.
             GameManager.instance.GameState = parent;
-            Dispose();
         }
 
 

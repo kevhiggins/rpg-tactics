@@ -9,15 +9,43 @@ namespace Rpg.Unit
     public abstract class AbstractUnit : MonoBehaviour, IUnit
     {
         public int movementSpeed = 4;
-
+        public int speed = 20;
+        public Vector2 startPosition;
 
         private Tile tile;
+        private TilePosition startTilePosition;
 
         public int MovementSpeed
         {
             get
             {
                 return movementSpeed;
+            }
+        }
+
+        public int Speed
+        {
+            get
+            {
+                return speed;
+            }
+        }
+
+        public int ChargeTime
+        {
+            get;
+            private set;
+        }
+
+        public TilePosition StartPosition
+        {
+            get
+            {
+                if(startTilePosition == null)
+                {
+                    startTilePosition = new TilePosition((int)startPosition.x, (int)startPosition.y);
+                }
+                return startTilePosition;
             }
         }
 
@@ -67,6 +95,24 @@ namespace Rpg.Unit
 
             tile.AddUnit(this);
             GetGameObject().transform.position = tile.GetPosition();
+        }
+
+        public void StartTurn()
+        {
+        }
+
+        public void EndTurn()
+        {
+            ChargeTime = 0;
+            GameManager.instance.WaitForNextAction();
+        }
+
+        /// <summary>
+        /// Increase the units charge time by their speed attribute.
+        /// </summary>
+        public void ClockTick()
+        {
+            ChargeTime += Speed;
         }
     }
 }

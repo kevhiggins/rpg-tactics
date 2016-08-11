@@ -8,11 +8,12 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
 
     public GameObject heroReference;
+    public GameObject hero2Reference;
     public GameObject activeUnitMenu;
 
     [HideInInspector] public LevelManager levelManager;
     [HideInInspector] public InputManager inputManager;
-    [HideInInspector] public IFriendlyUnit hero;
+    [HideInInspector] public IActionQueue actionQueue;
 
     private IGameState gameState;
 
@@ -49,28 +50,56 @@ public class GameManager : MonoBehaviour
 
         levelManager = GetComponent<LevelManager>();
         inputManager = GetComponent<InputManager>();
+        actionQueue = GetComponent<ActionQueue>();
 
         //GameState = new TestGameState();
 
 
-        var heroGameObject = Instantiate(heroReference, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
 
-        hero = heroGameObject.GetComponent<FriendlyUnit>();
 
-        GameState = new ActiveUnitMenuState(hero);
+
 
         InitGame();
     }
 
     void InitGame()
     {
+        // Load units.
+        var heroGameObject = Instantiate(heroReference, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        var hero2GameObject = Instantiate(hero2Reference, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+
+        var hero = heroGameObject.GetComponent<FriendlyUnit>();
+        var hero2 = hero2GameObject.GetComponent<FriendlyUnit>();
+
+
+        actionQueue.UnitList.Add(hero);
+        actionQueue.UnitList.Add(hero2);
+
         // Load the level here
         levelManager.LoadMap();
-        levelManager.GetMap().PlaceUnit(hero, 1, 1);
+
+        foreach(var unit in actionQueue.UnitList)
+        {
+            levelManager.GetMap().PlaceUnit(unit, unit.StartPosition);
+        }
+
+        WaitForNextAction();
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// Run additiona clock cycles until their is an action to perform.
+    /// </summary>
+    public void WaitForNextAction()
     {
+        IUnit unit;
+        do
+        {
+            actionQueue.ClockTick();
+        }
+        while ((unit = actionQueue.GetActiveUnit()) == null);
+
+        // At this point we will have an active unit. Select the unit, and prepare for user input.
+        unit.StartTurn();
+        GameState = new ActiveUnitMenuState(unit);
     }
 }

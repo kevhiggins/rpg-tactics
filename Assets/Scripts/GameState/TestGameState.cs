@@ -24,7 +24,7 @@ namespace Rpg.GameState
 
             if (Input.GetButton("Accept"))
             {
-                map.MoveUnitToSelectedTile(GameManager.instance.hero);
+              //  map.MoveUnitToSelectedTile(GameManager.instance.hero);
             }
         }
 

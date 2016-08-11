@@ -75,6 +75,9 @@ namespace Assets.Scripts.GameState
         public void Enable()
         {
             activeUnitMenu.SetActive(true);
+
+            // Move the tile cursor to the active unit.
+            GameManager.instance.levelManager.GetMap().SetTileCursor(activeUnit.GetTile().tilePosition);
         }
 
         public void Disable()

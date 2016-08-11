@@ -1,6 +1,15 @@
+Add bullet to the menu for showing which item is selected
+Add initiative to game
+Add second unit
+Add enemy unit(s)
+Allow attacking
+Allow enemy to move
+Allow enemies to die
+Add wait action
+
+
 Setup XBox Controller
 Look into proper garbage collection
 
-Add a second unit to the game
-Add a speed for initiative
+
 Add system to determine which units turn it is

@@ -15,7 +15,8 @@ namespace Assets.Scripts.GameState
         private GameObject activeMenuItem;
         private int activeMenuItemIndex;
         private int menuItemCount;
-        
+        private GameObject cursor;
+
 
         public ActiveUnitMenuState(IUnit unit)
         {
@@ -29,6 +30,8 @@ namespace Assets.Scripts.GameState
             // Find the menuItems game object, and the number if menu items.
             menuItems = activeUnitMenu.transform.GetChild(0).GetChild(1).gameObject;
             menuItemCount = menuItems.transform.childCount;
+
+            cursor = activeUnitMenu.transform.GetChild(0).GetChild(2).gameObject;
 
             // Highlight the first menu item.
             ActivateMenuItem(0);
@@ -85,20 +88,33 @@ namespace Assets.Scripts.GameState
             {
                 DeactiveMenuItem(activeMenuItem);
             }
-            
+
             var menuItem = menuItems.transform.GetChild(menuItemIndex).gameObject;
-            var textScript = menuItem.GetComponent<Text>();
-            textScript.fontStyle = FontStyle.Italic;
-            //            textScript.fontSize = 10;
-            //            textScript.OnRebuildRequested();
+
+
+            var rectTransform = menuItem.GetComponent<RectTransform>();
+            var rect = rectTransform.rect;
+            var menuItemPosition = (Vector3) rectTransform.localPosition;
+            var menuPosition = (Vector3) menuItems.GetComponent<RectTransform>().localPosition;
+
+
+            // Determine the cursor position using the menuPosition + the menuItemPosition - the menuItemWIdth / 2 - the cursor width / 2
+            var cursorPosition = menuPosition + menuItemPosition - new Vector3(rect.width/2, 0, 0) - new Vector3(cursor.GetComponent<RectTransform>().rect.width / 2, 0, 0);
+
+            // Offset the cursor slightly to move it away from the menu item, and make the finger point more at the middle.
+            cursorPosition += new Vector3(-2, -3, 0);
+
+
+            // Set the cursor position on the cursor game object's RectTransform
+            cursor.GetComponent<RectTransform>().localPosition = cursorPosition;
+
             activeMenuItem = menuItem;
             activeMenuItemIndex = menuItemIndex;
         }
 
         public void DeactiveMenuItem(GameObject menuItem)
         {
-            var textScript = menuItem.GetComponent<Text>();
-            textScript.fontStyle = FontStyle.Normal;
+            // Do nothing. The cursor is moved, so there is nothing to deactivate.
         }
 
 

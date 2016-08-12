@@ -1,4 +1,5 @@
 Remove tiles that have units on them from the list of moveable tile positions
+Move menu next to highlighted unit
 
 Add enemy unit(s)
 Allow attacking

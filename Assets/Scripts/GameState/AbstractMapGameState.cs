@@ -25,7 +25,7 @@ namespace Assets.Scripts.GameState
                 map.MoveTileCursor(0, axisValue > 0 ? -1 : 1);
             }
 
-            if (Input.GetButton("Accept"))
+            if (inputManager.Accept())
             {
                 HandleAccept();
             }

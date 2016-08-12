@@ -8,6 +8,11 @@ namespace Rpg.Unit
         int MovementSpeed { get; }
         int Speed { get; }
         int ChargeTime { get; }
+        int CurrentHp { get; }
+        int MaxHp { get; }
+        string UnitName { get; }
+        int Level { get; }
+
 
         // TODO This should be temporary
         TilePosition StartPosition { get; }

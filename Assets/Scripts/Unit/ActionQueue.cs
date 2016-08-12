@@ -24,6 +24,13 @@ namespace Rpg.Unit
             }
         }
 
+        public int ChargeTimeThreshold
+        {
+            get
+            {
+                return CTThreshold;
+            }
+        }
         /// <summary>
         /// Return the first unit on the list if it has enough CT. Otherwise, return null.
         /// The return value will only change after the ClockTick method is called.

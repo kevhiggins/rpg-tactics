@@ -4,6 +4,7 @@ using Rpg.Unit;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
+using Assets.Scripts.Unity;
 
 namespace Assets.Scripts.GameState
 {
@@ -29,10 +30,10 @@ namespace Assets.Scripts.GameState
 
             // Find the menuItems game object, and the number if menu items.
 
-            GameObject panel = FindChildByName(activeUnitMenu, "Panel");
+            GameObject panel = GameObjectHelper.FindChildByName(activeUnitMenu, "Panel");
 
-            menuItems = FindChildByName(panel, "Menu Items");
-            cursor = FindChildByName(panel, "Hand Cursor");        
+            menuItems = GameObjectHelper.FindChildByName(panel, "Menu Items");
+            cursor = GameObjectHelper.FindChildByName(panel, "Hand Cursor");        
 
            // menuItems = activeUnitMenu.transform.GetChild(0).GetChild(1).gameObject;
             menuItemCount = menuItems.transform.childCount;
@@ -40,20 +41,7 @@ namespace Assets.Scripts.GameState
             // Highlight the first menu item.
             ActivateMenuItem(0);
         }
-
-        public GameObject FindChildByName(GameObject parent, string name)
-        {
-            foreach (Transform transform in parent.transform)
-            {
-                if (transform.gameObject.name == name)
-                {
-                    return transform.gameObject;
-                }
-            }
-
-            throw new Exception("Could not find game object under parent game object `" + parent.name + "` with name " + name);
-        }
-        
+     
 
         public void HandleInput()
         {
@@ -88,6 +76,11 @@ namespace Assets.Scripts.GameState
             {
                 TriggerCurrentMenuItem();
             }
+
+            if (inputManager.Cancel())
+            {
+                GameManager.instance.GameState = new ExploreMapState(activeUnit);
+            }
         }
 
         public void Enable()
@@ -101,6 +94,7 @@ namespace Assets.Scripts.GameState
         public void Disable()
         {
             activeUnitMenu.SetActive(false);
+            Object.Destroy(activeUnitMenu);
         }
 
         public void ActivateMenuItem(int menuItemIndex)
@@ -144,7 +138,7 @@ namespace Assets.Scripts.GameState
             // If the Move option is selected, then switch to the SelectUnitMovement state.
             if (activeMenuItem.name == "Move")
             {
-                GameManager.instance.GameState = new SelectUnitMovementState(this, activeUnit);
+                GameManager.instance.GameState = new SelectUnitMovementState(activeUnit);
             }
         }
     }

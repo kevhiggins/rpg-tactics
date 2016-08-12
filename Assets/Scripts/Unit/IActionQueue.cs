@@ -7,6 +7,7 @@ namespace Rpg.Unit
 {
     public interface IActionQueue
     {
+        int ChargeTimeThreshold { get; }
         List<IUnit> UnitList { get; }
 
         /// <summary>

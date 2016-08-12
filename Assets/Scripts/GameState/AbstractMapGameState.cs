@@ -18,20 +18,29 @@ namespace Assets.Scripts.GameState
             {
                 var axisValue = Input.GetAxis("Horizontal");
                 map.MoveTileCursor(axisValue > 0 ? 1 : -1, 0);
+                HandleCursorMove();
             }
             else if (inputManager.GetVerticalDown())
             {
                 var axisValue = Input.GetAxis("Vertical");
                 map.MoveTileCursor(0, axisValue > 0 ? -1 : 1);
+                HandleCursorMove();
             }
 
             if (inputManager.Accept())
             {
                 HandleAccept();
             }
+
+            if (inputManager.Cancel())
+            {
+                HandleCancel();
+            }
         }
 
         public abstract void HandleAccept();
+        public abstract void HandleCancel();
+        public abstract void HandleCursorMove();
 
         public abstract void Enable();
         public abstract void Disable();

@@ -11,13 +11,11 @@ namespace Assets.Scripts.GameState
     class SelectUnitMovementState : AbstractMapGameState, IGameState, IDisposable
     {
         private IUnit unit;
-        private IGameState parent;
         private List<TilePosition> highlightedTilePositions;
         private List<GameObject> highlightedTiles;
 
-        public SelectUnitMovementState(IGameState parent, IUnit unit)
+        public SelectUnitMovementState(IUnit unit)
         {
-            this.parent = parent;
             this.unit = unit;
         }
 
@@ -62,6 +60,10 @@ namespace Assets.Scripts.GameState
             }
         }
 
+        public override void HandleCancel()
+        {
+        }
+
         /// <summary>
         /// Returns whether or not the unit can move to the selected tile position.
         /// </summary>
@@ -102,8 +104,7 @@ namespace Assets.Scripts.GameState
 
         private void BackToParentState()
         {
-            // Switch back to the parent state.
-            GameManager.instance.GameState = parent;
+            GameManager.instance.GameState = new ActiveUnitMenuState(unit);
         }
 
 
@@ -146,6 +147,10 @@ namespace Assets.Scripts.GameState
             }
 
             return movementTilePositions;
+        }
+
+        public override void HandleCursorMove()
+        {
         }
     }
 

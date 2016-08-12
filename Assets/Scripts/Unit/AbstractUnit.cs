@@ -2,12 +2,15 @@
 using DG.Tweening;
 using Rpg.Map;
 using UnityEngine;
-using Rpg.Unit;
 
 namespace Rpg.Unit
 {
     public abstract class AbstractUnit : MonoBehaviour, IUnit
     {
+        public string unitName = "UNNAMED";
+        public int currentHp = 20;
+        public int maxHp = 20;
+        public int level = 1;
         public int movementSpeed = 4;
         public int speed = 20;
         public Vector2 startPosition;
@@ -41,11 +44,43 @@ namespace Rpg.Unit
         {
             get
             {
-                if(startTilePosition == null)
+                if (startTilePosition == null)
                 {
                     startTilePosition = new TilePosition((int)startPosition.x, (int)startPosition.y);
                 }
                 return startTilePosition;
+            }
+        }
+
+        public int CurrentHp
+        {
+            get
+            {
+                return currentHp;
+            }
+        }
+
+        public int MaxHp
+        {
+            get
+            {
+                return maxHp;
+            }
+        }
+
+        public string UnitName
+        {
+            get
+            {
+                return unitName;
+            }
+        }
+
+        public int Level
+        {
+            get
+            {
+                return level;
             }
         }
 
@@ -113,6 +148,36 @@ namespace Rpg.Unit
         public void ClockTick()
         {
             ChargeTime += Speed;
+        }
+
+        public override bool Equals(System.Object obj)
+        {
+            // If parameter is null return false.
+            if (obj == null)
+            {
+                return false;
+            }
+
+            AbstractUnit p = obj as AbstractUnit;
+            // Return true if the fields match:
+            return Equals(p);
+        }
+
+        public bool Equals(AbstractUnit p)
+        {
+            // If parameter is null return false:
+            if ((object)p == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return p.GetGameObject().GetInstanceID() == GetGameObject().GetInstanceID();
+        }
+
+        public override int GetHashCode()
+        {
+            return GetGameObject().GetInstanceID();
         }
     }
 }

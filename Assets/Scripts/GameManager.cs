@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public GameObject heroReference;
     public GameObject hero2Reference;
     public GameObject activeUnitMenu;
+    public GameObject unitInfoBox;
 
     [HideInInspector] public LevelManager levelManager;
     [HideInInspector] public InputManager inputManager;

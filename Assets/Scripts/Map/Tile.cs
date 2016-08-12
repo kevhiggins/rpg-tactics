@@ -43,6 +43,11 @@ namespace Rpg.Map
             return unit != null;
         }
 
+        public IUnit GetUnit()
+        {
+            return unit;
+        }
+
         // TODO rename this, it sounds too similar to tilePosition attribute
         public Vector3 GetPosition()
         {

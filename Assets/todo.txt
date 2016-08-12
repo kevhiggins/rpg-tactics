@@ -1,4 +1,4 @@
-Figure out if unit's tile is highlighted when trying to move
+Remove tiles that have units on them from the list of moveable tile positions
 
 Add enemy unit(s)
 Allow attacking

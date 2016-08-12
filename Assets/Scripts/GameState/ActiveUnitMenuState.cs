@@ -28,14 +28,32 @@ namespace Assets.Scripts.GameState
             canvasScript.worldCamera = Camera.main;
 
             // Find the menuItems game object, and the number if menu items.
-            menuItems = activeUnitMenu.transform.GetChild(0).GetChild(1).gameObject;
-            menuItemCount = menuItems.transform.childCount;
 
-            cursor = activeUnitMenu.transform.GetChild(0).GetChild(2).gameObject;
+            GameObject panel = FindChildByName(activeUnitMenu, "Panel");
+
+            menuItems = FindChildByName(panel, "Menu Items");
+            cursor = FindChildByName(panel, "Hand Cursor");        
+
+           // menuItems = activeUnitMenu.transform.GetChild(0).GetChild(1).gameObject;
+            menuItemCount = menuItems.transform.childCount;
 
             // Highlight the first menu item.
             ActivateMenuItem(0);
         }
+
+        public GameObject FindChildByName(GameObject parent, string name)
+        {
+            foreach (Transform transform in parent.transform)
+            {
+                if (transform.gameObject.name == name)
+                {
+                    return transform.gameObject;
+                }
+            }
+
+            throw new Exception("Could not find game object under parent game object `" + parent.name + "` with name " + name);
+        }
+        
 
         public void HandleInput()
         {

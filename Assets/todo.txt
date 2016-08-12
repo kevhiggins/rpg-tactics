@@ -1,3 +1,5 @@
+Figure out if unit's tile is highlighted when trying to move
+
 Add enemy unit(s)
 Allow attacking
 Allow enemy to move

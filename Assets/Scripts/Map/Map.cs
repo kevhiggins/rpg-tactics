@@ -106,14 +106,20 @@ namespace Rpg.Map
             PlaceUnit(unit, tilePosition.x, tilePosition.y);
         }
 
-        public void MoveUnitToSelectedTile(IUnit unit)
+        public bool MoveUnitToSelectedTile(IUnit unit)
         {
             var tile = GetSelectedTile();
             if (tile == null)
             {
                 throw new Exception("Could not find tile at cursor position");
             }
+            
+            if(tile.HasUnit())
+            {
+                return false;
+            }
             unit.MoveToTile(tile);
+            return true;
         }
 
         public float GetTileWidthScaled()

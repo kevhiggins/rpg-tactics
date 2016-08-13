@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Assets.Scripts.Unity;
+﻿using Assets.Scripts.Unity;
 using Rpg.Unit;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,13 +12,16 @@ namespace Rpg.Widgets
 
         public UnitInfoWidget(IUnit unit)
         {
-            unitInfoBox = UnityEngine.Object.Instantiate(GameManager.instance.unitInfoBox);
+            unitInfoBox = Object.Instantiate(GameManager.instance.unitInfoBox);
             PopulateUnitInfoDisplay(unit);
+
+            var canvasScript = unitInfoBox.GetComponent<Canvas>();
+            canvasScript.worldCamera = Camera.main;
         }
 
         public override void Dispose()
         {
-            UnityEngine.Object.Destroy(unitInfoBox);
+            Object.Destroy(unitInfoBox);
         }
 
         protected void PopulateUnitInfoDisplay(IUnit targetUnit)

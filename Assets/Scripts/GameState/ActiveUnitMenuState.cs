@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 using Assets.Scripts.Unity;
+using Rpg.Widgets;
 
 namespace Assets.Scripts.GameState
 {
@@ -17,6 +18,7 @@ namespace Assets.Scripts.GameState
         private int activeMenuItemIndex;
         private int menuItemCount;
         private GameObject cursor;
+        private IWidget unitInfo;
 
 
         public ActiveUnitMenuState(IUnit unit)
@@ -37,6 +39,8 @@ namespace Assets.Scripts.GameState
 
            // menuItems = activeUnitMenu.transform.GetChild(0).GetChild(1).gameObject;
             menuItemCount = menuItems.transform.childCount;
+
+            unitInfo = new UnitInfoWidget(unit);
 
             // Highlight the first menu item.
             ActivateMenuItem(0);
@@ -95,6 +99,7 @@ namespace Assets.Scripts.GameState
         {
             activeUnitMenu.SetActive(false);
             Object.Destroy(activeUnitMenu);
+            unitInfo.Dispose();
         }
 
         public void ActivateMenuItem(int menuItemIndex)

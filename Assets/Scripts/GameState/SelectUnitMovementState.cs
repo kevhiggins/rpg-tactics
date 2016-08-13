@@ -132,7 +132,13 @@ namespace Assets.Scripts.GameState
                         {
                             continue;
                         }
-                        movementTilePositions.Add(new TilePosition(xPosition, yPosition));
+
+                        // Only add the tile to the highlight list if it exists, and does not have a unit.
+                        var tile = map.GetTile(xPosition, yPosition);
+                        if (tile != null && tile.HasUnit() == false)
+                        {
+                            movementTilePositions.Add(new TilePosition(xPosition, yPosition));
+                        }
                     }
                 }
 

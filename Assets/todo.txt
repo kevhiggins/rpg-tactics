@@ -1,4 +1,8 @@
+Fix bug where double turns show the menu in the wrong location
+
 Move menu next to highlighted unit
+
+Add bloop when menu confirms
 
 Add enemy unit(s)
 Allow attacking

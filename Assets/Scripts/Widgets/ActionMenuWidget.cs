@@ -25,11 +25,29 @@ namespace Rpg.Widgets
             menuItems = GameObjectHelper.FindChildByName(panel, "Menu Items");
             cursor = GameObjectHelper.FindChildByName(panel, "Hand Cursor");
 
-            // menuItems = activeUnitMenu.transform.GetChild(0).GetChild(1).gameObject;
             menuItemCount = menuItems.transform.childCount;
 
             // Highlight the first menu item.
             ActivateMenuItem(0);
+
+            SetMenuPosition(panel);
+        }
+
+        protected void SetMenuPosition(GameObject panel)
+        {
+            var unitGameObject = unit.GetGameObject();
+            var targetPosition = unitGameObject.transform.position;
+
+            var rectTransform = panel.GetComponent<RectTransform>();
+
+            var pixelsToUnits = GameManager.instance.pixelsToUnits;
+
+
+
+            targetPosition += new Vector3((rectTransform.GetWidth()/ pixelsToUnits) /2, 0, 0);
+            targetPosition += new Vector3((float)20 / pixelsToUnits, rectTransform.GetHeight() / pixelsToUnits / 2, 0);
+
+            panel.transform.position = targetPosition;
         }
 
         public override void Dispose()
@@ -56,7 +74,7 @@ namespace Rpg.Widgets
             }
             else if (inputManager.Down())
             {
-                menuItemIndex = (activeMenuItemIndex + 1) % menuItemCount;
+                menuItemIndex = (activeMenuItemIndex + 1)%menuItemCount;
             }
 
             // Only try to highlight the item if it's a new item.
@@ -99,7 +117,8 @@ namespace Rpg.Widgets
 
 
             // Determine the cursor position using the menuPosition + the menuItemPosition - the menuItemWIdth / 2 - the cursor width / 2
-            var cursorPosition = menuPosition + menuItemPosition - new Vector3(rect.width / 2, 0, 0) - new Vector3(cursor.GetComponent<RectTransform>().rect.width / 2, 0, 0);
+            var cursorPosition = menuPosition + menuItemPosition - new Vector3(rect.width/2, 0, 0) -
+                                 new Vector3(cursor.GetComponent<RectTransform>().rect.width/2, 0, 0);
 
             // Offset the cursor slightly to move it away from the menu item, and make the finger point more at the middle.
             cursorPosition += new Vector3(-2, -3, 0);

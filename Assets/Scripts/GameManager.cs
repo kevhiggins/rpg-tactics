@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject hero2Reference;
     public GameObject activeUnitMenu;
     public GameObject unitInfoBox;
+    public int pixelsToUnits = 100;
 
     [HideInInspector] public LevelManager levelManager;
     [HideInInspector] public InputManager inputManager;

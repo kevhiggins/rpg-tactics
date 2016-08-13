@@ -8,5 +8,6 @@ namespace Rpg.Widgets
     public abstract class AbstractWidget : IWidget
     {
         public abstract void Dispose();
+        public abstract void HandleInput();
     }
 }

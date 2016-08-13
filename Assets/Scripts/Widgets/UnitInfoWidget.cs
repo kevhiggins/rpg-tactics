@@ -5,28 +5,35 @@ using UnityEngine.UI;
 
 namespace Rpg.Widgets
 {
-    public class UnitInfoWidget : AbstractWidget
+    public class UnitInfoWidget : UiWidget
     {
         private IUnit unit;
-        private GameObject unitInfoBox;
 
-        public UnitInfoWidget(IUnit unit)
+        public UnitInfoWidget(IUnit unit) : base(CreateCanvas())
         {
-            unitInfoBox = Object.Instantiate(GameManager.instance.unitInfoBox);
             PopulateUnitInfoDisplay(unit);
 
-            var canvasScript = unitInfoBox.GetComponent<Canvas>();
+            var canvasScript = canvas.GetComponent<Canvas>();
             canvasScript.worldCamera = Camera.main;
+        }
+
+        private static GameObject CreateCanvas()
+        {
+            return Object.Instantiate(GameManager.instance.unitInfoBox);
         }
 
         public override void Dispose()
         {
-            Object.Destroy(unitInfoBox);
+            Object.Destroy(canvas);
+        }
+
+        public override void HandleInput()
+        {
         }
 
         protected void PopulateUnitInfoDisplay(IUnit targetUnit)
         {
-            var panel = GameObjectHelper.FindChildByName(unitInfoBox, "Panel");
+            var panel = GameObjectHelper.FindChildByName(canvas, "Panel");
             ReplaceTextData(panel, "hitpoints", "{hp / hpmax}", targetUnit.CurrentHp + " / " + targetUnit.MaxHp);
             ReplaceTextData(panel, "name", "{unitname}", targetUnit.UnitName);
             ReplaceTextData(panel, "chargetime", "{ct / max}", targetUnit.ChargeTime + " / " + GameManager.instance.actionQueue.ChargeTimeThreshold);

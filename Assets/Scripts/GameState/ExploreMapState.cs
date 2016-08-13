@@ -32,7 +32,7 @@ namespace Assets.Scripts.GameState
         public override void HandleAccept()
         {
             // Get current tile
-            var selectedTile = GameManager.instance.levelManager.GetMap().GetSelectedTile();
+ //           var selectedTile = GameManager.instance.levelManager.GetMap().GetSelectedTile();
             GameManager.instance.GameState = new ActiveUnitMenuState(unit);
 
  //           if (selectedTile.HasUnit())

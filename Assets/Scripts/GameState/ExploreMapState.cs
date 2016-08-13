@@ -83,7 +83,7 @@ namespace Assets.Scripts.GameState
             ReplaceTextData(panel, "chargetime", "{ct / max}", targetUnit.ChargeTime + " / " + GameManager.instance.actionQueue.ChargeTimeThreshold);
             ReplaceTextData(panel, "level", "{level}", targetUnit.Level.ToString());
             ReplaceTextData(panel, "speed", "{speed}", targetUnit.Speed.ToString());
-            ReplaceTextData(panel, "movespeed", "{movespeed}", targetUnit.MovementSpeed.ToString());
+            ReplaceTextData(panel, "movespeed", "{ms}", targetUnit.MovementSpeed.ToString());
         }
 
         protected void ReplaceTextData(GameObject parent, string textFieldName, string targetData, string newData)

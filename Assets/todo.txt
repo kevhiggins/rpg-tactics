@@ -1,8 +1,3 @@
-Refactor gamestate code?
-Decide on namespace usage. Either Rpg.* or Assets.Scripts.*
-
-
-
 Move menu next to highlighted unit
 
 Add enemy unit(s)
@@ -15,3 +10,6 @@ Unit's should have move called on them instead of maps?
 
 Setup XBox Controller
 Look into proper garbage collection
+
+Refactor gamestate code?
+Decide on namespace usage. Either Rpg.* or Assets.Scripts.*

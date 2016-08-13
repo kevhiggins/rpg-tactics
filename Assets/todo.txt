@@ -1,12 +1,10 @@
-Fix bug where double turns show the menu in the wrong location
-	-Problem is that the menu is created next to the unit as it starts moving, and then it moves away. Ideally, we should be waiting to allow more actions until the unit is done moving.
-
-Move menu next to highlighted unit
-
-Add bloop when menu confirms
-
 Add enemy unit(s)
 Allow attacking
+
+Hook up the hp and CT meters
+Add bloop when menu confirms
+
+
 Allow enemy to move
 Allow units to die
 Add wait action

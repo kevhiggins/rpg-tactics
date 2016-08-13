@@ -1,7 +1,7 @@
 Bug:
 
+On enemy unit turn, go into a custom enemy unit state instead of the normal state.
 
-Add enemy unit(s)
 Allow attacking
 
 Hook up the hp and CT meters

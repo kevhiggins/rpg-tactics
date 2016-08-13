@@ -84,6 +84,14 @@ namespace Assets.Scripts.GameState
             ReplaceTextData(panel, "level", "{level}", targetUnit.Level.ToString());
             ReplaceTextData(panel, "speed", "{speed}", targetUnit.Speed.ToString());
             ReplaceTextData(panel, "movespeed", "{ms}", targetUnit.MovementSpeed.ToString());
+
+            var spriteRenderer = targetUnit.GetGameObject().transform.GetChild(0).GetComponent<SpriteRenderer>();
+            var targetSprite = spriteRenderer.sprite;
+
+            var unitPortraitObject = GameObjectHelper.FindChildByName(panel, "UnitPortrait");
+            var imageScript = unitPortraitObject.GetComponent<Image>();
+            imageScript.sprite = targetSprite;
+            imageScript.color = spriteRenderer.color;
         }
 
         protected void ReplaceTextData(GameObject parent, string textFieldName, string targetData, string newData)

@@ -1,10 +1,8 @@
-Unit info should show when the unit is selected
-
-
 Refactor gamestate code?
 Decide on namespace usage. Either Rpg.* or Assets.Scripts.*
 
-Remove tiles that have units on them from the list of moveable tile positions
+
+
 Move menu next to highlighted unit
 
 Add enemy unit(s)

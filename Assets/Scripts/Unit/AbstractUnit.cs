@@ -118,6 +118,7 @@ namespace Rpg.Unit
             // Add unit to new tile.
             tile.AddUnit(this);
 
+            SetUnitOrderLayerPosition();
             GetGameObject().transform.DOMove(tile.GetPosition(), 0.5f);
         }
 
@@ -129,7 +130,15 @@ namespace Rpg.Unit
             }
 
             tile.AddUnit(this);
+            SetUnitOrderLayerPosition();
             GetGameObject().transform.position = tile.GetPosition();
+        }
+
+        protected void SetUnitOrderLayerPosition()
+        {
+            var spriteObject = GetGameObject().transform.GetChild(0).gameObject;
+            var spriteRenderer = spriteObject.GetComponent<SpriteRenderer>();
+            spriteRenderer.sortingOrder = tile.tilePosition.y;
         }
 
         public void StartTurn()

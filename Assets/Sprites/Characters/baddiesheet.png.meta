@@ -1,20 +1,22 @@
 fileFormatVersion: 2
-guid: 7027208a88aeae842ba8916eaa27c06d
-timeCreated: 1471062563
+guid: 2cbbcc77e6c193b4b96f3b69a659543a
+timeCreated: 1471088462
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: baddies_0
-    21300002: baddies_1
-    21300004: baddies_2
-    21300006: baddies_3
-    21300008: baddies_4
-    21300010: baddies_5
-    21300012: baddies_6
-    21300014: baddies_7
-    21300016: baddies_8
-    21300018: baddies_9
-    21300020: baddies_10
+    21300000: baddiesheet_0
+    21300002: baddiesheet_1
+    21300004: baddiesheet_2
+    21300006: baddiesheet_3
+    21300008: baddiesheet_4
+    21300010: baddiesheet_5
+    21300012: baddiesheet_6
+    21300014: baddiesheet_7
+    21300016: baddiesheet_8
+    21300018: baddiesheet_9
+    21300020: baddiesheet_10
+    21300022: baddiesheet_11
+    21300024: baddiesheet_12
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -64,145 +66,171 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: baddies_0
+      name: baddiesheet_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 1
-        width: 41
-        height: 41
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        y: 80
+        width: 50
+        height: 40
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: baddies_1
+      name: baddiesheet_1
       rect:
         serializedVersion: 2
-        x: 42
-        y: 1
-        width: 41
-        height: 41
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 50
+        y: 80
+        width: 50
+        height: 40
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: baddies_2
+      name: baddiesheet_2
       rect:
         serializedVersion: 2
-        x: 84
-        y: 1
-        width: 41
-        height: 41
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 100
+        y: 80
+        width: 50
+        height: 40
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: baddies_3
+      name: baddiesheet_3
       rect:
         serializedVersion: 2
-        x: 126
-        y: 1
-        width: 41
-        height: 41
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 150
+        y: 80
+        width: 50
+        height: 40
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: baddies_4
+      name: baddiesheet_4
       rect:
         serializedVersion: 2
-        x: 168
-        y: 1
-        width: 41
-        height: 41
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 200
+        y: 80
+        width: 50
+        height: 40
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: baddies_5
+      name: baddiesheet_5
       rect:
         serializedVersion: 2
-        x: 210
-        y: 1
-        width: 41
-        height: 41
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 40
+        width: 50
+        height: 40
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: baddies_6
+      name: baddiesheet_6
       rect:
         serializedVersion: 2
-        x: 252
-        y: 1
-        width: 41
-        height: 41
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 50
+        y: 40
+        width: 50
+        height: 40
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: baddies_7
+      name: baddiesheet_7
       rect:
         serializedVersion: 2
-        x: 294
-        y: 1
-        width: 41
-        height: 41
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 100
+        y: 40
+        width: 50
+        height: 40
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: baddies_8
+      name: baddiesheet_8
       rect:
         serializedVersion: 2
-        x: 336
-        y: 1
-        width: 41
-        height: 41
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 150
+        y: 40
+        width: 50
+        height: 40
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: baddies_9
+      name: baddiesheet_9
       rect:
         serializedVersion: 2
-        x: 378
-        y: 1
-        width: 41
-        height: 41
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 200
+        y: 40
+        width: 50
+        height: 40
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: baddies_10
+      name: baddiesheet_10
       rect:
         serializedVersion: 2
-        x: 420
-        y: 1
-        width: 41
-        height: 41
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 0
+        width: 50
+        height: 40
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: baddiesheet_11
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 0
+        width: 50
+        height: 40
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: baddiesheet_12
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 0
+        width: 50
+        height: 40
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

@@ -18,6 +18,7 @@ namespace Rpg.Unit
         TilePosition StartPosition { get; }
 
         GameObject GetGameObject();
+        SpriteRenderer GetSpriteRenderer();
 
         /// <summary>
         /// Perform any operations necessary for a new clock tick.

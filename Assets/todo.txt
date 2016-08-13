@@ -1,3 +1,6 @@
+Bug:
+
+
 Add enemy unit(s)
 Allow attacking
 

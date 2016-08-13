@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Rpg.Unit
+﻿namespace Rpg.Unit
 {
     class FriendlyUnit : AbstractUnit, IFriendlyUnit
     {

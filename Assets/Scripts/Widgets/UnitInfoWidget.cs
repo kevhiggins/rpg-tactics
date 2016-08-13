@@ -41,7 +41,7 @@ namespace Rpg.Widgets
             ReplaceTextData(panel, "speed", "{speed}", targetUnit.Speed.ToString());
             ReplaceTextData(panel, "movespeed", "{ms}", targetUnit.MovementSpeed.ToString());
 
-            var spriteRenderer = targetUnit.GetGameObject().transform.GetChild(0).GetComponent<SpriteRenderer>();
+            var spriteRenderer = targetUnit.GetSpriteRenderer();
             var targetSprite = spriteRenderer.sprite;
 
             var unitPortraitObject = GameObjectHelper.FindChildByName(panel, "UnitPortrait");

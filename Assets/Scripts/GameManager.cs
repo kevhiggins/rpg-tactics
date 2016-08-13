@@ -1,17 +1,19 @@
-﻿using Assets.Scripts.GameState;
+﻿using System;
+using Assets.Scripts.GameState;
 using UnityEngine;
 using Rpg.GameState;
 using Rpg.Unit;
+using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
 
-    public GameObject heroReference;
-    public GameObject hero2Reference;
     public GameObject activeUnitMenu;
     public GameObject unitInfoBox;
     public int pixelsToUnits = 100;
+
+    public GameObject[] units;
 
     [HideInInspector] public LevelManager levelManager;
     [HideInInspector] public InputManager inputManager;
@@ -66,16 +68,18 @@ public class GameManager : MonoBehaviour
 
     void InitGame()
     {
-        // Load units.
-        var heroGameObject = Instantiate(heroReference, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-        var hero2GameObject = Instantiate(hero2Reference, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        foreach (var unitObject in units)
+        {
+            var unitInstance = Instantiate(unitObject, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+            var unit = unitInstance.GetComponent<AbstractUnit>();
+            if (unit == null)
+            {
+                throw new Exception("Could not find AbstractUnit script");
+            }
+            
 
-        var hero = heroGameObject.GetComponent<FriendlyUnit>();
-        var hero2 = hero2GameObject.GetComponent<FriendlyUnit>();
-
-
-        actionQueue.UnitList.Add(hero);
-        actionQueue.UnitList.Add(hero2);
+            actionQueue.UnitList.Add(unit);
+        }
 
         // Load the level here
         levelManager.LoadMap();

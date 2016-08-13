@@ -89,6 +89,18 @@ namespace Rpg.Unit
             return gameObject;
         }
 
+        public SpriteRenderer GetSpriteRenderer()
+        {
+            // If the GameObject uses animations, then the SpriteRenders is on the GameObject, otherwise, it's on the child object.
+            var spriteRenderer = GetGameObject().GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null)
+            {
+                var spriteObject = GetGameObject().transform.GetChild(0).gameObject;
+                spriteRenderer = spriteObject.GetComponent<SpriteRenderer>();
+            }
+            return spriteRenderer;
+        }
+
         public void SetTile(Tile targetTile)
         {
             tile = targetTile;
@@ -137,8 +149,7 @@ namespace Rpg.Unit
 
         protected void SetUnitOrderLayerPosition()
         {
-            var spriteObject = GetGameObject().transform.GetChild(0).gameObject;
-            var spriteRenderer = spriteObject.GetComponent<SpriteRenderer>();
+            var spriteRenderer = GetSpriteRenderer();
             spriteRenderer.sortingOrder = tile.tilePosition.y;
         }
 

@@ -132,7 +132,44 @@ namespace Rpg.Unit
 
             SetUnitOrderLayerPosition();
 
-            GetGameObject().transform.DOMove(tile.GetPosition(), 0.5f).OnComplete(() => { onComplete(); });
+            TriggerStartMove();
+            GetGameObject().transform.DOMove(tile.GetPosition(), 0.5f).OnComplete(() =>
+            {
+                TriggerEndMove();
+                onComplete();
+            });
+        }
+
+        protected void TriggerStartMove()
+        {
+            var animator = GetAnimator();
+            if (animator != null)
+            {
+                animator.SetTrigger("StartMove");
+            }
+        }
+
+        protected void TriggerEndMove()
+        {
+            var animator = GetAnimator();
+            if (animator != null)
+            {
+                animator.SetTrigger("EndMove");
+            }
+        }
+
+        public void Attack()
+        {
+            var animator = GetAnimator();
+            if (animator != null)
+            {
+                animator.SetTrigger("Act");
+            }
+        }
+
+        protected Animator GetAnimator()
+        {
+            return GetGameObject().GetComponent<Animator>();
         }
 
         public void PlaceToTile(Tile tile)

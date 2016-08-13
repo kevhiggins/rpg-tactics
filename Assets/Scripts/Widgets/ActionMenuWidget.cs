@@ -145,6 +145,10 @@ namespace Rpg.Widgets
             {
                 GameManager.instance.GameState = new SelectUnitMovementState(unit);
             }
+            else if (activeMenuItem.name == "Act")
+            {
+                unit.Attack();
+            }
         }
     }
 }

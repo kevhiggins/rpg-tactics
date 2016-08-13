@@ -35,5 +35,7 @@ namespace Rpg.Unit
         /// Calleda t the end of the unit's turn.
         /// </summary>
         void EndTurn();
+
+        void Attack();
     }
 }

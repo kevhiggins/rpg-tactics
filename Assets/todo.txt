@@ -1,4 +1,5 @@
-Bug:
+Try reimplementing the tile highlighting using the A* system.
+On enemy unit's turn, try to find the closest unit, and move to them.
 
 On enemy unit turn, go into a custom enemy unit state instead of the normal state.
 

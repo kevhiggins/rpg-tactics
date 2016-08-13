@@ -33,18 +33,22 @@ namespace Assets.Scripts.GameState
         {
             // Get current tile
             var selectedTile = GameManager.instance.levelManager.GetMap().GetSelectedTile();
-            if(selectedTile.HasUnit())
-            {
-                if(selectedTile.GetUnit().Equals(unit))
-                {
-                    GameManager.instance.GameState = new ActiveUnitMenuState(unit);
-                }
-            }
+            GameManager.instance.GameState = new ActiveUnitMenuState(unit);
+
+ //           if (selectedTile.HasUnit())
+ //           {
+//                if(selectedTile.GetUnit().Equals(unit))
+//                {
+                
+//                }
+ //           }
         }
 
         public override void HandleCancel()
         {
+
         }
+
 
         public override void HandleCursorMove()
         {

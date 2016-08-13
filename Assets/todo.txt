@@ -1,3 +1,11 @@
+Unit info should show when the unit is selected
+Cancel in explore mode should bring it back to main character
+
+
+Joe - Cursor should be on top of the blue for the movement splat
+Units with lower Y coordinate should have a higher layer sort priority
+
+
 Refactor gamestate code?
 Decide on namespace usage. Either Rpg.* or Assets.Scripts.*
 

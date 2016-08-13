@@ -52,10 +52,8 @@ namespace Assets.Scripts.GameState
                 if(UnitCanMoveToTilePosition(cursorTilePosition))
                 {
                     // TODO Change this to tell the unit it's moving. That way we can decrement the CT gauge appropriately.
-                    if(map.MoveUnitToSelectedTile(unit))
-                    {
-                        unit.EndTurn();
-                    }
+                    GameManager.instance.GameState = new BlankState();
+                    map.MoveUnitToSelectedTile(unit, () => { unit.EndTurn();});
                 }
             }
         }

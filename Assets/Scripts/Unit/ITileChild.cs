@@ -12,7 +12,7 @@ namespace Rpg.Unit
         Tile GetTile();
         bool HasTile();
 
-        void MoveToTile(Tile tile);
+        void MoveToTile(Tile tile, Action onComplete);
         void PlaceToTile(Tile tile);
     }
 }

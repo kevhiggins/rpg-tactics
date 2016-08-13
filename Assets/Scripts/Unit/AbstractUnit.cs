@@ -104,7 +104,7 @@ namespace Rpg.Unit
             return tile != null;
         }
 
-        public void MoveToTile(Tile tile)
+        public void MoveToTile(Tile tile, Action onComplete)
         {
             if (!HasTile())
             {
@@ -119,7 +119,8 @@ namespace Rpg.Unit
             tile.AddUnit(this);
 
             SetUnitOrderLayerPosition();
-            GetGameObject().transform.DOMove(tile.GetPosition(), 0.5f);
+
+            GetGameObject().transform.DOMove(tile.GetPosition(), 0.5f).OnComplete(() => { onComplete(); });
         }
 
         public void PlaceToTile(Tile tile)

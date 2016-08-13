@@ -105,7 +105,7 @@ namespace Rpg.Map
             PlaceUnit(unit, tilePosition.x, tilePosition.y);
         }
 
-        public bool MoveUnitToSelectedTile(IUnit unit)
+        public void MoveUnitToSelectedTile(IUnit unit, Action onComplete)
         {
             var tile = GetSelectedTile();
             if (tile == null)
@@ -115,10 +115,9 @@ namespace Rpg.Map
             
             if(tile.HasUnit())
             {
-                return false;
+                throw new Exception("Cannot move unit to the same tile as another unit");
             }
-            unit.MoveToTile(tile);
-            return true;
+            unit.MoveToTile(tile, onComplete);
         }
 
         public float GetTileWidthScaled()

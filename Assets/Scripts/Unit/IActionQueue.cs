@@ -20,5 +20,7 @@ namespace Rpg.Unit
         /// Marks the passage of time. Useful for actions that take time, or charging how long till a unit's turn happens.
         /// </summary>
         void ClockTick();
+
+        List<IFriendlyUnit> GetFriendlyUnits();
     }
 }

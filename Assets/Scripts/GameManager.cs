@@ -1,5 +1,6 @@
 ﻿using System;
 using Assets.Scripts.GameState;
+using Pathfinding.Util;
 using UnityEngine;
 using Rpg.GameState;
 using Rpg.Unit;
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public LevelManager levelManager;
     [HideInInspector] public InputManager inputManager;
     [HideInInspector] public IActionQueue actionQueue;
+
 
     private IGameState gameState;
 
@@ -55,12 +57,6 @@ public class GameManager : MonoBehaviour
         levelManager = GetComponent<LevelManager>();
         inputManager = GetComponent<InputManager>();
         actionQueue = GetComponent<ActionQueue>();
-
-        //GameState = new TestGameState();
-
-
-
-
 
 
         InitGame();
@@ -106,6 +102,15 @@ public class GameManager : MonoBehaviour
 
         // At this point we will have an active unit. Select the unit, and prepare for user input.
         unit.StartTurn();
-        GameState = new ActiveUnitMenuState(unit);
+
+        if (unit is IFriendlyUnit)
+        {
+            GameState = new ActiveUnitMenuState(unit);
+        }
+        else
+        {
+            GameState = new EnemyTurn(unit);
+        }
+        
     }
 }

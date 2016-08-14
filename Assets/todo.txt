@@ -20,3 +20,8 @@ Look into proper garbage collection
 
 Refactor gamestate code?
 Decide on namespace usage. Either Rpg.* or Assets.Scripts.*
+
+
+
+Perform A* find on all units
+Figure out which path is shortest, and move as far down that path as possible

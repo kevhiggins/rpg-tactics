@@ -59,5 +59,19 @@ namespace Rpg.Unit
             // Sort the unit list to determine which unit is currently next in line.
             unitList.Sort(unitComparer);
         }
+
+        public List<IFriendlyUnit> GetFriendlyUnits()
+        {
+            var friendlyUnits = new List<IFriendlyUnit>();
+
+            foreach (var unit in unitList)
+            {
+                if (unit is IFriendlyUnit)
+                {
+                    friendlyUnits.Add((IFriendlyUnit)unit);
+                }
+            }
+            return friendlyUnits;
+        }
     }
 }

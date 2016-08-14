@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.Scripts.Unity;
 using DG.Tweening;
 using Rpg.Map;
 using UnityEngine;
@@ -132,38 +133,25 @@ namespace Rpg.Unit
 
             SetUnitOrderLayerPosition();
 
-            TriggerStartMove();
+            TriggerAnimatorParameter("StartMove");
             GetGameObject().transform.DOMove(tile.GetPosition(), 0.5f).OnComplete(() =>
             {
-                TriggerEndMove();
+                TriggerAnimatorParameter("EndMove");
                 onComplete();
             });
         }
 
-        protected void TriggerStartMove()
-        {
-            var animator = GetAnimator();
-            if (animator != null)
-            {
-                animator.SetTrigger("StartMove");
-            }
-        }
-
-        protected void TriggerEndMove()
-        {
-            var animator = GetAnimator();
-            if (animator != null)
-            {
-                animator.SetTrigger("EndMove");
-            }
-        }
-
         public void Attack()
         {
+            TriggerAnimatorParameter("Act");
+        }
+
+        protected void TriggerAnimatorParameter(string parameterName)
+        {
             var animator = GetAnimator();
-            if (animator != null)
+            if (animator != null && animator.HasParameter(parameterName))
             {
-                animator.SetTrigger("Act");
+                animator.SetTrigger(parameterName);
             }
         }
 

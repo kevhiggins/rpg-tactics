@@ -1,3 +1,5 @@
+
+
 Allow attacking
 Allow units to die
 
@@ -12,3 +14,5 @@ Look into proper garbage collection
 
 Refactor gamestate code?
 Decide on namespace usage. Either Rpg.* or Assets.Scripts.*
+
+See if there is a GetNodes within X distance function for A*

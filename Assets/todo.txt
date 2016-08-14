@@ -1,17 +1,9 @@
-Try reimplementing the tile highlighting using the A* system.
-On enemy unit's turn, try to find the closest unit, and move to them.
-
-On enemy unit turn, go into a custom enemy unit state instead of the normal state.
-
 Allow attacking
+Allow units to die
 
 Hook up the hp and CT meters
 Add bloop when menu confirms
 
-
-Allow enemy to move
-Allow units to die
-Add wait action
 
 Unit's should have move called on them instead of maps?
 
@@ -20,8 +12,3 @@ Look into proper garbage collection
 
 Refactor gamestate code?
 Decide on namespace usage. Either Rpg.* or Assets.Scripts.*
-
-
-
-Perform A* find on all units
-Figure out which path is shortest, and move as far down that path as possible

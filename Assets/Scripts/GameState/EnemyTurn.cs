@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Assets.Scripts.GameState;
 using Pathfinding;
 using Rpg.Unit;
-using UnityEngine;
 
 namespace Rpg.GameState
 {
@@ -13,7 +10,7 @@ namespace Rpg.GameState
     {
         private IUnit unit;
         private List<IFriendlyUnit> friendlyUnits;
-        private int pathsFound = 0;
+        private int pathsFound;
         private List<Path> paths = new List<Path>();
 
         public EnemyTurn(IUnit unit)
@@ -32,7 +29,7 @@ namespace Rpg.GameState
             {
                 var p = ABPath.Construct(unit.GetGameObject().transform.position,
                     friendlyUnit.GetGameObject().transform.position,
-                    (Path path) =>
+                    path =>
                     {
                         paths.Add(path);
                         pathsFound++;
@@ -64,8 +61,10 @@ namespace Rpg.GameState
                 }
             }
 
-            // 9 => 8  6      
-
+            if (shortestPath == null)
+            {
+                throw new Exception("Could not find shortest path.");
+            }
 
             // Remove the first position, since it is the unit's current location.
             shortestPath.vectorPath.RemoveAt(0);
@@ -90,23 +89,9 @@ namespace Rpg.GameState
             var map = GameManager.instance.levelManager.GetMap();
             var tile = map.FindTileAtPosition(finalPosition);
 
-            Debug.Log(tile.tilePosition);
-            Debug.Log(tile.HasUnit());
-
+            // Wait for the unit to finish moving, and then end the turn.
             GameManager.instance.GameState = new BlankState();
             unit.MoveToTile(tile, () => { unit.EndTurn(); });
-
-            //            Debug.Log(finalPosition);
-
-            //            Debug.Log(shortestPath.vectorPath.Count);
-            //
-            //
-            //            var targetNode = AstarPath.active.GetNearest().node;
-            //
-            //            Debug.Log(targetNode.GraphIndex);
-
-            //                        Debug.Log(path.vectorPath.Count);
-            //                        Debug.Log(path.vectorPath[0]);
         }
 
         public void Disable()

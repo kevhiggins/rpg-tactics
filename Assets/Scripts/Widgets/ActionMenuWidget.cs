@@ -149,6 +149,10 @@ namespace Rpg.Widgets
             {
                 unit.Attack();
             }
+            else if (activeMenuItem.name == "Wait")
+            {
+                unit.EndTurn();
+            }
         }
     }
 }

@@ -75,6 +75,7 @@ namespace Rpg.GameState
             if (shortestPath.vectorPath.Count == 0)
             {
                 unit.EndTurn();
+                return;
             }
 
             var index = shortestPath.vectorPath.Count - 1;

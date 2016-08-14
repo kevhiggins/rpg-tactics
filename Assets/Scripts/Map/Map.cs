@@ -173,22 +173,25 @@ namespace Rpg.Map
             return GetTile(tilePosition.x, tilePosition.y);
         }
 
-        // Find the unity at the unity world position.
+        /// <summary>
+        /// Find the tile at the given world position.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
         public Tile FindTileAtPosition(Vector3 position)
         {
-            // Add a half tile width/height to the position, since it starts on a corner, and tiles are drawn from their centers.
-            position += new Vector3(GetTileWidthScaled() / 2, -GetTileHeightScaled() / 2);
+            // Subtract a half tile width/height from the position, since it starts on a corner, and tiles are drawn from their centers.
+            // This way, if the position was the center of the tile at 0,0, we would shift it's position to the upper left of that tile, for easier maths.
+            position -= new Vector3(GetTileWidthScaled() / 2, -GetTileHeightScaled() / 2);
 
             // Find the difference in distance between the map's upper left, and the tiles lower right position.
             var mapPosition = GameObject.transform.position;
             var newPosition = position - mapPosition;
 
-            // Divide the tile dimensions by the point difference to get the number of tiles
-            int x = (int)(newPosition.x/GetTileWidthScaled());
-            int y = (int)(-newPosition.y/GetTileHeightScaled());
 
-            Debug.Log(x);
-            Debug.Log(y);
+            // Divide the tile dimensions by the point difference to get the number of tiles. Convert to Int32 to avoid float rounding errors.
+            int x = Convert.ToInt32(newPosition.x/GetTileWidthScaled());
+            int y = Convert.ToInt32(-newPosition.y/GetTileHeightScaled());
 
             return GetTile(x, y);
         }

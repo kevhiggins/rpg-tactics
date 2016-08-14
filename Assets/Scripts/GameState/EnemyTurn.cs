@@ -69,9 +69,17 @@ namespace Rpg.GameState
 
             // Remove the first position, since it is the unit's current location.
             shortestPath.vectorPath.RemoveAt(0);
+            // Remove the last position, because we only want to move the enemy next to the target.
+            shortestPath.vectorPath.RemoveAt(shortestPath.vectorPath.Count - 1);
 
+            // If the unit is already where it wants to be, then end turn.
+            if (shortestPath.vectorPath.Count == 0)
+            {
+                unit.EndTurn();
+            }
 
             var index = shortestPath.vectorPath.Count - 1;
+
             if (unit.MovementSpeed < shortestPath.vectorPath.Count)
             {
                 index -= shortestPath.vectorPath.Count - unit.MovementSpeed;

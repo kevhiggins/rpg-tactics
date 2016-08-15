@@ -1,11 +1,15 @@
-
-
 Allow attacking
+	Highlight tiles red
 Allow units to die
+
+Use A* pathfinding to generate the nearest nodes. Need it to take into account obstacles
+
+Test animation triggers for blood particle effect.
 
 Hook up the hp and CT meters
 Add bloop when menu confirms
 
+Visual cue for being able to perform an action
 
 Unit's should have move called on them instead of maps?
 

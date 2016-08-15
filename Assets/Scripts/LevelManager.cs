@@ -8,6 +8,7 @@ public class LevelManager : MonoBehaviour
     public GameObject currentMap;
     public GameObject tileSelectionCursor;
     public GameObject highlightedTile;
+    public GameObject attackHighlightedTile;
 
     private Map loadedMap;
 
@@ -31,14 +32,14 @@ public class LevelManager : MonoBehaviour
         return loadedMap;
     }
 
-    public List<GameObject> HighlightTiles(List<TilePosition> tilePositions)
+    public List<GameObject> HighlightTiles(List<TilePosition> tilePositions, GameObject highlightGameObject)
     {
         List<GameObject> highlightedTiles = new List<GameObject>();
         var map = GetMap();
         foreach (var tilePosition in tilePositions)
         {
             var tile = map.GetTile(tilePosition);
-            var currentHighlightedTile = Instantiate(highlightedTile, tile.GetPosition(), Quaternion.identity) as GameObject;
+            var currentHighlightedTile = Instantiate(highlightGameObject, tile.GetPosition(), Quaternion.identity) as GameObject;
             highlightedTiles.Add(currentHighlightedTile);
         }
 

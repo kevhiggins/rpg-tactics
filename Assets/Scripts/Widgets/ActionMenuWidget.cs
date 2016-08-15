@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.GameState;
 using Assets.Scripts.Unity;
+using Rpg.GameState;
 using Rpg.Unit;
 using UnityEngine;
 
@@ -147,7 +148,7 @@ namespace Rpg.Widgets
             }
             else if (activeMenuItem.name == "Act")
             {
-                unit.Attack();
+                GameManager.instance.GameState = new AttackState(unit);
             }
             else if (activeMenuItem.name == "Wait")
             {

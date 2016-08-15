@@ -2,6 +2,7 @@
 using Rpg.Unit;
 using Tiled2Unity;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Rpg.Map
 {
@@ -194,6 +195,40 @@ namespace Rpg.Map
             int y = Convert.ToInt32(-newPosition.y/GetTileHeightScaled());
 
             return GetTile(x, y);
+        }
+
+        public List<TilePosition> GetTilePositionsInRange(TilePosition targetTilePosition, int range)
+        {
+            var tilePositions = new List<TilePosition>();
+
+            var xBreadth = 0;
+            for (int y = range; y >= -range; y--)
+            {
+                var yPosition = targetTilePosition.y - y;
+                if (yPosition >= 0 && yPosition < TilesHigh())
+                {
+                    for (int x = -xBreadth; x <= xBreadth; x++)
+                    {
+                        var xPosition = targetTilePosition.x + x;
+                        if (xPosition < 0 || xPosition >= TilesWide())
+                        {
+                            continue;
+                        }
+                        tilePositions.Add(new TilePosition(xPosition, yPosition));
+                    }
+                }
+
+                if (y > 0)
+                {
+                    xBreadth++;
+                }
+                else
+                {
+                    xBreadth--;
+                }
+            }
+
+            return tilePositions;
         }
     }
 }

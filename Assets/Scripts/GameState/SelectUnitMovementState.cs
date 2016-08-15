@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Rpg.Map;
 using Rpg.Unit;
 using UnityEngine;
@@ -35,11 +34,11 @@ namespace Assets.Scripts.GameState
             // If the tile is not the current user tile, and the tile is in the list of highlighted tiles, then move the unit.
             if (!unit.GetTile().tilePosition.Equals(cursorTilePosition))
             {
-                if(UnitCanMoveToTilePosition(cursorTilePosition))
+                if (UnitCanMoveToTilePosition(cursorTilePosition))
                 {
                     // TODO Change this to tell the unit it's moving. That way we can decrement the CT gauge appropriately.
                     GameManager.instance.GameState = new BlankState();
-                    map.MoveUnitToSelectedTile(unit, () => { unit.EndTurn();});
+                    map.MoveUnitToSelectedTile(unit, () => { unit.EndTurn(); });
                 }
             }
         }
@@ -68,15 +67,37 @@ namespace Assets.Scripts.GameState
 
         public override void Enable()
         {
+            var map = GameManager.instance.levelManager.GetMap();
+
             // Find the tiles in the current units range, and highlight them to show which are available.
-            highlightedTilePositions = GetTilePositionsInRange();
-            highlightedTiles = GameManager.instance.levelManager.HighlightTiles(highlightedTilePositions);
+            var tilesInRange = map.GetTilePositionsInRange(unit.GetTile().tilePosition, unit.MovementSpeed);
+            highlightedTilePositions = FilterInvalidTilePositions(tilesInRange);
+
+            var levelManager = GameManager.instance.levelManager;
+            highlightedTiles = levelManager.HighlightTiles(highlightedTilePositions, levelManager.highlightedTile);
+
 
             foreach (var highlightedTile in highlightedTiles)
             {
                 highlightedTile.SetActive(true);
             }
             base.Enable();
+        }
+
+        protected List<TilePosition> FilterInvalidTilePositions(List<TilePosition> tilePositions)
+        {
+            var map = GameManager.instance.levelManager.GetMap();
+            var filteredList = new List<TilePosition>();
+            foreach (var tilePosition in tilePositions)
+            {
+                // Only add the tile to the highlight list if it exists, and does not have a unit.
+                var tile = map.GetTile(tilePosition.x, tilePosition.y);
+                if (tile != null && tile.HasUnit() == false)
+                {
+                    filteredList.Add(tilePosition);
+                }
+            }
+            return filteredList;
         }
 
         public override void Disable()
@@ -93,54 +114,5 @@ namespace Assets.Scripts.GameState
         {
             GameManager.instance.GameState = new ActiveUnitMenuState(unit);
         }
-
-
-        /// <summary>
-        /// Finds a list of the tile positions in movement range of the current unit.
-        /// </summary>
-        /// <returns></returns>
-        public List<TilePosition> GetTilePositionsInRange()
-        {
-            var tilePosition = unit.GetTile().tilePosition;
-            var movementTilePositions = new List<TilePosition>();
-
-            var map = GameManager.instance.levelManager.GetMap();
-
-            var xBreadth = 0;
-            for (int y = unit.MovementSpeed; y >= -unit.MovementSpeed; y--)
-            {
-                var yPosition = tilePosition.y - y;
-                if (yPosition >= 0 && yPosition < map.TilesHigh())
-                {
-                    for (int x = -xBreadth; x <= xBreadth; x++)
-                    {
-                        var xPosition = tilePosition.x + x;
-                        if (xPosition < 0 || xPosition >= map.TilesWide())
-                        {
-                            continue;
-                        }
-
-                        // Only add the tile to the highlight list if it exists, and does not have a unit.
-                        var tile = map.GetTile(xPosition, yPosition);
-                        if (tile != null && tile.HasUnit() == false)
-                        {
-                            movementTilePositions.Add(new TilePosition(xPosition, yPosition));
-                        }
-                    }
-                }
-
-                if (y > 0)
-                {
-                    xBreadth++;
-                }
-                else
-                {
-                    xBreadth--;
-                }
-            }
-
-            return movementTilePositions;
-        }
     }
-
 }

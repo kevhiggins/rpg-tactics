@@ -19,6 +19,9 @@ namespace Rpg.GameState
             var attackRange = 1;
             var map = GameManager.instance.levelManager.GetMap();
             attackTilePositions = map.GetTilePositionsInRange(unit.GetTile().tilePosition, attackRange);
+            attackTilePositions.Remove(unit.GetTile().tilePosition);
+
+
             var levelManager = GameManager.instance.levelManager;
 
             attackTiles = levelManager.HighlightTiles(attackTilePositions, levelManager.attackHighlightedTile);

@@ -161,9 +161,12 @@ namespace Rpg.Unit
             if (currentHp < 0)
             {
                 currentHp = 0;
+            }
+
+            if (currentHp == 0)
+            {
                 Die();
             }
-            
         }
 
         protected void Die()

@@ -12,6 +12,7 @@ namespace Rpg.Unit
         int MaxHp { get; }
         string UnitName { get; }
         int Level { get; }
+        int Damage { get; }
 
 
         // TODO This should be temporary
@@ -37,5 +38,7 @@ namespace Rpg.Unit
         void EndTurn();
 
         void Attack();
+
+        void TakeDamage(int damage);
     }
 }

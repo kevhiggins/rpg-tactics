@@ -6,10 +6,12 @@ namespace Assets.Scripts.GameState
     /// <summary>
     /// Abstract Game state that handles actions that can take place in most map game states.
     /// </summary>
-    abstract class AbstractMapGameState : IGameState
+    abstract class AbstractMapGameState : AbstractGameState
     {
-        public void HandleInput()
+        public override void HandleInput()
         {
+            base.HandleInput();
+
             var map = GameManager.instance.levelManager.GetMap();
             var inputManager = GameManager.instance.inputManager;
 
@@ -26,23 +28,8 @@ namespace Assets.Scripts.GameState
                 map.MoveTileCursor(0, axisValue > 0 ? -1 : 1);
                 HandleCursorMove();
             }
-
-            if (inputManager.Accept())
-            {
-                HandleAccept();
-            }
-
-            if (inputManager.Cancel())
-            {
-                HandleCancel();
-            }
         }
 
-        public abstract void HandleAccept();
-        public abstract void HandleCancel();
         public abstract void HandleCursorMove();
-
-        public abstract void Enable();
-        public abstract void Disable();
     }
 }

@@ -34,6 +34,11 @@ namespace Rpg.Widgets
             SetMenuPosition(panel);
         }
 
+        private static GameObject CreateCanvas()
+        {
+            return Object.Instantiate(GameManager.instance.activeUnitMenu);
+        }
+
         protected void SetMenuPosition(GameObject panel)
         {
             var unitGameObject = unit.GetGameObject();
@@ -49,11 +54,6 @@ namespace Rpg.Widgets
             targetPosition += new Vector3((float)20 / pixelsToUnits, rectTransform.GetHeight() / pixelsToUnits / 2, 0);
 
             panel.transform.position = targetPosition;
-        }
-
-        public override void Dispose()
-        {
-            Object.Destroy(canvas);
         }
 
         public override void HandleInput()
@@ -94,11 +94,6 @@ namespace Rpg.Widgets
             {
                 GameManager.instance.GameState = new ExploreMapState(unit);
             }
-        }
-
-        private static GameObject CreateCanvas()
-        {
-            return Object.Instantiate(GameManager.instance.activeUnitMenu);
         }
 
         public void ActivateMenuItem(int menuItemIndex)

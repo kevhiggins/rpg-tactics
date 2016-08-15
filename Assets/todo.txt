@@ -4,6 +4,8 @@ Allow units to die
 
 Use A* pathfinding to generate the nearest nodes. Need it to take into account obstacles
 
+Look into saving previous menu states
+
 Test animation triggers for blood particle effect.
 
 Hook up the hp and CT meters

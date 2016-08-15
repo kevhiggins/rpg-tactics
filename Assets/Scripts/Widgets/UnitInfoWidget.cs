@@ -11,10 +11,8 @@ namespace Rpg.Widgets
 
         public UnitInfoWidget(IUnit unit) : base(CreateCanvas())
         {
-            PopulateUnitInfoDisplay(unit);
-
-            var canvasScript = canvas.GetComponent<Canvas>();
-            canvasScript.worldCamera = Camera.main;
+            var panel = GameObjectHelper.FindChildByName(canvas, "Panel");
+            PopulateUnitInfoDisplay(panel, unit);
         }
 
         private static GameObject CreateCanvas()
@@ -22,18 +20,12 @@ namespace Rpg.Widgets
             return Object.Instantiate(GameManager.instance.unitInfoBox);
         }
 
-        public override void Dispose()
-        {
-            Object.Destroy(canvas);
-        }
-
         public override void HandleInput()
         {
         }
 
-        protected void PopulateUnitInfoDisplay(IUnit targetUnit)
+        public static void PopulateUnitInfoDisplay(GameObject panel, IUnit targetUnit)
         {
-            var panel = GameObjectHelper.FindChildByName(canvas, "Panel");
             ReplaceTextData(panel, "hitpoints", "{hp / hpmax}", targetUnit.CurrentHp + " / " + targetUnit.MaxHp);
             ReplaceTextData(panel, "name", "{unitname}", targetUnit.UnitName);
             ReplaceTextData(panel, "chargetime", "{ct / max}", targetUnit.ChargeTime + " / " + GameManager.instance.actionQueue.ChargeTimeThreshold);
@@ -50,7 +42,7 @@ namespace Rpg.Widgets
             imageScript.color = spriteRenderer.color;
         }
 
-        protected void ReplaceTextData(GameObject parent, string textFieldName, string targetData, string newData)
+        protected static void ReplaceTextData(GameObject parent, string textFieldName, string targetData, string newData)
         {
             var hitPointObject = GameObjectHelper.FindChildByName(parent, textFieldName);
             var textScript = hitPointObject.GetComponent<Text>();

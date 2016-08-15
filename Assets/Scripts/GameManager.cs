@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject activeUnitMenu;
     public GameObject unitInfoBox;
+    public GameObject targetActionBox;
+
     public int pixelsToUnits = 100;
 
     public GameObject[] units;

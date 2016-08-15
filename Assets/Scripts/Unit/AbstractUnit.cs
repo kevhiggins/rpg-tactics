@@ -14,6 +14,7 @@ namespace Rpg.Unit
         public int level = 1;
         public int movementSpeed = 4;
         public int speed = 20;
+        public int damage = 10;
         public Vector2 startPosition;
 
         private Tile tile;
@@ -85,6 +86,14 @@ namespace Rpg.Unit
             }
         }
 
+        public int Damage
+        {
+            get
+            {
+                return damage;
+            }
+        }
+
         public GameObject GetGameObject()
         {
             return gameObject;
@@ -144,6 +153,24 @@ namespace Rpg.Unit
         public void Attack()
         {
             TriggerAnimatorParameter("Act");
+        }
+
+        public void TakeDamage(int damage)
+        {
+            currentHp -= damage;
+            if (currentHp < 0)
+            {
+                currentHp = 0;
+                Die();
+            }
+            
+        }
+
+        protected void Die()
+        {
+            TriggerAnimatorParameter("Death");
+            GameManager.instance.actionQueue.UnitList.Remove(this);
+
         }
 
         protected void TriggerAnimatorParameter(string parameterName)

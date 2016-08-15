@@ -13,5 +13,10 @@ namespace Rpg.Widgets
             var canvasScript = canvas.GetComponent<Canvas>();
             canvasScript.worldCamera = Camera.main;
         }
+
+        public override void Dispose()
+        {
+            Object.Destroy(canvas);
+        }
     }
 }

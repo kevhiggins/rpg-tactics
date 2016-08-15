@@ -173,7 +173,7 @@ namespace Rpg.Unit
         {
             TriggerAnimatorParameter("Death");
             GameManager.instance.actionQueue.UnitList.Remove(this);
-
+            GetTile().ClearUnit();
         }
 
         protected void TriggerAnimatorParameter(string parameterName)

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Rpg.GameState;
 using Rpg.Map;
 using Rpg.Unit;
 using UnityEngine;
@@ -8,13 +7,13 @@ using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.GameState
 {
-    class SelectUnitMovementState : AbstractMapGameState, IGameState, IDisposable
+    class SelectUnitMovementState : ExploreMapState
     {
         private IUnit unit;
         private List<TilePosition> highlightedTilePositions;
         private List<GameObject> highlightedTiles;
 
-        public SelectUnitMovementState(IUnit unit)
+        public SelectUnitMovementState(IUnit unit) : base(unit)
         {
             this.unit = unit;
         }
@@ -27,19 +26,6 @@ namespace Assets.Scripts.GameState
             }
         }
 
-
-        public new void HandleInput()
-        {
-            base.HandleInput();
-
-            var inputManager = GameManager.instance.inputManager;
-
-            // On Cancel command, go back to the parent menu.
-            if (inputManager.Cancel())
-            {
-                BackToParentState();
-            }
-        }
 
         public override void HandleAccept()
         {
@@ -60,6 +46,7 @@ namespace Assets.Scripts.GameState
 
         public override void HandleCancel()
         {
+            BackToParentState();
         }
 
         /// <summary>
@@ -98,6 +85,7 @@ namespace Assets.Scripts.GameState
                 highlightedTile.SetActive(false);
             }
             Dispose();
+            base.Disable();
         }
 
         private void BackToParentState()
@@ -151,10 +139,6 @@ namespace Assets.Scripts.GameState
             }
 
             return movementTilePositions;
-        }
-
-        public override void HandleCursorMove()
-        {
         }
     }
 

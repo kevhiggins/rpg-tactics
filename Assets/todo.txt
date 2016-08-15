@@ -1,6 +1,4 @@
-Allow attacking
-	Highlight tiles red
-Allow units to die
+Allow AI to attack
 
 Use A* pathfinding to generate the nearest nodes. Need it to take into account obstacles
 

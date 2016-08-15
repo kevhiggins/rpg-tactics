@@ -76,6 +76,7 @@ namespace Assets.Scripts.GameState
             {
                 highlightedTile.SetActive(true);
             }
+            base.Enable();
         }
 
         public override void Disable()

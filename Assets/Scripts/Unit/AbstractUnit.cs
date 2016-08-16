@@ -28,25 +28,15 @@ namespace Rpg.Unit
 
         public int MovementSpeed
         {
-            get
-            {
-                return movementSpeed;
-            }
+            get { return movementSpeed; }
         }
 
         public int Speed
         {
-            get
-            {
-                return speed;
-            }
+            get { return speed; }
         }
 
-        public int ChargeTime
-        {
-            get;
-            private set;
-        }
+        public int ChargeTime { get; private set; }
 
         public TilePosition StartPosition
         {
@@ -54,7 +44,7 @@ namespace Rpg.Unit
             {
                 if (startTilePosition == null)
                 {
-                    startTilePosition = new TilePosition((int)startPosition.x, (int)startPosition.y);
+                    startTilePosition = new TilePosition((int) startPosition.x, (int) startPosition.y);
                 }
                 return startTilePosition;
             }
@@ -62,42 +52,27 @@ namespace Rpg.Unit
 
         public int CurrentHp
         {
-            get
-            {
-                return currentHp;
-            }
+            get { return currentHp; }
         }
 
         public int MaxHp
         {
-            get
-            {
-                return maxHp;
-            }
+            get { return maxHp; }
         }
 
         public string UnitName
         {
-            get
-            {
-                return unitName;
-            }
+            get { return unitName; }
         }
 
         public int Level
         {
-            get
-            {
-                return level;
-            }
+            get { return level; }
         }
 
         public int Damage
         {
-            get
-            {
-                return damage;
-            }
+            get { return damage; }
         }
 
         public GameObject GetGameObject()
@@ -266,7 +241,7 @@ namespace Rpg.Unit
         public bool Equals(AbstractUnit p)
         {
             // If parameter is null return false:
-            if ((object)p == null)
+            if ((object) p == null)
             {
                 return false;
             }

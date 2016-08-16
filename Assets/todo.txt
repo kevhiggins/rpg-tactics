@@ -2,7 +2,10 @@ Direction of unit.
 
 Read the Unity manual
 
-Allow AI to attack
+Allow doing both move and attack in the same turn.
+Hook up Level up that Joe will make
+
+Fix bug where enemy animation prevents flipping during movementzdzz
 
 Make sure that nodes with units on them don't count as walkable.
 Use A* pathfinding to generate the nearest nodes. Need it to take into account obstacles

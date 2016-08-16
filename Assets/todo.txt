@@ -1,9 +1,9 @@
-Direction of unit.
+Figure out a way for the HP bar game objects to be properly shared between their parents, so that you can easily propogate updates to each.
 
 Read the Unity manual
 
 Allow doing both move and attack in the same turn.
-Hook up Level up that Joe will make
+Hook up Level-Up that Joe will make
 
 Fix bug where enemy animation prevents flipping during movementzdzz
 

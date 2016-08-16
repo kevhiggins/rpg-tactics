@@ -11,7 +11,7 @@ namespace Rpg
 
         public void AttackUnit(IUnit sourceUnit, IUnit targetUnit)
         {
-            sourceUnit.Attack();
+            sourceUnit.Attack(targetUnit.GetTile().tilePosition);
             targetUnit.TakeDamage(sourceUnit.Damage);
             DisplayDamagePop(targetUnit, sourceUnit.Damage);
             sourceUnit.EndTurn();

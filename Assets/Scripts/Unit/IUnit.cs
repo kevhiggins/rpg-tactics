@@ -37,7 +37,7 @@ namespace Rpg.Unit
         /// </summary>
         void EndTurn();
 
-        void Attack();
+        void Attack(TilePosition targetPosition);
 
         void TakeDamage(int damage);
     }

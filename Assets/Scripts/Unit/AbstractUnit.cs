@@ -80,17 +80,9 @@ namespace Rpg.Unit
             return gameObject;
         }
 
-        public SpriteRenderer GetSpriteRenderer()
-        {
-            // If the GameObject uses animations, then the SpriteRenders is on the GameObject, otherwise, it's on the child object.
-            var spriteRenderer = GetGameObject().GetComponent<SpriteRenderer>();
-            if (spriteRenderer == null)
-            {
-                var spriteObject = GetGameObject().transform.GetChild(0).gameObject;
-                spriteRenderer = spriteObject.GetComponent<SpriteRenderer>();
-            }
-            return spriteRenderer;
-        }
+        private Direction direction;
+
+
 
         public void SetTile(Tile targetTile)
         {
@@ -114,10 +106,11 @@ namespace Rpg.Unit
                 throw new Exception("Can not move a unit that is not already on a tile.");
             }
 
-            var direction = GetMovementDirection(this.GetTile().tilePosition, tile.tilePosition);
+            var previousTile = GetTile();
+
+            CalculateMovementDirection(previousTile.tilePosition, tile.tilePosition);
 
             // Clear unit from previous tile.
-            var previousTile = GetTile();
             previousTile.ClearUnit();
 
             // Add unit to new tile.
@@ -125,9 +118,6 @@ namespace Rpg.Unit
 
             SetUnitOrderLayerPosition();
 
-
-            GetSpriteRenderer().flipX = direction == Direction.Left;
-            
             TriggerAnimatorParameter("StartMove");
             GetGameObject().transform.DOMove(tile.GetPosition(), 0.5f).OnComplete(() =>
             {
@@ -136,16 +126,35 @@ namespace Rpg.Unit
             });
         }
 
-        public Direction GetMovementDirection(TilePosition startPosition, TilePosition endPosition)
+        /// <summary>
+        /// Calculate the new direction of the unit based on the tile movement.
+        /// </summary>
+        /// <param name="startPosition"></param>
+        /// <param name="endPosition"></param>
+        public void CalculateMovementDirection(TilePosition startPosition, TilePosition endPosition)
         {
+            // If neither condition, then staying the same is what we want.
             if (startPosition.x < endPosition.x)
-                return Direction.Right;
-            return Direction.Left;
+                direction = Direction.Right;
+            else if(startPosition.x > endPosition.x)
+                direction = Direction.Left;
+
+            var animator = GetAnimator();
+            if(animator != null)
+            {
+                animator.SetBool("IsFacingLeft", direction == Direction.Left);
+            }
+
+            // Change the units facing if needed.
+            var scale = GetGameObject().transform.localScale;
+            scale.x = Math.Abs(scale.x) * (direction == Direction.Left ? -1 : 1);
+            GetGameObject().transform.localScale = scale;
         }
 
-        public void Attack()
+        public void Attack(TilePosition targetPosition)
         {
-            TriggerAnimatorParameter("Act");
+            CalculateMovementDirection(GetTile().tilePosition, targetPosition);
+            TriggerAnimatorParameter("Attack");
         }
 
         public void Hit()
@@ -186,7 +195,23 @@ namespace Rpg.Unit
 
         protected Animator GetAnimator()
         {
-            return GetGameObject().GetComponent<Animator>();
+            var animator = GetGameObject().GetComponent<Animator>();
+            if(animator == null)
+            {
+                animator = GetGameObject().GetComponentInChildren<Animator>();
+            }
+            return animator;
+        }
+
+        public SpriteRenderer GetSpriteRenderer()
+        {
+            // If the GameObject uses animations, then the SpriteRenders is on the GameObject, otherwise, it's on the child object.
+            var spriteRenderer = GetGameObject().GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null)
+            {
+                spriteRenderer = GetGameObject().GetComponentInChildren<SpriteRenderer>();
+            }
+            return spriteRenderer;
         }
 
         public void PlaceToTile(Tile tile)

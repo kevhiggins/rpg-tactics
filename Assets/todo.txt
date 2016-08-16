@@ -4,6 +4,7 @@ Read the Unity manual
 
 Allow AI to attack
 
+Make sure that nodes with units on them don't count as walkable.
 Use A* pathfinding to generate the nearest nodes. Need it to take into account obstacles
 
 Look into saving previous menu states

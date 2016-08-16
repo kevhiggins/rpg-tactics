@@ -1,3 +1,7 @@
+Direction of unit.
+
+Read the Unity manual
+
 Allow AI to attack
 
 Use A* pathfinding to generate the nearest nodes. Need it to take into account obstacles
@@ -20,3 +24,6 @@ Refactor gamestate code?
 Decide on namespace usage. Either Rpg.* or Assets.Scripts.*
 
 See if there is a GetNodes within X distance function for A*
+
+
+Add a onDamageTaken event

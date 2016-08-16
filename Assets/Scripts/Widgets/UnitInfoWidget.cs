@@ -28,10 +28,14 @@ namespace Rpg.Widgets
         {
             ReplaceTextData(panel, "hitpoints", "{hp / hpmax}", targetUnit.CurrentHp + " / " + targetUnit.MaxHp);
             ReplaceTextData(panel, "name", "{unitname}", targetUnit.UnitName);
-            ReplaceTextData(panel, "chargetime", "{ct / max}", targetUnit.ChargeTime + " / " + GameManager.instance.actionQueue.ChargeTimeThreshold);
+            ReplaceTextData(panel, "chargetime", "{ct / max}",
+                targetUnit.ChargeTime + " / " + GameManager.instance.actionQueue.ChargeTimeThreshold);
             ReplaceTextData(panel, "level", "{level}", targetUnit.Level.ToString());
             ReplaceTextData(panel, "speed", "{speed}", targetUnit.Speed.ToString());
             ReplaceTextData(panel, "movespeed", "{ms}", targetUnit.MovementSpeed.ToString());
+
+            SetBarValue(panel, "hpbar", "hpbar", (float) targetUnit.CurrentHp/targetUnit.MaxHp);
+            SetBarValue(panel, "ctbar", "ctbar", (float)targetUnit.ChargeTime / GameManager.instance.actionQueue.ChargeTimeThreshold);
 
             var spriteRenderer = targetUnit.GetSpriteRenderer();
             var targetSprite = spriteRenderer.sprite;
@@ -40,6 +44,16 @@ namespace Rpg.Widgets
             var imageScript = unitPortraitObject.GetComponent<Image>();
             imageScript.sprite = targetSprite;
             imageScript.color = spriteRenderer.color;
+        }
+
+        protected static void SetBarValue(GameObject panel, string barName, string currentBarName, float value)
+        {
+            var bars = GameObjectHelper.FindChildByName(panel, "Bars");
+            var parentBar = GameObjectHelper.FindChildByName(bars, barName);
+
+            var childBar = GameObjectHelper.FindChildByName(parentBar, currentBarName);
+            var barImageScript = childBar.GetComponent<Image>();
+            barImageScript.fillAmount = value;
         }
 
         protected static void ReplaceTextData(GameObject parent, string textFieldName, string targetData, string newData)

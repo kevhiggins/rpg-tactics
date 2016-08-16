@@ -155,8 +155,14 @@ namespace Rpg.Unit
             TriggerAnimatorParameter("Act");
         }
 
+        public void Hit()
+        {
+            TriggerAnimatorParameter("Hit");
+        }
+
         public void TakeDamage(int damage)
         {
+            Hit();
             currentHp -= damage;
             if (currentHp < 0)
             {

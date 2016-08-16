@@ -1,6 +1,8 @@
-﻿namespace Rpg.Map
+﻿using System;
+
+namespace Rpg.Map
 {
-    public class TilePosition
+    public class TilePosition : IEquatable<TilePosition>
     {
         public int x { get; private set; }
         public int y { get; private set; }
@@ -38,7 +40,7 @@
         public bool Equals(TilePosition p)
         {
             // If parameter is null return false:
-            if ((object)p == null)
+            if (p == null)
             {
                 return false;
             }

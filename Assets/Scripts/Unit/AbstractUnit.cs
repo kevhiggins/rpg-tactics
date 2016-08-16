@@ -17,6 +17,12 @@ namespace Rpg.Unit
         public int damage = 10;
         public Vector2 startPosition;
 
+        public enum Direction
+        {
+            Left,
+            Right
+        }
+
         private Tile tile;
         private TilePosition startTilePosition;
 
@@ -133,6 +139,8 @@ namespace Rpg.Unit
                 throw new Exception("Can not move a unit that is not already on a tile.");
             }
 
+            var direction = GetMovementDirection(this.GetTile().tilePosition, tile.tilePosition);
+
             // Clear unit from previous tile.
             var previousTile = GetTile();
             previousTile.ClearUnit();
@@ -142,12 +150,22 @@ namespace Rpg.Unit
 
             SetUnitOrderLayerPosition();
 
+
+            GetSpriteRenderer().flipX = direction == Direction.Left;
+            
             TriggerAnimatorParameter("StartMove");
             GetGameObject().transform.DOMove(tile.GetPosition(), 0.5f).OnComplete(() =>
             {
                 TriggerAnimatorParameter("EndMove");
                 onComplete();
             });
+        }
+
+        public Direction GetMovementDirection(TilePosition startPosition, TilePosition endPosition)
+        {
+            if (startPosition.x < endPosition.x)
+                return Direction.Right;
+            return Direction.Left;
         }
 
         public void Attack()

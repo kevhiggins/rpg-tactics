@@ -66,15 +66,28 @@ namespace Rpg.GameState
                 throw new Exception("Could not find shortest path.");
             }
 
+            var map = GameManager.instance.levelManager.GetMap();
+
             // Remove the first position, since it is the unit's current location.
             shortestPath.vectorPath.RemoveAt(0);
             // Remove the last position, because we only want to move the enemy next to the target.
-            shortestPath.vectorPath.RemoveAt(shortestPath.vectorPath.Count - 1);
+            var targetIndex = shortestPath.vectorPath.Count - 1;
+            var targetPosition = shortestPath.vectorPath[targetIndex];
+            shortestPath.vectorPath.RemoveAt(targetIndex);
 
             // If the unit is already where it wants to be, then end turn.
             if (shortestPath.vectorPath.Count == 0)
             {
-                unit.EndTurn();
+                // Get the target tile's unit and attack it.
+                var unitTile = map.FindTileAtPosition(targetPosition);
+                if (unitTile.HasUnit() == false)
+                {
+                    throw new Exception("Could not find a unit at the tile we are targeting. This isn't supposed to be possible.");
+                }
+                var targetUnit = unitTile.GetUnit();
+
+
+                GameManager.instance.battleManager.AttackUnit(unit, targetUnit);
                 return;
             }
 
@@ -87,7 +100,7 @@ namespace Rpg.GameState
 
             var finalPosition = shortestPath.vectorPath[index];
 
-            var map = GameManager.instance.levelManager.GetMap();
+            
             var tile = map.FindTileAtPosition(finalPosition);
 
             // Wait for the unit to finish moving, and then end the turn.

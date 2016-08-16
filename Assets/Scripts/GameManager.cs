@@ -1,14 +1,13 @@
 ﻿using System;
 using Assets.Scripts.GameState;
-using Pathfinding.Util;
+using Rpg;
 using UnityEngine;
 using Rpg.GameState;
 using Rpg.Unit;
-using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance = null;
+    public static GameManager instance;
 
     public GameObject activeUnitMenu;
     public GameObject unitInfoBox;
@@ -21,6 +20,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public LevelManager levelManager;
     [HideInInspector] public InputManager inputManager;
     [HideInInspector] public IActionQueue actionQueue;
+    [HideInInspector] public BattleManager battleManager;
+
 
 
     private IGameState gameState;
@@ -59,6 +60,7 @@ public class GameManager : MonoBehaviour
         levelManager = GetComponent<LevelManager>();
         inputManager = GetComponent<InputManager>();
         actionQueue = GetComponent<ActionQueue>();
+        battleManager = GetComponent<BattleManager>();
 
 
         InitGame();

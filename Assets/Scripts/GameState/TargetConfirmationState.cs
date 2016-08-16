@@ -34,9 +34,7 @@ namespace Assets.Scripts.GameState
 
         public override void HandleAccept()
         {
-            sourceUnit.Attack();
-            targetUnit.TakeDamage(sourceUnit.Damage);
-            sourceUnit.EndTurn();
+            GameManager.instance.battleManager.AttackUnit(sourceUnit, targetUnit);
         }
 
         public override void HandleCancel()

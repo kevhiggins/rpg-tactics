@@ -1,6 +1,6 @@
 ﻿namespace Rpg.Unit
 {
-    class EnemyUnit : AbstractUnit, IEnemyUnit
+    public class EnemyUnit : AbstractUnit, IEnemyUnit
     {
     }
 }

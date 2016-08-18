@@ -1,6 +1,6 @@
 ﻿namespace Rpg.Unit
 {
-    class FriendlyUnit : AbstractUnit, IFriendlyUnit
+    public class FriendlyUnit : AbstractUnit, IFriendlyUnit
     {
     }
 }

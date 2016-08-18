@@ -30,6 +30,9 @@ namespace Rpg.Unit
         int ExperienceToLevel { get; }
         bool IsDead { get; }
 
+        bool HasMoved { get; }
+        bool HasActed { get; }
+
         // TODO This should be temporary
         TilePosition StartPosition { get; }
 

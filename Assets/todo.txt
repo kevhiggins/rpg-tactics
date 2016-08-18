@@ -12,18 +12,12 @@ GAME:
 X - Hook up Pop EXP and Pop DMG if it broke
 X - Hook up level up noise and make a POP for it?
 X - Wait until the proper attack animation frame to deal damage
-
-Wait until enemy is done dying to end turn AND to give EXP.
+X - Wait until enemy is done dying to end turn AND to give EXP.
 
 camera
 
 Allow doing both move and attack in the same turn.
-Add frame to the attack to determine when the hit happens.
-Make sure to throw an exception if it doesn't.
-
-
-
-
+	-Once one of them is done, the option needs to be greyed out.
 
 Make sure that nodes with units on them don't count as walkable.
 Use A* pathfinding to generate the nearest nodes. Need it to take into account obstacles

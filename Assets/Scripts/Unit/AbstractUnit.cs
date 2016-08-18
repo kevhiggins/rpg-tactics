@@ -104,6 +104,15 @@ namespace Rpg.Unit
 
         public bool IsDead { get; private set; }
 
+        public bool HasMoved { get; private set; }
+        public bool HasActed { get; private set; }
+
+        protected AbstractUnit()
+        {
+            HasMoved = false;
+            HasActed = false;
+        }
+
         public GameObject GetGameObject()
         {
             return gameObject;

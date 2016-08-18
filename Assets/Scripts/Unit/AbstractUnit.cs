@@ -27,6 +27,7 @@ namespace Rpg.Unit
         public event DamageHandler OnDamage = (unit, amount) => { };
         public event AttackHitHandler OnAttackHit = () => { };
         public event AttackCompleteHandler OnAttackComplete = () => { };
+        public event DeathCompleteHandler OnDeathComplete = () => { };
 
         public enum Direction
         {
@@ -197,6 +198,14 @@ namespace Rpg.Unit
         public void AttackComplete()
         {
             OnAttackComplete();
+        }
+
+        /// <summary>
+        /// Called when the death animation is complete.
+        /// </summary>
+        public void DeathComplete()
+        {
+            OnDeathComplete();
         }
 
         public void TakeDamage(int damage)

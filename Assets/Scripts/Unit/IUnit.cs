@@ -10,7 +10,10 @@ namespace Rpg.Unit
     public delegate void DamageHandler(IUnit unit, int amount);
 
     public delegate void AttackHitHandler();
+
     public delegate void AttackCompleteHandler();
+
+    public delegate void DeathCompleteHandler();
 
     public interface IUnit : ITileChild
     {
@@ -65,5 +68,6 @@ namespace Rpg.Unit
         event AttackHitHandler OnAttackHit;
 
         event AttackCompleteHandler OnAttackComplete;
+        event DeathCompleteHandler OnDeathComplete;
     }
 }

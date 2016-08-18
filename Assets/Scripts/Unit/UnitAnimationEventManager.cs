@@ -18,5 +18,10 @@ namespace Assets.Scripts.Unit
         {
             gameObject.transform.parent.GetComponent<AbstractUnit>().AttackComplete();
         }
+
+        public void DeathComplete()
+        {
+            gameObject.transform.parent.GetComponent<AbstractUnit>().DeathComplete();
+        }
     }
 }

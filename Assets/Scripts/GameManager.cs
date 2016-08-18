@@ -21,7 +21,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public InputManager inputManager;
     [HideInInspector] public IActionQueue actionQueue;
     [HideInInspector] public BattleManager battleManager;
-
+    [HideInInspector] public AudioManager audioManager;
+    [HideInInspector] public PopManager popManager;
 
 
     private IGameState gameState;
@@ -61,7 +62,8 @@ public class GameManager : MonoBehaviour
         inputManager = GetComponent<InputManager>();
         actionQueue = GetComponent<ActionQueue>();
         battleManager = GetComponent<BattleManager>();
-
+        audioManager = GetComponent<AudioManager>();
+        popManager = GetComponent<PopManager>();
 
         InitGame();
     }
@@ -79,6 +81,7 @@ public class GameManager : MonoBehaviour
             
 
             actionQueue.UnitList.Add(unit);
+            popManager.RegisterUnit(unit);
         }
 
         // Load the level here

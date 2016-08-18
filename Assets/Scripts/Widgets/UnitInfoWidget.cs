@@ -33,9 +33,12 @@ namespace Rpg.Widgets
             ReplaceTextData(panel, "level", "{level}", targetUnit.Level.ToString());
             ReplaceTextData(panel, "speed", "{speed}", targetUnit.Speed.ToString());
             ReplaceTextData(panel, "movespeed", "{ms}", targetUnit.MovementSpeed.ToString());
+            ReplaceTextData(panel, "expamount", "{exp}", targetUnit.Experience.ToString());
+            ReplaceTextData(panel, "expamount", "{nextlevel}", targetUnit.ExperienceToLevel.ToString());
 
             SetBarValue(panel, "hpbar", "hpbar", (float) targetUnit.CurrentHp/targetUnit.MaxHp);
             SetBarValue(panel, "ctbar", "ctbar", (float)targetUnit.ChargeTime / GameManager.instance.actionQueue.ChargeTimeThreshold);
+            SetBarValue(panel, "expbar", "expbar", (float)targetUnit.Experience / targetUnit.ExperienceToLevel);
 
             var spriteRenderer = targetUnit.GetSpriteRenderer();
             var targetSprite = spriteRenderer.sprite;

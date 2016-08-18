@@ -15,7 +15,18 @@ namespace Rpg.Unit
         public int movementSpeed = 4;
         public int speed = 20;
         public int damage = 10;
+        public int experience;
+        public int experienceWorth;
+        public int experienceToLevel = 30;
         public Vector2 startPosition;
+        public GameObject deathSound;
+
+
+        public event LevelUpHandler OnLevelUp = (unit, level) => { };
+        public event ExperienceGainHandler OnExperienceGain = (unit, amount) => { };
+        public event DamageHandler OnDamage = (unit, amount) => { };
+        public event AttackHitHandler OnAttackHit = () => { };
+        public event AttackCompleteHandler OnAttackComplete = () => { };
 
         public enum Direction
         {
@@ -75,13 +86,29 @@ namespace Rpg.Unit
             get { return damage; }
         }
 
+        public int Experience
+        {
+            get { return experience; }
+        }
+
+        public int ExperienceWorth
+        {
+            get { return experienceWorth; }
+        }
+
+        public int ExperienceToLevel
+        {
+            get { return experienceToLevel; }
+        }
+
+        public bool IsDead { get; private set; }
+
         public GameObject GetGameObject()
         {
             return gameObject;
         }
 
-        private Direction direction;
-
+        public Direction direction = Direction.Right;
 
 
         public void SetTile(Tile targetTile)
@@ -136,18 +163,12 @@ namespace Rpg.Unit
             // If neither condition, then staying the same is what we want.
             if (startPosition.x < endPosition.x)
                 direction = Direction.Right;
-            else if(startPosition.x > endPosition.x)
+            else if (startPosition.x > endPosition.x)
                 direction = Direction.Left;
-
-            var animator = GetAnimator();
-            if(animator != null)
-            {
-                animator.SetBool("IsFacingLeft", direction == Direction.Left);
-            }
 
             // Change the units facing if needed.
             var scale = GetGameObject().transform.localScale;
-            scale.x = Math.Abs(scale.x) * (direction == Direction.Left ? -1 : 1);
+            scale.x = Math.Abs(scale.x)*(direction == Direction.Left ? -1 : 1);
             GetGameObject().transform.localScale = scale;
         }
 
@@ -162,10 +183,27 @@ namespace Rpg.Unit
             TriggerAnimatorParameter("Hit");
         }
 
+        /// <summary>
+        /// Called when an attack animation contacts its target.
+        /// </summary>
+        public void AttackHit()
+        {
+            OnAttackHit();
+        }
+
+        /// <summary>
+        /// Called when the attack animation is complete.
+        /// </summary>
+        public void AttackComplete()
+        {
+            OnAttackComplete();
+        }
+
         public void TakeDamage(int damage)
         {
             Hit();
             currentHp -= damage;
+            OnDamage(this, damage);
             if (currentHp < 0)
             {
                 currentHp = 0;
@@ -177,11 +215,36 @@ namespace Rpg.Unit
             }
         }
 
+        public void GainExperience(int amount)
+        {
+            experience += amount;
+            OnExperienceGain(this, amount);
+            var hasLeveled = false;
+            while (experience >= experienceToLevel)
+            {
+                level++;
+                experience -= experienceToLevel;
+                hasLeveled = true;
+            }
+
+            // Wait till all levels have happened, so we don't trigger the event more than once.
+            if (hasLeveled)
+            {
+                OnLevelUp(this, level);
+            }
+        }
+
+
         protected void Die()
         {
             TriggerAnimatorParameter("Death");
             GameManager.instance.actionQueue.UnitList.Remove(this);
             GetTile().ClearUnit();
+            if (deathSound != null)
+            {
+                GameManager.instance.audioManager.Play(deathSound);
+            }
+            IsDead = true;
         }
 
         protected void TriggerAnimatorParameter(string parameterName)
@@ -196,7 +259,7 @@ namespace Rpg.Unit
         protected Animator GetAnimator()
         {
             var animator = GetGameObject().GetComponent<Animator>();
-            if(animator == null)
+            if (animator == null)
             {
                 animator = GetGameObject().GetComponentInChildren<Animator>();
             }

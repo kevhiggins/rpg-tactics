@@ -1,10 +1,14 @@
 fileFormatVersion: 2
 guid: 85e94c5ba7c775647b8087d6f96de793
-timeCreated: 1471314896
+timeCreated: 1471489818
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - damagePopCanvas: {fileID: 1000011765372780, guid: 0e5d98ab14203024ca2cef345b515cfd,
+      type: 2}
+  - experiencePopCanvas: {fileID: 1000010209377224, guid: a12c867e1bdc31b43bd93814e9aab039,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

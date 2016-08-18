@@ -7,23 +7,29 @@ namespace Rpg
 {
     public class BattleManager : MonoBehaviour
     {
-        public GameObject popCanvas;
-
         public void AttackUnit(IUnit sourceUnit, IUnit targetUnit)
         {
-            sourceUnit.Attack(targetUnit.GetTile().tilePosition);
-            targetUnit.TakeDamage(sourceUnit.Damage);
-            DisplayDamagePop(targetUnit, sourceUnit.Damage);
-            sourceUnit.EndTurn();
-        }
+            
+            // When the hit lands, apply damage to the target unit.
+            AttackHitHandler attackHitHandler = null;
+            sourceUnit.OnAttackHit += attackHitHandler = () =>
+            {
+                sourceUnit.OnAttackHit -= attackHitHandler;
+                targetUnit.TakeDamage(sourceUnit.Damage);
+            };
 
-        public void DisplayDamagePop(IUnit targetUnit, int damage)
-        {
-            var popObject = Instantiate(popCanvas);
-            popObject.transform.position = targetUnit.GetGameObject().transform.position;
-            var textObject = GameObjectHelper.FindChildByName(popObject, "FloatingDMG");
-            var textScript = textObject.GetComponent<Text>();
-            textScript.text = textScript.text.Replace("{dmg}", damage.ToString());
+            // When the attack is complete, check if the enemy is dead, award experience if necessary, and end the turn.
+            AttackCompleteHandler attackCompleteHandler = null;
+            sourceUnit.OnAttackComplete += attackCompleteHandler = () =>
+            {
+                if (targetUnit.IsDead && targetUnit.ExperienceWorth > 0)
+                {
+                    sourceUnit.GainExperience(targetUnit.ExperienceWorth);
+                }
+                sourceUnit.EndTurn();
+            };
+
+            sourceUnit.Attack(targetUnit.GetTile().tilePosition);
         }
     }
 }

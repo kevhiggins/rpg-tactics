@@ -3,6 +3,15 @@ using Rpg.Map;
 
 namespace Rpg.Unit
 {
+    public delegate void LevelUpHandler(IUnit unit, int level);
+
+    public delegate void ExperienceGainHandler(IUnit unit, int amount);
+
+    public delegate void DamageHandler(IUnit unit, int amount);
+
+    public delegate void AttackHitHandler();
+    public delegate void AttackCompleteHandler();
+
     public interface IUnit : ITileChild
     {
         int MovementSpeed { get; }
@@ -13,7 +22,10 @@ namespace Rpg.Unit
         string UnitName { get; }
         int Level { get; }
         int Damage { get; }
-
+        int Experience { get; }
+        int ExperienceWorth { get; }
+        int ExperienceToLevel { get; }
+        bool IsDead { get; }
 
         // TODO This should be temporary
         TilePosition StartPosition { get; }
@@ -33,12 +45,25 @@ namespace Rpg.Unit
         void StartTurn();
 
         /// <summary>
-        /// Calleda t the end of the unit's turn.
+        /// Called at the end of the unit's turn.
         /// </summary>
         void EndTurn();
 
         void Attack(TilePosition targetPosition);
 
         void TakeDamage(int damage);
+
+        void GainExperience(int amount);
+
+        event LevelUpHandler OnLevelUp;
+        event ExperienceGainHandler OnExperienceGain;
+        event DamageHandler OnDamage;
+
+        /// <summary>
+        /// When the current unit's attack contacts its target.
+        /// </summary>
+        event AttackHitHandler OnAttackHit;
+
+        event AttackCompleteHandler OnAttackComplete;
     }
 }

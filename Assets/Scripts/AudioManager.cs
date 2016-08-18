@@ -26,13 +26,20 @@ namespace Rpg
 
         private void CullAudio()
         {
+            var destroyAudios = new List<AudioSource>();
             foreach (var audioSource in audioSourceList)
             {
                 if (audioSource.isPlaying == false)
                 {
-                    audioSourceList.Remove(audioSource);
-                    Destroy(audioSource.gameObject);
+                    destroyAudios.Add(audioSource);
                 }
+            }
+
+            // Destroy the audios that are ready to be culled.
+            foreach (var audioSource in destroyAudios)
+            {
+                audioSourceList.Remove(audioSource);
+                Destroy(audioSource.gameObject);
             }
         }
 

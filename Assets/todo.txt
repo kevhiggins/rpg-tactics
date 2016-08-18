@@ -14,6 +14,25 @@ X - Hook up level up noise and make a POP for it?
 X - Wait until the proper attack animation frame to deal damage
 X - Wait until enemy is done dying to end turn AND to give EXP.
 
+Bug: Fix issue with death vs attack and how if one gets shorter we will get bugs.
+
+
+
+
+Cursor appear on enemy
+Add attack comparison for enemy?
+
+Delays:
+After Move
+After attack
+Level up delay
+
+
+Potential Things:
+Allow configuring delays between GameStates
+Allow configuring delays 
+Figure out a better way to determing the end of animation states
+
 camera
 
 Allow doing both move and attack in the same turn.

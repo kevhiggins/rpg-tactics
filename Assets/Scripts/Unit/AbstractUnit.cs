@@ -161,6 +161,7 @@ namespace Rpg.Unit
                 TriggerAnimatorParameter("EndMove");
                 onComplete();
             });
+            HasMoved = true;
         }
 
         /// <summary>
@@ -186,6 +187,7 @@ namespace Rpg.Unit
         {
             CalculateMovementDirection(GetTile().tilePosition, targetPosition);
             TriggerAnimatorParameter("Attack");
+            HasActed = true;
         }
 
         public void Hit()

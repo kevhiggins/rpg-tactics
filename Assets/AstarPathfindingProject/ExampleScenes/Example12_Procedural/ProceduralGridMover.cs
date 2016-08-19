@@ -66,7 +66,7 @@ public class ProceduralGridMover : MonoBehaviour {
 		UpdateGraph();
 	}
 
-	/** Update is called once per frame */
+	/** StateUpdate is called once per frame */
 	void Update () {
 		// Calculate where the graph center and the target position is in graph space
 		var graphCenterInGraphSpace = PointToGraphSpace(graph.center);
@@ -218,7 +218,7 @@ public class ProceduralGridMover : MonoBehaviour {
 
 			yield return null;
 
-			// Update all nodes along one edge of the graph
+			// StateUpdate all nodes along one edge of the graph
 			// With the same width as the rect
 			for (int z = r.ymin; z < r.ymax; z++) {
 				for (int x = 0; x < width; x++) {
@@ -228,7 +228,7 @@ public class ProceduralGridMover : MonoBehaviour {
 
 			yield return null;
 
-			// Update all nodes along the other edge of the graph
+			// StateUpdate all nodes along the other edge of the graph
 			// With the same width as the rect
 			for (int z = minz; z < maxz; z++) {
 				for (int x = r.xmin; x < r.xmax; x++) {

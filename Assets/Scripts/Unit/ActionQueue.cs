@@ -15,6 +15,7 @@ namespace Rpg.Unit
 
         private List<IUnit> unitList = new List<IUnit>();
         private IComparer<IUnit> unitComparer = new SortUnitsByCT();
+        private IUnit activeUnit;
 
         public List<IUnit> UnitList
         {
@@ -38,6 +39,11 @@ namespace Rpg.Unit
         /// <returns></returns>
         public IUnit GetActiveUnit()
         {
+            if (activeUnit != null)
+            {
+                return activeUnit;
+            }
+
             var nextUnit = unitList.First();
 
             if (nextUnit == null)
@@ -45,11 +51,14 @@ namespace Rpg.Unit
                 return null;
             }
 
-            return nextUnit.ChargeTime >= CTThreshold ? nextUnit : null;
+            return activeUnit = nextUnit.ChargeTime >= CTThreshold ? nextUnit : null;
         }
 
         public void ClockTick()
         {
+            // Null out the active unit.
+            activeUnit = null;
+
             // Progress time for each unit in the unit list.
             foreach(IUnit unit in unitList)
             {

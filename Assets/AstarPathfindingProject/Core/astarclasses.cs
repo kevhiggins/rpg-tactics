@@ -298,9 +298,9 @@ namespace Pathfinding {
 		 * Notes to implementators.
 		 * This function should (in order):
 		 * -# Call o.WillUpdateNode on the GUO for every node it will update, it is important that this is called BEFORE any changes are made to the nodes.
-		 * -# Update walkabilty using special settings such as the usePhysics flag used with the GridGraph.
+		 * -# StateUpdate walkabilty using special settings such as the usePhysics flag used with the GridGraph.
 		 * -# Call Apply on the GUO for every node which should be updated with the GUO.
-		 * -# Update eventual connectivity info if appropriate (GridGraphs updates connectivity, but most other graphs don't since then the connectivity cannot be recovered later).
+		 * -# StateUpdate eventual connectivity info if appropriate (GridGraphs updates connectivity, but most other graphs don't since then the connectivity cannot be recovered later).
 		 */
 		void UpdateArea (GraphUpdateObject o);
 		void UpdateAreaInit (GraphUpdateObject o);
@@ -385,7 +385,7 @@ namespace Pathfinding {
 		 */
 		public bool resetPenaltyOnPhysics = true;
 
-		/** Update Erosion for GridGraphs.
+		/** StateUpdate Erosion for GridGraphs.
 		 * When enabled, erosion will be recalculated for grid graphs
 		 * after the GUO has been applied.
 		 *
@@ -496,13 +496,13 @@ namespace Pathfinding {
 		/** Updates the specified node using this GUO's settings */
 		public virtual void Apply (GraphNode node) {
 			if (shape == null || shape.Contains(node)) {
-				//Update penalty and walkability
+				//StateUpdate penalty and walkability
 				node.Penalty = (uint)(node.Penalty+addPenalty);
 				if (modifyWalkability) {
 					node.Walkable = setWalkability;
 				}
 
-				//Update tags
+				//StateUpdate tags
 				if (modifyTag) node.Tag = (uint)setTag;
 			}
 		}

@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public GameObject activeUnitMenu;
     public GameObject unitInfoBox;
     public GameObject targetActionBox;
+    public Animator GameStateMachine { get; private set; }
+    
 
     public int pixelsToUnits = 100;
 
@@ -64,6 +66,7 @@ public class GameManager : MonoBehaviour
         battleManager = GetComponent<BattleManager>();
         audioManager = GetComponent<AudioManager>();
         popManager = GetComponent<PopManager>();
+        GameStateMachine = GetComponent<Animator>();
 
         InitGame();
     }
@@ -91,33 +94,6 @@ public class GameManager : MonoBehaviour
         {
             levelManager.GetMap().PlaceUnit(unit, unit.StartPosition);
         }
-
-        WaitForNextAction();
     }
-
-    /// <summary>
-    /// Run additiona clock cycles until their is an action to perform.
-    /// </summary>
-    public void WaitForNextAction()
-    {
-        IUnit unit;
-        do
-        {
-            actionQueue.ClockTick();
-        }
-        while ((unit = actionQueue.GetActiveUnit()) == null);
-
-        // At this point we will have an active unit. Select the unit, and prepare for user input.
-        unit.StartTurn();
-
-        if (unit is IFriendlyUnit)
-        {
-            GameState = new ActiveUnitMenuState(unit);
-        }
-        else
-        {
-            GameState = new EnemyTurn(unit);
-        }
-        
-    }
+    
 }

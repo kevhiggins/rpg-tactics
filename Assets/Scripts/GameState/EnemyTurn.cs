@@ -87,7 +87,8 @@ namespace Rpg.GameState
                 var targetUnit = unitTile.GetUnit();
 
 
-                GameManager.instance.battleManager.AttackUnit(unit, targetUnit);
+                // TODO use callback
+//                GameManager.instance.battleManager.AttackUnit(unit, targetUnit);
                 return;
             }
 

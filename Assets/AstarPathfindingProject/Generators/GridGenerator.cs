@@ -1416,7 +1416,7 @@ namespace Pathfinding {
 				}
 			}
 
-			// Update Physics
+			// StateUpdate Physics
 			if (o.updatePhysics && !o.modifyWalkability) {
 				collision.Initialize(matrix, nodeSize);
 

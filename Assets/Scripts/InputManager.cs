@@ -13,7 +13,7 @@ public class InputManager : MonoBehaviour
     {
     }
 
-    // Update is called once per frame
+    // StateUpdate is called once per frame
     void Update()
     {
         isHorizontalDown = false;
@@ -24,7 +24,7 @@ public class InputManager : MonoBehaviour
             Application.Quit();
         }
 
-        GameManager.instance.GameState.HandleInput();
+//        GameManager.instance.GameState.HandleInput();
     }
 
     public bool Accept()

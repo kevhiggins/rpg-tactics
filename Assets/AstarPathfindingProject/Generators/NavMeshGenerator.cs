@@ -367,7 +367,7 @@ namespace Pathfinding {
 				if (allBelow == 3 || allAbove == 3) return true;
 
 				// Triangle is inside the bounding box!
-				// Update it!
+				// StateUpdate it!
 				o.WillUpdateNode(node);
 				o.Apply(node);
 				return true;

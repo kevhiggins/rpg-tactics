@@ -1,6 +1,6 @@
 ﻿using Assets.Scripts.GameState;
-using Assets.Scripts.Widgets;
 using Rpg.Unit;
+using Rpg.Widgets;
 
 namespace Rpg.GameState
 {

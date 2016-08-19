@@ -40,7 +40,7 @@ namespace Pathfinding {
 		public bool convex = true;
 
 		[HideInInspector]
-		/** Minumum height of the bounds of the resulting Graph Update Object.
+		/** Minumum height of the bounds of the resulting Graph StateUpdate Object.
 		 * Useful when all points are laid out on a plane but you still need a bounds with a height greater than zero since a
 		 * zero height graph update object would usually result in no nodes being updated.
 		 */
@@ -77,11 +77,11 @@ namespace Pathfinding {
 		[HideInInspector]
 		public bool useWorldSpace;
 
-		/** Update node's walkability and connectivity using physics functions.
+		/** StateUpdate node's walkability and connectivity using physics functions.
 		 * For grid graphs, this will update the node's position and walkability exactly like when doing a scan of the graph.
 		 * If enabled for grid graphs, #modifyWalkability will be ignored.
 		 *
-		 * For Point Graphs, this will recalculate all connections which passes through the bounds of the resulting Graph Update Object
+		 * For Point Graphs, this will recalculate all connections which passes through the bounds of the resulting Graph StateUpdate Object
 		 * using raycasts (if enabled).
 		 *
 		 */

@@ -66,5 +66,26 @@ namespace Rpg.Widgets
 
             textScript.text = textScript.text.Replace(targetData, newData);
         }
+
+        public static void CheckUnitInfoDisplay(ref UnitInfoWidget unitInfoWidget)
+        {
+            var selectedTile = GameManager.instance.levelManager.GetMap().GetSelectedTile();
+
+            // Create the unit info box
+            if (selectedTile.HasUnit())
+            {
+                if (unitInfoWidget != null)
+                {
+                    unitInfoWidget.Dispose();
+                }
+
+                unitInfoWidget = new UnitInfoWidget(selectedTile.GetUnit());
+            }
+            else if (unitInfoWidget != null)
+            {
+                unitInfoWidget.Dispose();
+                unitInfoWidget = null;
+            }
+        }
     }
 }

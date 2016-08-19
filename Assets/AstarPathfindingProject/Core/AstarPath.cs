@@ -362,7 +362,7 @@ public class AstarPath : MonoBehaviour {
 	#region StatusVariables
 
 	/** Set when scanning is being done. It will be true up until the FloodFill is done.
-	 * Used to better support Graph Update Objects called for example in OnPostScan */
+	 * Used to better support Graph StateUpdate Objects called for example in OnPostScan */
 	public bool isScanning { get; private set; }
 
 	/** Number of parallel pathfinders.
@@ -858,7 +858,7 @@ public class AstarPath : MonoBehaviour {
 		 */
 		public System.Action init;
 
-		/** Update function, called once per frame when the work item executes.
+		/** StateUpdate function, called once per frame when the work item executes.
 		 * Takes a param \a force. If that is true, the work item should try to complete the whole item in one go instead
 		 * of spreading it out over multiple frames.
 		 * \returns True when the work item is completed.
@@ -884,7 +884,7 @@ public class AstarPath : MonoBehaviour {
 	 */
 	private void Update () {
 		// This class uses the [ExecuteInEditMode] attribute
-		// So Update is called even when not playing
+		// So StateUpdate is called even when not playing
 		// Don't do anything when not in play mode
 		if (!Application.isPlaying) return;
 
@@ -1006,7 +1006,7 @@ public class AstarPath : MonoBehaviour {
 	 *
 	 * \see AddWorkItem
 	 * \see threadSafeUpdateState
-	 * \see Update
+	 * \see StateUpdate
 	 */
 	private int ProcessWorkItems (bool force) {
 		if (pathQueue.AllReceiversBlocked) {
@@ -1080,7 +1080,7 @@ public class AstarPath : MonoBehaviour {
 		graphUpdateRoutineRunning = false;
 	}
 
-	/** Update all graphs within \a bounds after \a t seconds.
+	/** StateUpdate all graphs within \a bounds after \a t seconds.
 	 * This function will add a GraphUpdateObject to the #graphUpdateQueue.
 	 * The graphs will be updated as soon as possible.
 	 */
@@ -1088,20 +1088,20 @@ public class AstarPath : MonoBehaviour {
 		UpdateGraphs(new GraphUpdateObject(bounds), t);
 	}
 
-	/** Update all graphs using the GraphUpdateObject after \a t seconds.
+	/** StateUpdate all graphs using the GraphUpdateObject after \a t seconds.
 	 * This can be used to, e.g make all nodes in an area unwalkable, or set them to a higher penalty.
 	 */
 	public void UpdateGraphs (GraphUpdateObject ob, float t) {
 		StartCoroutine(UpdateGraphsInteral(ob, t));
 	}
 
-	/** Update all graphs using the GraphUpdateObject after \a t seconds */
+	/** StateUpdate all graphs using the GraphUpdateObject after \a t seconds */
 	IEnumerator UpdateGraphsInteral (GraphUpdateObject ob, float t) {
 		yield return new WaitForSeconds(t);
 		UpdateGraphs(ob);
 	}
 
-	/** Update all graphs within \a bounds.
+	/** StateUpdate all graphs within \a bounds.
 	 * This function will add a GraphUpdateObject to the #graphUpdateQueue.
 	 * The graphs will be updated as soon as possible.
 	 *
@@ -1114,7 +1114,7 @@ public class AstarPath : MonoBehaviour {
 		UpdateGraphs(new GraphUpdateObject(bounds));
 	}
 
-	/** Update all graphs using the GraphUpdateObject.
+	/** StateUpdate all graphs using the GraphUpdateObject.
 	 * This can be used to, e.g make all nodes in an area unwalkable, or set them to a higher penalty.
 	 * The graphs will be updated as soon as possible (with respect to #batchGraphUpdates)
 	 *

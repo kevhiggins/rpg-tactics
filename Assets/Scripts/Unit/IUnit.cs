@@ -57,6 +57,8 @@ namespace Rpg.Unit
 
         void Attack(TilePosition targetPosition);
 
+        void Wait();
+
         void TakeDamage(int damage);
 
         void GainExperience(int amount);

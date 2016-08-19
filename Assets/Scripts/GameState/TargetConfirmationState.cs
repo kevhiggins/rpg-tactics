@@ -1,6 +1,4 @@
-﻿
-using Assets.Scripts.Widgets;
-using Rpg.GameState;
+﻿using Rpg.GameState;
 using Rpg.Unit;
 using Rpg.Widgets;
 
@@ -34,7 +32,7 @@ namespace Assets.Scripts.GameState
 
         public override void HandleAccept()
         {
-            GameManager.instance.battleManager.AttackUnit(sourceUnit, targetUnit);
+//            GameManager.instance.battleManager.AttackUnit(sourceUnit, targetUnit);
         }
 
         public override void HandleCancel()

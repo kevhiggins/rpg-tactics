@@ -1,4 +1,4 @@
-/** \page changelog Changelog
+﻿/** \page changelog Changelog
 
 - 3.8.2 (2016-02-29)
 	- Improvements
@@ -189,7 +189,7 @@
 		- All compiler directives in the Optimizations tab are now tested during the package build phase. So hopefully none of them should give compiler errors now.
 		- Improved accuracy of intellisense by changing the start of some documentation comments to /** instead of /**< as the later type is handled well by doxygen
 			but apparently not so well by MonoDevelop and VS.
-		- Fixed the editor sometimes incorrectly comparing versions which could cause the 'New Update' window to appear even though no new version was available.
+		- Fixed the editor sometimes incorrectly comparing versions which could cause the 'New StateUpdate' window to appear even though no new version was available.
 	- Changes
 		- Removed code only necessary for compatibility with Unity 4.5 and lower.
 		- Removed a lot of internal unused old code.
@@ -387,7 +387,7 @@
 		- Fixed a bug which caused the points field on GraphUpdateScene to sometimes not be editable.
 		- Fixed a bug which could cause RVO agents not to move if the fps was low and Interpolation and Double Buffering was used.
 		- Set the execution order for RVOController and RVOSimulator to make sure that other scripts will
-			get the latest position in their Update method.
+			get the latest position in their StateUpdate method.
 		- Fixed a bug which could cause some nearest point on line methods in AstarMath to return NaN.
 			This could happen when Seeker->Start End Modifier->StartPoint and EndPoint was set to Interpolate.
 		- Fixed a runtime error on PS Vita.
@@ -614,7 +614,7 @@
 		- GraphUpdateScene will now fall back to collider.bounds or renderer.bounds (depending on what is available) if no points are
 			defined for the shape.
 		- AstarPath.StartPath now has an option to put the path in the front of the queue to prioritize its calculation over other paths.
-		- Time.fixedDeltaTime by Time.deltaTime in AIPath.RotateTowards() to work with both FixedUpdate and Update. (Thanks Pat_AfterMoon)
+		- Time.fixedDeltaTime by Time.deltaTime in AIPath.RotateTowards() to work with both FixedUpdate and StateUpdate. (Thanks Pat_AfterMoon)
 			You might have to configure the turn speed variable after updating since the actual rotation speed might have changed a bit depending on your settings.
 		- Fixed maxNeighbourDistance not being used correctly by the RVOController script. It would stay at the default value. If you
 			have had trouble getting local avoidance working on world with a large scale, this could have been the problem. (Thanks to Edgar Sun for providing a reproducible example case)
@@ -693,7 +693,7 @@
 	- Changes
 		- Max Slope in grid graphs is now relative to the graph's up direction instead of world up (makes more sense I hope)
 	- Note
-		- Update really too small to be an update by itself, but I was updating the build scripts I use for the project and had to upload a new version because of technical reasons.
+		- StateUpdate really too small to be an update by itself, but I was updating the build scripts I use for the project and had to upload a new version because of technical reasons.
 
 - 3.2.1
 	- Fixes
@@ -731,7 +731,7 @@
  		- When really high penalties are applied (which could be underflowed negative penalties) a warning message is logged.
  			Really high penalties (close to max uint value) can otherwise cause overflows and in some cases infinity loops because of that.
  		- ClosestPointOnTriangle is now spelled correctly.
- 		- MineBotAI now uses Update instead of FixedUpdate.
+ 		- MineBotAI now uses StateUpdate instead of FixedUpdate.
  		- Use Dark Skin option is now exposed again since it could be incorrectly set sometimes. Now you can force it to light or dark, or set it to auto.
  		- Fixed recast graph bug when using multiple terrains. Previously only one terrain would be used.
  		- Fixed some UI glitches in Unity 4.
@@ -843,8 +843,8 @@
 
 	 <b>Known Bugs:</b> The C++ version of Recast does not work on Windows
 
-- Documentation Update
-	- Changed from FixedUpdate to Update in the Get Started Guide. CharacterController.SimpleMove should not be called more than once per frame,
+- Documentation StateUpdate
+	- Changed from FixedUpdate to StateUpdate in the Get Started Guide. CharacterController.SimpleMove should not be called more than once per frame,
 			so this might have lowered performance when using many agents, sorry about this typo.
 - 3.0.9
 	- The List Graph's "raycast" variable is now serialized correctly, so it will be saved.

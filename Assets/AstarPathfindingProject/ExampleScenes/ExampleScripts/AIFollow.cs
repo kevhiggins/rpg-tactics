@@ -187,7 +187,7 @@ public class AIFollow : MonoBehaviour {
 		//The AI has reached the end of the path
 	}
 
-	/** Update is called once per frame */
+	/** StateUpdate is called once per frame */
 	public void Update () {
 		if (path == null || pathIndex >= path.Length || pathIndex < 0 || !canMove) {
 			return;

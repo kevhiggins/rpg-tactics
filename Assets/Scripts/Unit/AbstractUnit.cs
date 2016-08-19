@@ -190,6 +190,12 @@ namespace Rpg.Unit
             HasActed = true;
         }
 
+        public void Wait()
+        {
+            HasActed = true;
+            HasMoved = true;
+        }
+
         public void Hit()
         {
             TriggerAnimatorParameter("Hit");
@@ -322,7 +328,6 @@ namespace Rpg.Unit
         public void EndTurn()
         {
             ChargeTime = 0;
-            GameManager.instance.WaitForNextAction();
         }
 
         /// <summary>

@@ -7,8 +7,6 @@ namespace Rpg.Widgets
 {
     public class UnitInfoWidget : UiWidget
     {
-        private IUnit unit;
-
         public UnitInfoWidget(IUnit unit) : base(CreateCanvas())
         {
             var panel = GameObjectHelper.FindChildByName(canvas, "Panel");

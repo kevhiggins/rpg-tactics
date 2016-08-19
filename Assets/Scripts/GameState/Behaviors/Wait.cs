@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Rpg.GameState.Behaviors.PlayerTurn
+namespace Rpg.GameState.Behaviors
 {
     class Wait : AbstractActiveUnitStateBehavior
     {

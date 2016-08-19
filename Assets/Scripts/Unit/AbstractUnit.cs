@@ -18,6 +18,9 @@ namespace Rpg.Unit
         public int experience;
         public int experienceWorth;
         public int experienceToLevel = 30;
+        public bool isAi = false;
+        public int teamID = 1;
+
         public Vector2 startPosition;
         public GameObject deathSound;
 
@@ -107,6 +110,16 @@ namespace Rpg.Unit
         public bool HasMoved { get; private set; }
         public bool HasActed { get; private set; }
 
+        public bool IsAi
+        {
+            get { return isAi; }
+        }
+
+        public int TeamId
+        {
+            get { return teamID; }
+        }
+
         protected AbstractUnit()
         {
             HasMoved = false;
@@ -138,6 +151,11 @@ namespace Rpg.Unit
 
         public void MoveToTile(Tile tile, Action onComplete)
         {
+            if (HasMoved)
+            {
+                throw new Exception("Unit limited to a single move per turn.");
+            }
+
             if (!HasTile())
             {
                 throw new Exception("Can not move a unit that is not already on a tile.");
@@ -185,6 +203,11 @@ namespace Rpg.Unit
 
         public void Attack(TilePosition targetPosition)
         {
+            if (HasActed)
+            {
+                throw new Exception("Unit limited to a single action per turn.");
+            }
+
             CalculateMovementDirection(GetTile().tilePosition, targetPosition);
             TriggerAnimatorParameter("Attack");
             HasActed = true;
@@ -323,6 +346,8 @@ namespace Rpg.Unit
 
         public void StartTurn()
         {
+            HasMoved = false;
+            HasActed = false;
         }
 
         public void EndTurn()

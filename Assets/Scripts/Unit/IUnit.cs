@@ -29,6 +29,9 @@ namespace Rpg.Unit
         int ExperienceWorth { get; }
         int ExperienceToLevel { get; }
         bool IsDead { get; }
+        bool IsAi { get; }
+        int TeamId { get; }
+
 
         bool HasMoved { get; }
         bool HasActed { get; }

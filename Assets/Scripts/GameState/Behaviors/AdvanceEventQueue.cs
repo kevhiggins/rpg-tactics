@@ -15,17 +15,10 @@ namespace Rpg.GameState.Behaviors
                 actionQueue.ClockTick();
             } while ((unit = actionQueue.GetActiveUnit()) == null);
 
-            // At this point we will have an active unit. Select the unit, and prepare for user input.
-            unit.StartTurn();
+            // Start the active units turn.
+            GameManager.instance.UnitTurn = new UnitTurn(unit);
 
-            if (unit is IFriendlyUnit)
-            {
-                animator.SetTrigger("Player Turn");
-            }
-            else
-            {
-                animator.SetTrigger("Enemy Turn");
-            }
+            animator.SetTrigger(unit.IsAi == false ? "Player Turn" : "AI Turn");
         }
 
         public override void Disable(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

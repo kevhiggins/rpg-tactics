@@ -69,18 +69,18 @@ namespace Rpg.Unit
             unitList.Sort(unitComparer);
         }
 
-        public List<IFriendlyUnit> GetFriendlyUnits()
+        public List<IUnit> GetEnemyUnits(int friendlyTeamId)
         {
-            var friendlyUnits = new List<IFriendlyUnit>();
+            var enemyUnits = new List<IUnit>();
 
             foreach (var unit in unitList)
             {
-                if (unit is IFriendlyUnit)
+                if (unit.TeamId != friendlyTeamId)
                 {
-                    friendlyUnits.Add((IFriendlyUnit)unit);
+                    enemyUnits.Add(unit);
                 }
             }
-            return friendlyUnits;
+            return enemyUnits;
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using Assets.Scripts.GameState;
 using Rpg;
 using UnityEngine;
 using Rpg.GameState;
@@ -14,6 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject targetActionBox;
     public Animator GameStateMachine { get; private set; }
     
+    
 
     public int pixelsToUnits = 100;
 
@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public BattleManager battleManager;
     [HideInInspector] public AudioManager audioManager;
     [HideInInspector] public PopManager popManager;
+    [HideInInspector] public PathManager PathManager { get; private set; }
+    [HideInInspector] public UnitTurn UnitTurn { get; set; }
 
 
     private IGameState gameState;
@@ -67,6 +69,7 @@ public class GameManager : MonoBehaviour
         audioManager = GetComponent<AudioManager>();
         popManager = GetComponent<PopManager>();
         GameStateMachine = GetComponent<Animator>();
+        PathManager = GetComponent<PathManager>();
 
         InitGame();
     }

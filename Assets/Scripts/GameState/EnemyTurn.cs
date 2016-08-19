@@ -16,7 +16,7 @@ namespace Rpg.GameState
         public EnemyTurn(IUnit unit)
         {
             this.unit = unit;
-            friendlyUnits = GameManager.instance.actionQueue.GetFriendlyUnits();
+//            friendlyUnits = GameManager.instance.actionQueue.GetFriendlyUnits();
         }
 
         public void HandleInput()

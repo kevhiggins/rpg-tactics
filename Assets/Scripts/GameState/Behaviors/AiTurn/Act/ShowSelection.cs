@@ -1,18 +1,16 @@
-﻿using UnityEngine;
+﻿using Rpg.Widgets;
+using UnityEngine;
 
-namespace Rpg.GameState.Behaviors.PlayerTurn
+namespace Rpg.GameState.Behaviors.AiTurn.Act
 {
-    class EndAction : AbstractActiveUnitStateBehavior
+    class ShowSelection : AbstractActiveUnitStateBehavior
     {
         public override void Enable(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            var hasActions = !ActiveUnit.HasActed || !ActiveUnit.HasMoved;
-            animator.SetBool("Has Actions", !ActiveUnit.HasActed || !ActiveUnit.HasMoved);
-            if (!hasActions)
-            {
-                ActiveUnit.EndTurn();
-            }
-
+            RegisterWidget(new HighlightAttackWidget(ActiveUnit));
+            var targetTile = GameManager.instance.UnitTurn.ActTargetTile;
+            GameManager.instance.levelManager.GetMap().SetTileCursor(targetTile.tilePosition);
+            
             animator.SetTrigger("State Complete");
         }
 

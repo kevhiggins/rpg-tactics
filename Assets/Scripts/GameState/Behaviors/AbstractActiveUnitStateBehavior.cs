@@ -12,7 +12,7 @@ namespace Rpg.GameState.Behaviors
 
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            ActiveUnit = GameManager.instance.actionQueue.GetActiveUnit();
+            ActiveUnit = GameManager.instance.UnitTurn.ActiveUnit;
             base.OnStateEnter(animator, stateInfo, layerIndex);
         }
     }

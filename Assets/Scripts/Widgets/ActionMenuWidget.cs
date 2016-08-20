@@ -1,6 +1,8 @@
-﻿using Assets.Scripts.Unity;
+﻿using System.Collections.Generic;
+using Assets.Scripts.Unity;
 using Rpg.Unit;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Rpg.Widgets
 {
@@ -12,6 +14,7 @@ namespace Rpg.Widgets
         private GameObject cursor;
         private int menuItemCount;
         private int activeMenuItemIndex;
+        private List<int> disabledIndexes = new List<int>();
 
         public ActionMenuWidget(IUnit unit) : base(CreateCanvas())
         {
@@ -26,10 +29,45 @@ namespace Rpg.Widgets
 
             menuItemCount = menuItems.transform.childCount;
 
+            if (unit.HasMoved)
+            {
+                DisableItem("Move");
+            }
+
+            if (unit.HasActed)
+            {
+                DisableItem("Act");
+            }
+
             // Highlight the first menu item.
-            ActivateMenuItem(0);
+            // TODO don't start on the first item if it's disabled
+
+            var startIndex = 0;
+            while (disabledIndexes.Contains(startIndex))
+            {
+                startIndex++;
+            }
+
+            ActivateMenuItem(startIndex);
 
             SetMenuPosition(panel);
+        }
+
+        protected void DisableItem(string itemName)
+        {
+            var index = 0;
+
+
+            foreach (Transform item in menuItems.transform)
+            {
+                if (item.gameObject.name == itemName)
+                {
+                    disabledIndexes.Add(index);
+                    var textScript = item.gameObject.GetComponent<Text>();
+                    textScript.color = Color.grey;
+                }
+                index++;
+            }
         }
 
         private static GameObject CreateCanvas()
@@ -122,24 +160,11 @@ namespace Rpg.Widgets
 
         public string GetActiveItemName()
         {
+            if (disabledIndexes.Contains(activeMenuItemIndex))
+            {
+                return null;
+            }
             return activeMenuItem.name;
         }
-
-        //        public void TriggerCurrentMenuItem()
-        //        {
-        //            // If the Move option is selected, then switch to the SelectUnitMovement state.
-        //            if (activeMenuItem.name == "Move")
-        //            {
-        //                GameManager.instance.GameState = new SelectUnitMovementState(unit);
-        //            }
-        //            else if (activeMenuItem.name == "Act")
-        //            {
-        //                GameManager.instance.GameState = new AttackState(unit);
-        //            }
-        //            else if (activeMenuItem.name == "Wait")
-        //            {
-        //                unit.EndTurn();
-        //            }
-        //        }
     }
 }

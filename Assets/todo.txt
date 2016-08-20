@@ -1,7 +1,4 @@
 
-Also, make it so that the ActiveMenu greys out, and prevents selection of already performed actions.
-
-
 LEARNING:
 Learn about particle system from Joe
 Read the Unity manual
@@ -10,19 +7,9 @@ Dream Land:
 Figure out a way for the HP bar game objects to be properly shared between their parents, so that you can easily propogate updates to each.
 Consider making sure that the AnimationManager script is always attached to the animation child.
 
-GAME:
-X - Hook up Pop EXP and Pop DMG if it broke
-X - Hook up level up noise and make a POP for it?
-X - Wait until the proper attack animation frame to deal damage
-X - Wait until enemy is done dying to end turn AND to give EXP.
 
-Bug: Fix issue with death vs attack and how if one gets shorter we will get bugs.
-
-
-
-
-Cursor appear on enemy
-Add attack comparison for enemy?
+-Add attack comparison for enemy?
+-Make sure that it shows the enemy user info when selecting as well
 
 Delays:
 After Move

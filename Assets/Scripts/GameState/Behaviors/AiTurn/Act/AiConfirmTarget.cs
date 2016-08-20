@@ -3,15 +3,13 @@ using UnityEngine;
 
 namespace Rpg.GameState.Behaviors.AiTurn.Act
 {
-    class ShowSelection : AbstractActiveUnitStateBehavior
+    class AiConfirmTarget : AbstractActiveUnitStateBehavior
     {
         public override void Enable(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            var targetUnit = GameManager.instance.UnitTurn.ActTargetTile.GetUnit();
+            RegisterWidget(new TargetActionBoxWidget(ActiveUnit, targetUnit));
             RegisterWidget(new HighlightAttackWidget(ActiveUnit));
-            var targetTile = GameManager.instance.UnitTurn.ActTargetTile;
-            GameManager.instance.levelManager.GetMap().SetTileCursor(targetTile.tilePosition);
-            RegisterWidget(new UnitInfoWidget(targetTile.GetUnit()));
-            
             animator.SetTrigger("State Complete");
         }
 

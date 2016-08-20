@@ -29,25 +29,6 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public UnitTurn UnitTurn { get; set; }
 
 
-    private IGameState gameState;
-
-    public IGameState GameState
-    {
-        get { return gameState; }
-        set
-        {
-            // Disable old game state, and enable the new one.
-            if (gameState != null)
-            {
-                gameState.Disable();
-            }
-            
-            // Save the new game state, and enable it.
-            gameState = value;
-            gameState.Enable();
-        }
-    }
-
     // Use this for initialization
     void Awake()
     {

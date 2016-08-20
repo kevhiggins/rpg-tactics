@@ -1,7 +1,6 @@
 ﻿using System;
 using Rpg;
 using UnityEngine;
-using Rpg.GameState;
 using Rpg.Unit;
 
 public class GameManager : MonoBehaviour
@@ -12,7 +11,6 @@ public class GameManager : MonoBehaviour
     public GameObject unitInfoBox;
     public GameObject targetActionBox;
     public Animator GameStateMachine { get; private set; }
-    
     
 
     public int pixelsToUnits = 100;
@@ -27,6 +25,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public PopManager popManager;
     [HideInInspector] public PathManager PathManager { get; private set; }
     [HideInInspector] public UnitTurn UnitTurn { get; set; }
+    [HideInInspector] public CameraManager CameraManager { get; private set; }
 
 
     // Use this for initialization
@@ -51,6 +50,7 @@ public class GameManager : MonoBehaviour
         popManager = GetComponent<PopManager>();
         GameStateMachine = GetComponent<Animator>();
         PathManager = GetComponent<PathManager>();
+        CameraManager = GetComponent<CameraManager>();
 
         InitGame();
     }
@@ -73,11 +73,12 @@ public class GameManager : MonoBehaviour
 
         // Load the level here
         levelManager.LoadMap();
+        levelManager.GetMap().OnCursorMove += CameraManager.CheckCamera;
+
 
         foreach(var unit in actionQueue.UnitList)
         {
             levelManager.GetMap().PlaceUnit(unit, unit.StartPosition);
         }
     }
-    
 }

@@ -6,6 +6,8 @@ using System.Collections.Generic;
 
 namespace Rpg.Map
 {
+    public delegate void CursorMoveHandler(TilePosition tilePosition);
+
     public class Map
     {
         private GameObject cursorGameObject;
@@ -13,8 +15,9 @@ namespace Rpg.Map
         private TilePosition cursorTilePosition;
         private Tile[,] tiles;
 
-
         public GameObject GameObject { get; private set; }
+
+        public event CursorMoveHandler OnCursorMove = tilePosition => { };
 
         public Map(GameObject mapGameObject, GameObject cursorGameObject)
         {
@@ -88,6 +91,8 @@ namespace Rpg.Map
 
             // StateUpdate the tile cursor position with the newly calculated info.
             cursorGameObject.transform.position = newPosition;
+
+            OnCursorMove(cursorTilePosition);
         }
 
         public void PlaceUnit(IUnit unit, int x, int y)
@@ -95,7 +100,7 @@ namespace Rpg.Map
             var tile = GetTile(x, y);
             if (tile == null)
             {
-                throw new Exception("Could not find tile at position x:" + x + ", y:" + y);               
+                throw new Exception("Could not find tile at position x:" + x + ", y:" + y);
             }
 
             unit.PlaceToTile(tile);
@@ -113,8 +118,8 @@ namespace Rpg.Map
             {
                 throw new Exception("Could not find tile at cursor position");
             }
-            
-            if(tile.HasUnit())
+
+            if (tile.HasUnit())
             {
                 throw new Exception("Cannot move unit to the same tile as another unit");
             }
@@ -183,7 +188,7 @@ namespace Rpg.Map
         {
             // Subtract a half tile width/height from the position, since it starts on a corner, and tiles are drawn from their centers.
             // This way, if the position was the center of the tile at 0,0, we would shift it's position to the upper left of that tile, for easier maths.
-            position -= new Vector3(GetTileWidthScaled() / 2, -GetTileHeightScaled() / 2);
+            position -= new Vector3(GetTileWidthScaled()/2, -GetTileHeightScaled()/2);
 
             // Find the difference in distance between the map's upper left, and the tiles lower right position.
             var mapPosition = GameObject.transform.position;

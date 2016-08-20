@@ -8,50 +8,21 @@ Figure out a way for the HP bar game objects to be properly shared between their
 Consider making sure that the AnimationManager script is always attached to the animation child.
 
 
--Add attack comparison for enemy?
--Make sure that it shows the enemy user info when selecting as well
 
-Delays:
-After Move
-After attack
-Level up delay
+-Make camera follow the units. Might want to look into how tactics does it some more, since it doesn't seem to center on the unit.
 
-
-Potential Things:
-Allow configuring delays between GameStates
-Allow configuring delays 
-Figure out a better way to determing the end of animation states
-
-camera
-
-Allow doing both move and attack in the same turn.
-	-Once one of them is done, the option needs to be greyed out.
 
 Make sure that nodes with units on them don't count as walkable.
 Use A* pathfinding to generate the nearest nodes. Need it to take into account obstacles
 
 
+Look into saving previous menu states when cancelling an action.
 
 
-
-Look into saving previous menu states
-
-Test animation triggers for blood particle effect.
-
-
+Low Priority:
 Add bloop when menu confirms
-
-Visual cue for being able to perform an action
-
-Unit's should have move called on them instead of maps?
-
 Setup XBox Controller
 Look into proper garbage collection
 
-Refactor gamestate code?
-Decide on namespace usage. Either Rpg.* or Assets.Scripts.*
 
 See if there is a GetNodes within X distance function for A*
-
-
-Add a onDamageTaken event

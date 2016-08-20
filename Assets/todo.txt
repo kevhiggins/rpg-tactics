@@ -1,4 +1,6 @@
 
+
+
 LEARNING:
 Learn about particle system from Joe
 Read the Unity manual
@@ -6,10 +8,6 @@ Read the Unity manual
 Dream Land:
 Figure out a way for the HP bar game objects to be properly shared between their parents, so that you can easily propogate updates to each.
 Consider making sure that the AnimationManager script is always attached to the animation child.
-
-
-
--Make camera follow the units. Might want to look into how tactics does it some more, since it doesn't seem to center on the unit.
 
 
 Make sure that nodes with units on them don't count as walkable.

@@ -1,4 +1,4 @@
-
+When fighter attacks a unit, they should have a lower zindex
 
 
 LEARNING:

@@ -32,7 +32,7 @@ public class DoorController : MonoBehaviour {
 		this.open = open;
 
 		if (updateGraphsWithGUO) {
-			// Update the graph below the door
+			// StateUpdate the graph below the door
 			// Set the tag of the nodes below the door
 			// To something indicating that the door is open or closed
 			GraphUpdateObject guo = new GraphUpdateObject(bounds);

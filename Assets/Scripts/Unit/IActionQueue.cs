@@ -21,6 +21,11 @@ namespace Rpg.Unit
         /// </summary>
         void ClockTick();
 
-        List<IFriendlyUnit> GetFriendlyUnits();
+        /// <summary>
+        /// Returns all units not on the same team as friendlyTeamId
+        /// </summary>
+        /// <param name="friendlyTeamId"></param>
+        /// <returns></returns>
+        List<IUnit> GetEnemyUnits(int friendlyTeamId);
     }
 }

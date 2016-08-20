@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Unity;
+﻿using System;
+using Assets.Scripts.Unity;
 using Rpg.Unit;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +8,9 @@ namespace Rpg
 {
     public class BattleManager : MonoBehaviour
     {
-        public void AttackUnit(IUnit sourceUnit, IUnit targetUnit)
+        public IUnit TargetUnit { get; set; }
+
+        public void AttackUnit(IUnit sourceUnit, IUnit targetUnit, Action onComplete)
         {
             // When the hit lands, apply damage to the target unit.
             AttackHitHandler attackHitHandler = null;
@@ -32,20 +35,20 @@ namespace Rpg
                         {
                             sourceUnit.GainExperience(targetUnit.ExperienceWorth);
                         }
-                        sourceUnit.EndTurn();
+                        onComplete();
                     };
                 }
                 else
                 {
-                    // When the attack is complete, check if the enemy is dead, award experience if necessary, and end the turn.
+                    // When the attack is complete, check if the enemy is dead, and award experience if necessary.
                     AttackCompleteHandler attackCompleteHandler = null;
                     sourceUnit.OnAttackComplete += attackCompleteHandler = () =>
                     {
                         // Unregister the callback
                         sourceUnit.OnAttackComplete -= attackCompleteHandler;
 
-                        // If the target unit is not dead, then end the turn. Otherwise, the death handler will take care of this.
-                        sourceUnit.EndTurn();
+                        // If the target unit is not dead, then the attack is complete. Otherwise, the death handler will take care of this.
+                        onComplete();
                     };
                 }
             };

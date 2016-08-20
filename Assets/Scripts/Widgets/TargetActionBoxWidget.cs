@@ -9,14 +9,8 @@ namespace Rpg.Widgets
 {
     class TargetActionBoxWidget : UiWidget
     {
-        private IUnit sourceUnit;
-        private IUnit targetUnit;
-
         public TargetActionBoxWidget(IUnit sourceUnit, IUnit targetUnit) : base(CreateCanvas())
         {
-            this.sourceUnit = sourceUnit;
-            this.targetUnit = targetUnit;
-
             var sourceUnitPanel = GameObjectHelper.FindChildByName(canvas, "SourceUnitInfo");
             var targetUnitPanel = GameObjectHelper.FindChildByName(canvas, "TargetUnitInfo");
             var actionInfo = GameObjectHelper.FindChildByName(canvas, "ActionInfo");

@@ -72,7 +72,7 @@ public class ProceduralWorld : MonoBehaviour {
 		StartCoroutine(GenerateTiles());
 	}
 
-	// Update is called once per frame
+	// StateUpdate is called once per frame
 	void Update () {
 		// Calculate the tile the target is standing on
 		Int2 p = new Int2(Mathf.RoundToInt((target.position.x - tileSize*0.5f) / tileSize), Mathf.RoundToInt((target.position.z - tileSize*0.5f) / tileSize));

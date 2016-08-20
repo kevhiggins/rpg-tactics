@@ -85,7 +85,7 @@ public class DynamicGridObstacle : MonoBehaviour {
 			// If the difference between the previous bounds and the new bounds is greater than some value, update the graphs
 			if (minDiff.sqrMagnitude > updateError*updateError || maxDiff.sqrMagnitude > updateError*updateError ||
 				errorFromRotation > updateError || !prevEnabled) {
-				// Update the graphs as soon as possible
+				// StateUpdate the graphs as soon as possible
 				DoUpdateGraphs();
 			}
 		} else {

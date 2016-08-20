@@ -76,7 +76,7 @@ namespace Pathfinding {
 
 			public Color preFadeColor;
 
-			/** Update the visibility in Layout to avoid complications with different events not drawing the same thing */
+			/** StateUpdate the visibility in Layout to avoid complications with different events not drawing the same thing */
 			private bool visibleInLayout;
 
 			public void Switch () {

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Rpg.Map;
 using Rpg.Unit;
-using Rpg.Widgets;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Assets.Scripts.Widgets
+namespace Rpg.Widgets
 {
     class HighlightAttackWidget : IWidget
     {

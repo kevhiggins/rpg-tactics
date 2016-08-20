@@ -1,4 +1,6 @@
 
+Also, make it so that the ActiveMenu greys out, and prevents selection of already performed actions.
+
 
 LEARNING:
 Learn about particle system from Joe

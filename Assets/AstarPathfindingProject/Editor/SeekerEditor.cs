@@ -30,7 +30,7 @@ public class SeekerEditor : Editor {
 				if (tmp < 0) tmp = 0;
 
 				// If the new value is different than the old one
-				// Update the value and mark the script as dirty
+				// StateUpdate the value and mark the script as dirty
 				if (script.tagPenalties[i] != tmp) {
 					script.tagPenalties[i] = tmp;
 					EditorUtility.SetDirty(target);

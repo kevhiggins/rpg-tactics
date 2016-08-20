@@ -49,7 +49,7 @@ namespace Pathfinding {
 				return;
 			}
 
-			GUILayout.Label("New Update Available!", largeStyle);
+			GUILayout.Label("New StateUpdate Available!", largeStyle);
 			GUILayout.Label("There is a new version of the <b>A* Pathfinding Project</b> available for download.\n" +
 				"The new version is <b>" + version + "</b> you have <b>" + AstarPath.Version + "</b>\n\n"+
 				"<i>Summary:</i>\n"+summary, normalStyle

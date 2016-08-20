@@ -1,6 +1,4 @@
-﻿using Assets.Scripts.GameState;
-using Assets.Scripts.Unity;
-using Rpg.GameState;
+﻿using Assets.Scripts.Unity;
 using Rpg.Unit;
 using UnityEngine;
 
@@ -83,17 +81,6 @@ namespace Rpg.Widgets
             {
                 ActivateMenuItem(menuItemIndex);
             }
-
-            // If the accept command is sent, trigger the currently selected menu item.
-            if (inputManager.Accept())
-            {
-                TriggerCurrentMenuItem();
-            }
-
-            if (inputManager.Cancel())
-            {
-                GameManager.instance.GameState = new ExploreMapState(unit);
-            }
         }
 
         public void ActivateMenuItem(int menuItemIndex)
@@ -133,22 +120,26 @@ namespace Rpg.Widgets
             // Do nothing. The cursor is moved, so there is nothing to deactivate.
         }
 
-
-        public void TriggerCurrentMenuItem()
+        public string GetActiveItemName()
         {
-            // If the Move option is selected, then switch to the SelectUnitMovement state.
-            if (activeMenuItem.name == "Move")
-            {
-                GameManager.instance.GameState = new SelectUnitMovementState(unit);
-            }
-            else if (activeMenuItem.name == "Act")
-            {
-                GameManager.instance.GameState = new AttackState(unit);
-            }
-            else if (activeMenuItem.name == "Wait")
-            {
-                unit.EndTurn();
-            }
+            return activeMenuItem.name;
         }
+
+        //        public void TriggerCurrentMenuItem()
+        //        {
+        //            // If the Move option is selected, then switch to the SelectUnitMovement state.
+        //            if (activeMenuItem.name == "Move")
+        //            {
+        //                GameManager.instance.GameState = new SelectUnitMovementState(unit);
+        //            }
+        //            else if (activeMenuItem.name == "Act")
+        //            {
+        //                GameManager.instance.GameState = new AttackState(unit);
+        //            }
+        //            else if (activeMenuItem.name == "Wait")
+        //            {
+        //                unit.EndTurn();
+        //            }
+        //        }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Rpg.Widgets
 {
-    interface IWidget : IDisposable
+    public interface IWidget : IDisposable
     {
         void HandleInput();
     }

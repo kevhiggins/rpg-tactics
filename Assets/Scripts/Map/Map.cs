@@ -86,7 +86,7 @@ namespace Rpg.Map
 
             cursorTilePosition = new TilePosition(newXTileIndex, newYTileIndex);
 
-            // Update the tile cursor position with the newly calculated info.
+            // StateUpdate the tile cursor position with the newly calculated info.
             cursorGameObject.transform.position = newPosition;
         }
 

@@ -70,7 +70,7 @@ public class GraphUpdateSceneEditor : Editor {
 
 		DrawPhysicsField();
 
-		EditorGUILayout.PropertyField(updateErosion, new GUIContent("Update Erosion", "Recalculate erosion for grid graphs.\nSee online documentation for more info"));
+		EditorGUILayout.PropertyField(updateErosion, new GUIContent("StateUpdate Erosion", "Recalculate erosion for grid graphs.\nSee online documentation for more info"));
 
 		DrawConvexField();
 
@@ -122,7 +122,7 @@ public class GraphUpdateSceneEditor : Editor {
 	}
 
 	void DrawPhysicsField () {
-		EditorGUILayout.PropertyField(updatePhysics, new GUIContent("Update Physics", "Perform similar calculations on the nodes as during scan.\n" +
+		EditorGUILayout.PropertyField(updatePhysics, new GUIContent("StateUpdate Physics", "Perform similar calculations on the nodes as during scan.\n" +
 				"Grid Graphs will update the position of the nodes and also check walkability using collision.\nSee online documentation for more info."));
 
 		if (!updatePhysics.hasMultipleDifferentValues && updatePhysics.boolValue) {

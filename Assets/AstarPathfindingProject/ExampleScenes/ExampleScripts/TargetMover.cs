@@ -40,7 +40,7 @@ namespace Pathfinding {
 			}
 		}
 
-		// Update is called once per frame
+		// StateUpdate is called once per frame
 		void Update () {
 			if (!onlyOnDoubleClick && cam != null) {
 				UpdateTargetPosition();

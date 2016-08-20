@@ -1086,7 +1086,7 @@ public class AstarPathEditor : Editor {
 			guiLayoutx.BeginFadeArea(script.batchGraphUpdates, "graphUpdateInterval");
 			if (guiLayoutx.DrawID("graphUpdateInterval")) {
 				EditorGUI.indentLevel++;
-				script.graphUpdateBatchingInterval = EditorGUILayout.FloatField(new GUIContent("Update Interval (s)", "Minimum number of seconds between each graph update"), script.graphUpdateBatchingInterval);
+				script.graphUpdateBatchingInterval = EditorGUILayout.FloatField(new GUIContent("StateUpdate Interval (s)", "Minimum number of seconds between each graph update"), script.graphUpdateBatchingInterval);
 				EditorGUI.indentLevel--;
 			}
 			guiLayoutx.EndFadeArea();

@@ -7,8 +7,6 @@ namespace Rpg.Widgets
 {
     public class UnitInfoWidget : UiWidget
     {
-        private IUnit unit;
-
         public UnitInfoWidget(IUnit unit) : base(CreateCanvas())
         {
             var panel = GameObjectHelper.FindChildByName(canvas, "Panel");
@@ -65,6 +63,27 @@ namespace Rpg.Widgets
             var textScript = hitPointObject.GetComponent<Text>();
 
             textScript.text = textScript.text.Replace(targetData, newData);
+        }
+
+        public static void CheckUnitInfoDisplay(ref UnitInfoWidget unitInfoWidget)
+        {
+            var selectedTile = GameManager.instance.levelManager.GetMap().GetSelectedTile();
+
+            // Create the unit info box
+            if (selectedTile.HasUnit())
+            {
+                if (unitInfoWidget != null)
+                {
+                    unitInfoWidget.Dispose();
+                }
+
+                unitInfoWidget = new UnitInfoWidget(selectedTile.GetUnit());
+            }
+            else if (unitInfoWidget != null)
+            {
+                unitInfoWidget.Dispose();
+                unitInfoWidget = null;
+            }
         }
     }
 }

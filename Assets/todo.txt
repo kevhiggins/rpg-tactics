@@ -1,3 +1,5 @@
+Make sure that nodes with units on them don't count as walkable.
+
 When fighter attacks a unit, they should have a lower zindex
 
 
@@ -10,8 +12,7 @@ Figure out a way for the HP bar game objects to be properly shared between their
 Consider making sure that the AnimationManager script is always attached to the animation child.
 
 
-Make sure that nodes with units on them don't count as walkable.
-Use A* pathfinding to generate the nearest nodes. Need it to take into account obstacles
+
 
 
 Look into saving previous menu states when cancelling an action.

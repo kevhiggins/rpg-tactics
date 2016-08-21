@@ -3,6 +3,7 @@ using Rpg.Unit;
 using Tiled2Unity;
 using UnityEngine;
 using System.Collections.Generic;
+using Rpg.PathFinding;
 
 namespace Rpg.Map
 {
@@ -204,36 +205,22 @@ namespace Rpg.Map
 
         public List<TilePosition> GetTilePositionsInRange(TilePosition targetTilePosition, int range)
         {
-            var tilePositions = new List<TilePosition>();
+            var targetTile = GetTile(targetTilePosition);
 
-            var xBreadth = 0;
-            for (int y = range; y >= -range; y--)
+            var targetNode = AstarPath.active.GetNearest(targetTile.GetPosition()).node;
+            var nodeFinder = new NodeFinder();
+            var nodeAdapter = new GraphNodeAdapter(targetNode);
+            var graphNodes = nodeFinder.FindNodesInRange(nodeAdapter, range);
+
+            var tilesInRange = new List<TilePosition>();
+
+            foreach (var graphNode in graphNodes)
             {
-                var yPosition = targetTilePosition.y - y;
-                if (yPosition >= 0 && yPosition < TilesHigh())
-                {
-                    for (int x = -xBreadth; x <= xBreadth; x++)
-                    {
-                        var xPosition = targetTilePosition.x + x;
-                        if (xPosition < 0 || xPosition >= TilesWide())
-                        {
-                            continue;
-                        }
-                        tilePositions.Add(new TilePosition(xPosition, yPosition));
-                    }
-                }
-
-                if (y > 0)
-                {
-                    xBreadth++;
-                }
-                else
-                {
-                    xBreadth--;
-                }
+                var tile = FindTileAtPosition((Vector3)graphNode.GraphNode.position);
+                tilesInRange.Add(tile.tilePosition);
             }
 
-            return tilePositions;
+            return tilesInRange;
         }
     }
 }

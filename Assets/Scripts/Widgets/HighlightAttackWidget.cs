@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Pathfinding;
 using Rpg.Map;
 using Rpg.Unit;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace Rpg.Widgets
         {
             var attackRange = 1;
             var map = GameManager.instance.levelManager.GetMap();
-            AttackTilePositions = map.GetTilePositionsInRange(unit.GetTile().tilePosition, attackRange);
+            AttackTilePositions = map.GetTilePositionsInRange(unit.GetTile().tilePosition, attackRange, PathNNConstraint.Default);
             AttackTilePositions.Remove(unit.GetTile().tilePosition);
 
 

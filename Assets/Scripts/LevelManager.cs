@@ -2,6 +2,8 @@
 using UnityEngine;
 using Rpg.Map;
 using System.Collections.Generic;
+using Rpg.PathFinding;
+using Rpg.Unit;
 
 public class LevelManager : MonoBehaviour
 {
@@ -25,6 +27,10 @@ public class LevelManager : MonoBehaviour
             Instantiate(tileSelectionCursor, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
 
         loadedMap = new Map(mapInstance, tileCursorInstance);
+
+        // Add event handlers to update the walkabliity of nodes on the Astar graph.
+        loadedMap.OnTileAddUnit += UpdateTileWalkability;
+        loadedMap.OnTileRemoveUnit += UpdateTileWalkability;
     }
 
     public Map GetMap()
@@ -39,10 +45,30 @@ public class LevelManager : MonoBehaviour
         foreach (var tilePosition in tilePositions)
         {
             var tile = map.GetTile(tilePosition);
-            var currentHighlightedTile = Instantiate(highlightGameObject, tile.GetPosition(), Quaternion.identity) as GameObject;
+            var currentHighlightedTile =
+                Instantiate(highlightGameObject, tile.GetPosition(), Quaternion.identity) as GameObject;
             highlightedTiles.Add(currentHighlightedTile);
         }
 
         return highlightedTiles;
+    }
+
+    protected void UpdateTileWalkability(Tile tile, IUnit unit)
+    {
+        // Find the GraphNode
+        var node = AstarPath.active.GetNearest(tile.GetPosition()).node;
+
+        AstarPath.RegisterSafeUpdate(() =>
+        {
+            if (tile.HasUnit())
+            {
+                node.Tag = PathConstraint.TagHasUnit;
+            }
+            else
+            {
+                node.Tag = PathConstraint.TagNone;
+            }
+            
+        });
     }
 }

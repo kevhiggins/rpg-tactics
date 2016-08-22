@@ -3,11 +3,16 @@ using Rpg.Unit;
 using Tiled2Unity;
 using UnityEngine;
 using System.Collections.Generic;
+using Pathfinding;
 using Rpg.PathFinding;
 
 namespace Rpg.Map
 {
     public delegate void CursorMoveHandler(TilePosition tilePosition);
+
+    public delegate void TileAddUnitHandler(Tile tile, IUnit unit);
+
+    public delegate void TileRemoveUnitHandler(Tile tile, IUnit unit);
 
     public class Map
     {
@@ -19,6 +24,8 @@ namespace Rpg.Map
         public GameObject GameObject { get; private set; }
 
         public event CursorMoveHandler OnCursorMove = tilePosition => { };
+        public event TileAddUnitHandler OnTileAddUnit = (tile, unit) => { };
+        public event TileRemoveUnitHandler OnTileRemoveUnit = (tile, unit) => { };
 
         public Map(GameObject mapGameObject, GameObject cursorGameObject)
         {
@@ -203,24 +210,34 @@ namespace Rpg.Map
             return GetTile(x, y);
         }
 
-        public List<TilePosition> GetTilePositionsInRange(TilePosition targetTilePosition, int range)
+        public List<TilePosition> GetTilePositionsInRange(TilePosition targetTilePosition, int range, NNConstraint pathConstraint)
         {
             var targetTile = GetTile(targetTilePosition);
 
             var targetNode = AstarPath.active.GetNearest(targetTile.GetPosition()).node;
             var nodeFinder = new NodeFinder();
             var nodeAdapter = new GraphNodeAdapter(targetNode);
-            var graphNodes = nodeFinder.FindNodesInRange(nodeAdapter, range);
+            var graphNodes = nodeFinder.FindNodesInRange(nodeAdapter, range, pathConstraint);
 
             var tilesInRange = new List<TilePosition>();
 
             foreach (var graphNode in graphNodes)
             {
-                var tile = FindTileAtPosition((Vector3)graphNode.GraphNode.position);
+                var tile = FindTileAtPosition((Vector3) graphNode.GraphNode.position);
                 tilesInRange.Add(tile.tilePosition);
             }
 
             return tilesInRange;
+        }
+
+        public void TileAddUnit(Tile tile, IUnit unit)
+        {
+            OnTileAddUnit(tile, unit);
+        }
+
+        public void TileRemoveUnit(Tile tile, IUnit unit)
+        {
+            OnTileRemoveUnit(tile, unit);
         }
     }
 }

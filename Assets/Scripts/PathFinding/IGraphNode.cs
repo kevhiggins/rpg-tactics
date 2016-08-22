@@ -10,7 +10,7 @@ namespace Rpg.PathFinding
         uint TentativeDistance { get; set; }
         uint Penalty { get; }
         bool IsVisited { get; set; }
-        List<IGraphNode> FindNeighbors();
+        List<IGraphNode> FindNeighbors(NNConstraint pathConstraint);
         uint GetConnectionDistance(IGraphNode targetNode);
     }
 }

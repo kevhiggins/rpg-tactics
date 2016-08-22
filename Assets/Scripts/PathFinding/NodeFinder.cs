@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Pathfinding;
 
 namespace Rpg.PathFinding
 {
     class NodeFinder
     {
-        public List<IGraphNode> FindNodesInRange(IGraphNode startNode, float maxDistance)
+        public List<IGraphNode> FindNodesInRange(IGraphNode startNode, float maxDistance, NNConstraint pathConstraint)
         {
             var nodesInRange = new SortedList<int, IGraphNode>();
 
@@ -20,7 +21,7 @@ namespace Rpg.PathFinding
 
             while ((currentNode = GetNextUnvisitedNode(nodesInRange)) != null)
             {
-                var unvisitedNeighbors = FindUnvisitedNeighbors(currentNode, nodesInRange);
+                var unvisitedNeighbors = FindUnvisitedNeighbors(currentNode, nodesInRange, pathConstraint);
                 foreach (var unvisitedNeighbor in unvisitedNeighbors)
                 {
                     unvisitedNeighbor.IsVisited = false;
@@ -59,10 +60,10 @@ namespace Rpg.PathFinding
         /// <param name="node"></param>
         /// <param name="graphNodes"></param>
         /// <returns></returns>
-        public List<IGraphNode> FindUnvisitedNeighbors(IGraphNode node, SortedList<int, IGraphNode> graphNodes)
+        public List<IGraphNode> FindUnvisitedNeighbors(IGraphNode node, SortedList<int, IGraphNode> graphNodes, NNConstraint pathConstraint)
         {
             var unvisitedNeighbors = new List<IGraphNode>();
-            var neighbors = node.FindNeighbors();
+            var neighbors = node.FindNeighbors(pathConstraint);
             foreach (var neighbor in neighbors)
             {
                 if (graphNodes.ContainsKey(neighbor.Id))

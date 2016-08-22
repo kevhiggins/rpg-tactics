@@ -18,6 +18,7 @@ namespace Rpg.PathFinding
                     targetPosition,
                     path =>
                     {
+                        
                         paths.Add(path);
                         pathsFound++;
 
@@ -27,6 +28,22 @@ namespace Rpg.PathFinding
                             onComplete(paths);
                         }
                     });
+
+
+//                var pathConstraint = new PathConstraint();
+
+//                var pathConstraint = new NNConstraint();
+                // After the start/end nodes are found, restrict to tag 0;
+//                pathConstraint.tags = 1 << 4;
+//                p.nnConstraint = pathConstraint;
+
+                p.enabledTags = PathConstraint.TagBasicGround;
+                p.nnConstraint = new StaticTagsPathConstraint(-1);
+
+                Debug.Log(p.nnConstraint.tags);
+                p.nnConstraint.tags = 10;
+                Debug.Log(p.nnConstraint.tags);
+
                 AstarPath.StartPath(p);
             }
         }

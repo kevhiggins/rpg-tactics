@@ -1,3 +1,18 @@
+Delete StaticPathConstraint class
+
+Hook into start turn and end turn.
+	Tag/untag the current source unit node.
+Hook into start target and end target events.
+	Tag/untag the current target unit node.
+
+Tag the target unit, and source unit, so that they are findable.
+Remove tags after all is said and done.
+
+Remove sourceunit highlighting on move
+
+PathNNConstraint
+Use NCConstaint SetStart to look for walkable start nodes, but not other nodes.
+
 Make sure that nodes with units on them don't count as walkable.
 
 When fighter attacks a unit, they should have a lower zindex
@@ -25,3 +40,26 @@ Look into proper garbage collection
 
 
 See if there is a GetNodes within X distance function for A*
+
+
+        bounds = GetComponent<Collider>().bounds;
+        bounds.extents = new Vector3(0.5f, 0.5f, 0.4f);
+        guo = new GraphUpdateObject(bounds);
+        guo.modifyWalkability = true;
+        guo.setWalkability = false;
+        AstarPath.active.UpdateGraphs(guo);
+
+
+				/** Which graph tags are traversable.
+		 * This is a bitmask so -1 = all bits set = all tags traversable.
+		 * For example, to set bit 5 to true, you would do
+		 * \code myPath.enabledTags |= 1 << 5; \endcode
+		 * To set it to false, you would do
+		 * \code myPath.enabledTags &= ~(1 << 5); \endcode
+		 *
+		 * The Seeker has a popup field where you can set which tags to use.
+		 * \note If you are using a Seeker. The Seeker will set this value to what is set in the inspector field on StartPath.
+		 * So you need to change the Seeker value via script, not set this value if you want to change it via script.
+		 *
+		 * \see CanTraverse
+		 */

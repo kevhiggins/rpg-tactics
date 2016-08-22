@@ -46,6 +46,13 @@ namespace Rpg.GameState.Behaviors.AiTurn
             // Remove the first position, since it is the unit's current location.
             shortestPath.vectorPath.RemoveAt(0);
 
+            // If there are no nodes other than the sourceUnit node, then we should wait, since the unit is trapped, or has 0 movement.
+            if (shortestPath.vectorPath.Any() == false)
+            {
+                animator.SetTrigger("Wait");
+                return;
+            }
+
             // Remove the last position, because we only want to move the enemy next to the target.
             var targetIndex = shortestPath.vectorPath.Count - 1;
             var targetPosition = shortestPath.vectorPath[targetIndex];
@@ -62,6 +69,7 @@ namespace Rpg.GameState.Behaviors.AiTurn
                 return;
             }
 
+            // If we have a unit in range, but have already acted, then wait.
             if (shortestPath.vectorPath.Count == 0 || ActiveUnit.HasMoved)
             {
                 animator.SetTrigger("Wait");

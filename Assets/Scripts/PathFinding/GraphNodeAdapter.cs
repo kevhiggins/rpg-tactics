@@ -31,11 +31,18 @@ namespace Rpg.PathFinding
             this.node = node;
         }
 
-        public List<IGraphNode> FindNeighbors()
+        public List<IGraphNode> FindNeighbors(NNConstraint pathConstraint)
         {
             var neighbors = new List<IGraphNode>();
 
-            node.GetConnections(graphNode => { neighbors.Add(new GraphNodeAdapter(graphNode)); });
+            node.GetConnections(graphNode =>
+            {
+                // Restrict the neighboring nodes by the path constraint.
+                if (pathConstraint.Suitable(graphNode))
+                {
+                    neighbors.Add(new GraphNodeAdapter(graphNode));
+                }
+            });
 
             return neighbors;
         }

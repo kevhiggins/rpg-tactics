@@ -24,6 +24,7 @@ namespace Rpg.Map
             }
             unit = targetUnit;
             targetUnit.SetTile(this);
+            map.TileAddUnit(this, targetUnit);
         }
 
         /// <summary>
@@ -33,8 +34,10 @@ namespace Rpg.Map
         {
             if (unit != null)
             {
+                var tmpUnit = unit;
                 unit.SetTile(null);
                 unit = null;
+                map.TileRemoveUnit(this, tmpUnit);
             }
         }
 

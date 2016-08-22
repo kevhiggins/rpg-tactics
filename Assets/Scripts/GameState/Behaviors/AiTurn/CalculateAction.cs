@@ -42,9 +42,10 @@ namespace Rpg.GameState.Behaviors.AiTurn
         private void ProcessNearestEnemyPath(Path shortestPath, Animator animator)
         {
             var map = GameManager.instance.levelManager.GetMap();
-
+            
             // Remove the first position, since it is the unit's current location.
-            shortestPath.vectorPath.RemoveAt(0);
+            if(shortestPath.vectorPath.Any())
+                shortestPath.vectorPath.RemoveAt(0);
 
             // If there are no nodes other than the sourceUnit node, then we should wait, since the unit is trapped, or has 0 movement.
             if (shortestPath.vectorPath.Any() == false)

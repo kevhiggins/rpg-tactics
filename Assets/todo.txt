@@ -1,19 +1,6 @@
-Delete StaticPathConstraint class
-
-Hook into start turn and end turn.
-	Tag/untag the current source unit node.
-Hook into start target and end target events.
-	Tag/untag the current target unit node.
-
-Tag the target unit, and source unit, so that they are findable.
-Remove tags after all is said and done.
-
-Remove sourceunit highlighting on move
-
-PathNNConstraint
-Use NCConstaint SetStart to look for walkable start nodes, but not other nodes.
-
-Make sure that nodes with units on them don't count as walkable.
+Make sure that AI units unitinfo box is showing up on cursor selection.
+Next up, make the unit follow the specific path, instead of fly like a bird to their destination.
+Also, make the movement speed standardized per tile. (Make this configurable.)
 
 When fighter attacks a unit, they should have a lower zindex
 

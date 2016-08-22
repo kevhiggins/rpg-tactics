@@ -1,4 +1,5 @@
 ﻿using Pathfinding;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Rpg.PathFinding
@@ -10,6 +11,8 @@ namespace Rpg.PathFinding
         public const int TagSourceUnit = 1 << 2;
         public const int TagTargetUnit = 1 << 3;
         public const int TagNone = 0;
+
+        public List<GraphNode> alwaysSuitableNodes = new List<GraphNode>();
 
         // The tags to use after the start and end nodes are found.
         public int afterEndTags = -1;
@@ -30,19 +33,11 @@ namespace Rpg.PathFinding
             }
         }
 
-        /** Called after the start node has been found. This is used to get different search logic for the start and end nodes in a path */
-
-        public override void SetStart(GraphNode node)
+        public override bool Suitable(GraphNode node)
         {
-        }
-
-        public override void SetEnd(GraphNode node)
-        {
-            Debug.Log("TEST!!!");
-            // Set to unwalkable, since we initially set the node to walkable to get around library constraints.
-//            if (afterEndTags != -1)
-//                tags = afterEndTags;
-            base.SetStart(node);
+            if (alwaysSuitableNodes.Contains(node))
+                return true;
+            return base.Suitable(node);
         }
     }
 }

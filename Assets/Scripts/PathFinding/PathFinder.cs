@@ -12,9 +12,14 @@ namespace Rpg.PathFinding
 
         public void FindTargetPaths(Vector3 sourcePosition, List<Vector3> targetPositions, Action<List<Path>> onComplete)
         {
+            var startNode = AstarPath.active.GetNearest(sourcePosition).node;
+
             foreach (var targetPosition in targetPositions)
             {
-                var p = ABPath.Construct(sourcePosition,
+                // Find the target node so that we can make sure it's excluded from the constraint, and always traversible in the path.
+                var targetNode = AstarPath.active.GetNearest(targetPosition).node;
+
+                var p = (ABPathExclusion) ABPathExclusion.Construct(sourcePosition,
                     targetPosition,
                     path =>
                     {
@@ -29,20 +34,21 @@ namespace Rpg.PathFinding
                         }
                     });
 
+                // Gather a list of the source and target nodes.
+                var alwaysTraversableNodes = new List<GraphNode>();
+                alwaysTraversableNodes.Add(startNode);
+                alwaysTraversableNodes.Add(targetNode);
 
-//                var pathConstraint = new PathConstraint();
+                // Tell constraint to ignore the source and target nodes.
+                var pathConstraint = new PathConstraint();
+                pathConstraint.alwaysSuitableNodes = alwaysTraversableNodes;
 
-//                var pathConstraint = new NNConstraint();
-                // After the start/end nodes are found, restrict to tag 0;
-//                pathConstraint.tags = 1 << 4;
-//                p.nnConstraint = pathConstraint;
+                // Tell the path that the source and target nodes are always traversible.
+                p.alwaysTraversableNodes = alwaysTraversableNodes;
 
+                // Constrain movement to basic ground (non-occupied) nodes.
                 p.enabledTags = PathConstraint.TagBasicGround;
-                p.nnConstraint = new StaticTagsPathConstraint(-1);
-
-                Debug.Log(p.nnConstraint.tags);
-                p.nnConstraint.tags = 10;
-                Debug.Log(p.nnConstraint.tags);
+                p.nnConstraint = pathConstraint;
 
                 AstarPath.StartPath(p);
             }

@@ -263,7 +263,7 @@ namespace Pathfinding {
 
 		/** Returns if the node can be traversed.
 		 * This per default equals to if the node is walkable and if the node's tag is included in #enabledTags */
-		public bool CanTraverse (GraphNode node) {
+		public virtual bool CanTraverse (GraphNode node) {
 			unchecked { return node.Walkable && (enabledTags >> (int)node.Tag & 0x1) != 0; }
 		}
 

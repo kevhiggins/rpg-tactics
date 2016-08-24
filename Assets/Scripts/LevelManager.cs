@@ -26,7 +26,9 @@ public class LevelManager : MonoBehaviour
         var tileCursorInstance =
             Instantiate(tileSelectionCursor, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
 
-        loadedMap = new Map(mapInstance, tileCursorInstance);
+        var tileMap = new TiledMapAdapter(mapInstance);
+
+        loadedMap = new Map(tileMap, tileCursorInstance);
 
         // Add event handlers to update the walkabliity of nodes on the Astar graph.
         loadedMap.OnTileAddUnit += UpdateTileWalkability;

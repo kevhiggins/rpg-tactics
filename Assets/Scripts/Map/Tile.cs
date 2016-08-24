@@ -55,8 +55,8 @@ namespace Rpg.Map
         public Vector3 GetPosition()
         {
             var currentMapPosition = map.GameObject.transform.position;
-            var tileWidthScaled = map.GetTileWidthScaled();
-            var tileHeightScaled = map.GetTileHeightScaled();
+            var tileWidthScaled = map.TileMap.TileWidth;
+            var tileHeightScaled = map.TileMap.TileHeight;
             var xPosition = currentMapPosition.x + tilePosition.x * tileWidthScaled + tileWidthScaled / 2;
             var yPosition = currentMapPosition.y + -tilePosition.y * tileHeightScaled - tileHeightScaled / 2;
             return new Vector3(xPosition, yPosition, 0);

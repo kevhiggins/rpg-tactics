@@ -17,7 +17,6 @@ namespace Rpg.Map
     public class Map
     {
         private GameObject cursorGameObject;
-        private TiledMap tiledMapScript;
         private TilePosition cursorTilePosition;
         private Tile[,] tiles;
 
@@ -27,20 +26,21 @@ namespace Rpg.Map
         public event TileAddUnitHandler OnTileAddUnit = (tile, unit) => { };
         public event TileRemoveUnitHandler OnTileRemoveUnit = (tile, unit) => { };
 
-        public Map(GameObject mapGameObject, GameObject cursorGameObject)
+        public ITileMap TileMap { get; private set; }
+
+        public Map(ITileMap tileMap, GameObject cursorGameObject)
         {
+            TileMap = tileMap;
+
             //this.mapGameObject = mapGameObject;
-            GameObject = mapGameObject;
+            GameObject = TileMap.GameObject;
             this.cursorGameObject = cursorGameObject;
 
-            // Store a reference to the map script
-            tiledMapScript = GameObject.GetComponent<TiledMap>();
-
             // Create Tile object instances for each tile on the map.
-            tiles = new Tile[tiledMapScript.NumTilesWide, tiledMapScript.NumTilesHigh];
+            tiles = new Tile[TileMap.TilesWide, TileMap.TilesHigh];
 
-            var tilesWide = TilesWide();
-            var tilesHigh = TilesHigh();
+            var tilesWide = TileMap.TilesWide;
+            var tilesHigh = TileMap.TilesHigh;
 
             for (int x = 0; x < tilesWide; x++)
             {
@@ -68,8 +68,8 @@ namespace Rpg.Map
         /// <param name="y">The number of tiles on the y axis to move the cursor</param>
         public void MoveTileCursor(int x, int y)
         {
-            var tileWidth = GetTileWidthScaled();
-            var tileHeight = GetTileHeightScaled();
+            var tileWidth = TileMap.TileWidth;
+            var tileHeight = TileMap.TileHeight;
 
             var newPosition = cursorGameObject.transform.position;
 
@@ -134,16 +134,6 @@ namespace Rpg.Map
             unit.MoveToTile(tile, onComplete);
         }
 
-        public float GetTileWidthScaled()
-        {
-            return tiledMapScript.TileWidth*tiledMapScript.transform.lossyScale.x*tiledMapScript.ExportScale;
-        }
-
-        public float GetTileHeightScaled()
-        {
-            return tiledMapScript.TileHeight*tiledMapScript.transform.lossyScale.y*tiledMapScript.ExportScale;
-        }
-
         public TilePosition GetCursorTilePosition()
         {
             return cursorTilePosition;
@@ -156,21 +146,11 @@ namespace Rpg.Map
 
         public bool IsValidTilePosition(int x, int y)
         {
-            if (x < 0 || x >= TilesWide() || y < 0 || y >= TilesHigh())
+            if (x < 0 || x >= TileMap.TilesWide || y < 0 || y >= TileMap.TilesHigh)
             {
                 return false;
             }
             return true;
-        }
-
-        public int TilesWide()
-        {
-            return tiles.GetLength(0);
-        }
-
-        public int TilesHigh()
-        {
-            return tiles.GetLength(1);
         }
 
         public Tile GetTile(int x, int y)
@@ -196,7 +176,7 @@ namespace Rpg.Map
         {
             // Subtract a half tile width/height from the position, since it starts on a corner, and tiles are drawn from their centers.
             // This way, if the position was the center of the tile at 0,0, we would shift it's position to the upper left of that tile, for easier maths.
-            position -= new Vector3(GetTileWidthScaled()/2, -GetTileHeightScaled()/2);
+            position -= new Vector3(TileMap.TileWidth/2, -TileMap.TileHeight/2);
 
             // Find the difference in distance between the map's upper left, and the tiles lower right position.
             var mapPosition = GameObject.transform.position;
@@ -204,8 +184,8 @@ namespace Rpg.Map
 
 
             // Divide the tile dimensions by the point difference to get the number of tiles. Convert to Int32 to avoid float rounding errors.
-            int x = Convert.ToInt32(newPosition.x/GetTileWidthScaled());
-            int y = Convert.ToInt32(-newPosition.y/GetTileHeightScaled());
+            int x = Convert.ToInt32(newPosition.x/TileMap.TileWidth);
+            int y = Convert.ToInt32(-newPosition.y/TileMap.TileHeight);
 
             return GetTile(x, y);
         }

@@ -195,6 +195,8 @@ namespace Rpg.Map
             var targetTile = GetTile(targetTilePosition);
 
             var targetNode = AstarPath.active.GetNearest(targetTile.GetPosition()).node;
+            Debug.Log(targetTile.GetPosition());
+            Debug.Log(targetNode.position);
             var nodeFinder = new NodeFinder();
             var nodeAdapter = new GraphNodeAdapter(targetNode);
             var graphNodes = nodeFinder.FindNodesInRange(nodeAdapter, range, pathConstraint);

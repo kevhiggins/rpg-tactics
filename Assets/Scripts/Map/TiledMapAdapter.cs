@@ -27,6 +27,16 @@ namespace Rpg.Map
             get { return tiledMapScript.NumTilesHigh; }
         }
 
+        public float MapWidth
+        {
+            get { return (float) tiledMapScript.MapWidthInPixels/GameManager.instance.pixelsToUnits; }
+        }
+
+        public float MapHeight
+        {
+            get { return (float) tiledMapScript.MapHeightInPixels/GameManager.instance.pixelsToUnits; }
+        }
+
         private TiledMap tiledMapScript;
 
         public TiledMapAdapter(GameObject tiledGameObject)

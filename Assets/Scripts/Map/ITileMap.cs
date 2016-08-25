@@ -32,5 +32,15 @@ namespace Rpg.Map
         /// </summary>
         /// <returns></returns>
         int TilesHigh { get; }
+
+        /// <summary>
+        /// The map width in unity units.
+        /// </summary>
+        float MapWidth { get; }
+
+        /// <summary>
+        /// The map height in unity units.
+        /// </summary>
+        float MapHeight { get; }
     }
 }

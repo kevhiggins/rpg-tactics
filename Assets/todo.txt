@@ -1,3 +1,8 @@
+Cursor seems unnatural when it switched back to enemy after attack, and then immediately to the next unit
+Add Joe's fighter unit
+
+Update A* math with the corresponding Passable/Penalty tiles from Tiled
+
 Make sure that AI units unitinfo box is showing up on cursor selection.
 Next up, make the unit follow the specific path, instead of fly like a bird to their destination.
 Also, make the movement speed standardized per tile. (Make this configurable.)
@@ -24,29 +29,3 @@ Low Priority:
 Add bloop when menu confirms
 Setup XBox Controller
 Look into proper garbage collection
-
-
-See if there is a GetNodes within X distance function for A*
-
-
-        bounds = GetComponent<Collider>().bounds;
-        bounds.extents = new Vector3(0.5f, 0.5f, 0.4f);
-        guo = new GraphUpdateObject(bounds);
-        guo.modifyWalkability = true;
-        guo.setWalkability = false;
-        AstarPath.active.UpdateGraphs(guo);
-
-
-				/** Which graph tags are traversable.
-		 * This is a bitmask so -1 = all bits set = all tags traversable.
-		 * For example, to set bit 5 to true, you would do
-		 * \code myPath.enabledTags |= 1 << 5; \endcode
-		 * To set it to false, you would do
-		 * \code myPath.enabledTags &= ~(1 << 5); \endcode
-		 *
-		 * The Seeker has a popup field where you can set which tags to use.
-		 * \note If you are using a Seeker. The Seeker will set this value to what is set in the inspector field on StartPath.
-		 * So you need to change the Seeker value via script, not set this value if you want to change it via script.
-		 *
-		 * \see CanTraverse
-		 */

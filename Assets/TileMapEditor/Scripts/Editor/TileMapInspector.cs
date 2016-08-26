@@ -14,43 +14,67 @@ namespace TileMapEditor.Editor
         private bool MouseOnMap
         {
             // TODO revamp this to be relative to the map object position
-            get { return mouseHitPosition.x > 0 && mouseHitPosition.x < map.gridSize.x && mouseHitPosition.y < 0 && mouseHitPosition.y > -map.gridSize.y ; }
+            get
+            {
+                return mouseHitPosition.x > 0 && mouseHitPosition.x < map.gridSize.x && mouseHitPosition.y < 0 &&
+                       mouseHitPosition.y > -map.gridSize.y;
+            }
+        }
+
+        protected void DisplayList()
+        {
+            var penaltyColors = serializedObject.FindProperty("penaltyColors");
+
+            EditorGUILayout.PropertyField(penaltyColors, new GUIContent("Penalty Colors:"), true);
+            serializedObject.ApplyModifiedProperties();
         }
 
         public override void OnInspectorGUI()
         {
+            serializedObject.Update();
             EditorGUILayout.BeginVertical();
 
             var oldSize = map.mapSize;
             map.mapSize = EditorGUILayout.Vector2Field("Map Size:", map.mapSize);
+            map.tileSize = EditorGUILayout.Vector2Field("Tile Size In Pixels", map.tileSize);
+            map.pixelsToUnits = EditorGUILayout.IntField("Pixels To Units", map.pixelsToUnits);
+
+            map.impassableColor = EditorGUILayout.ColorField("Impassable Color:", map.impassableColor);
+
+            DisplayList();
+
             if (map.mapSize != oldSize)
             {
                 UpdateCalculations();
             }
 
-            map.texture2D =
-                (Texture2D) EditorGUILayout.ObjectField("Texture2D:", map.texture2D, typeof(Texture2D), false);
+//            map.texture2D =
+//                (Texture2D) EditorGUILayout.ObjectField("Texture2D:", map.texture2D, typeof(Texture2D), false);
 
-            if (map.texture2D == null)
-            {
-                EditorGUILayout.HelpBox("You have not selected a texture 2d yet.", MessageType.Warning);
-            }
-            else
-            {
-                EditorGUILayout.LabelField("Tile Size:", map.tileSize.x + "x" + map.tileSize.y);
-                EditorGUILayout.LabelField("Grid Size In Units:", map.gridSize.x + "x" + map.gridSize.y);
-                EditorGUILayout.LabelField("Pixels To Units:", map.pixelsToUnits.ToString());
-                UpdateBrush(map.CurrentTileBrush);
+            // Replace tile size detection with configuration
 
-                if (GUILayout.Button("Clear Tiles"))
-                {
-                    if(EditorUtility.DisplayDialog("Clear map's tiles?", "Are you sure?", "Clear", "Do not clear"))
-                    {
-                        ClearMap();
-                    }
-                    ;
-                }
-            }
+
+//            if (map.texture2D == null)
+//            {
+//                EditorGUILayout.HelpBox("You have not selected a texture 2d yet.", MessageType.Warning);
+//            }
+
+            EditorGUILayout.LabelField("Tile Size:", map.tileSize.x + "x" + map.tileSize.y);
+            EditorGUILayout.LabelField("Grid Size In Units:", map.gridSize.x + "x" + map.gridSize.y);
+
+            UpdateBrush(map.selectedSprite);
+
+//                UpdateBrush(map.CurrentTileBrush);
+
+//                if (GUILayout.Button("Clear Tiles"))
+//                {
+//                    if (EditorUtility.DisplayDialog("Clear map's tiles?", "Are you sure?", "Clear", "Do not clear"))
+//                    {
+//                        ClearMap();
+//                    }
+//                    ;
+//                }
+//            }
 
             EditorGUILayout.EndVertical();
         }
@@ -70,10 +94,8 @@ namespace TileMapEditor.Editor
             }
 
             UpdateCalculations();
-            if (map.texture2D != null)
-            {
+            if (brush == null)
                 NewBrush();
-            }
         }
 
         void OnDisable()
@@ -88,13 +110,14 @@ namespace TileMapEditor.Editor
                 UpdateHitPosition();
                 MoveBrush();
 
-                if (map.texture2D != null && MouseOnMap)
+                if (MouseOnMap && map.selectedSprite != null)
                 {
                     var current = Event.current;
                     if (current.shift)
                     {
                         Draw();
-                    } else if (current.alt)
+                    }
+                    else if (current.alt)
                     {
                         RemoveTile();
                     }
@@ -104,23 +127,8 @@ namespace TileMapEditor.Editor
 
         void UpdateCalculations()
         {
-            if (map.texture2D == null)
-                return;
-
-            var path = AssetDatabase.GetAssetPath(map.texture2D);
-            map.spriteReferences = AssetDatabase.LoadAllAssetsAtPath(path);
-
-            // First item is the Texture2D itself. Second item is the first sliced sprite.
-            var sprite = (Sprite) map.spriteReferences[1];
-
-            var width = sprite.textureRect.width;
-            var height = sprite.textureRect.height;
-
-            map.pixelsToUnits = sprite.rect.width/sprite.bounds.size.x;
-
-            map.tileSize = new Vector2(width, height);
-
-            map.gridSize = new Vector2(width/map.pixelsToUnits*map.mapSize.x, height/map.pixelsToUnits*map.mapSize.y);
+            map.gridSize = new Vector2(map.tileSize.x/map.pixelsToUnits*map.mapSize.x,
+                map.tileSize.y/map.pixelsToUnits*map.mapSize.y);
         }
 
         void CreateBrush()
@@ -133,6 +141,10 @@ namespace TileMapEditor.Editor
 
                 brush = gameObject.AddComponent<TileBrush>();
                 brush.renderer2D = gameObject.AddComponent<SpriteRenderer>();
+                // Add the sprite material to the sprite renderer if its configured.
+                if (map.spriteMaterial != null)
+                    brush.renderer2D.material = map.spriteMaterial;
+
                 var pixelsToUnits = map.pixelsToUnits;
 
                 // TODO move this calculation into UpdateBrush
@@ -185,7 +197,7 @@ namespace TileMapEditor.Editor
             var column = Mathf.Abs(y/tileSize) - 1;
 
             if (!MouseOnMap)
-                return; 
+                return;
             var id = (column*map.mapSize.x + row);
             brush.tileID = Convert.ToInt32(id);
 
@@ -208,9 +220,10 @@ namespace TileMapEditor.Editor
                 tile.transform.SetParent(map.tiles.transform);
                 tile.transform.position = new Vector3(posX, posY, 0);
                 tile.AddComponent<SpriteRenderer>();
+                tile.AddComponent<Tile>();
             }
 
-            tile.GetComponent<SpriteRenderer>().sprite = brush.renderer2D.sprite; 
+            tile.GetComponent<SpriteRenderer>().sprite = brush.renderer2D.sprite;
         }
 
         void RemoveTile()
@@ -226,8 +239,7 @@ namespace TileMapEditor.Editor
 
         void ClearMap()
         {
-
-            for(var i=0; i < map.tiles.transform.childCount; i++)
+            for (var i = 0; i < map.tiles.transform.childCount; i++)
             {
                 Transform t = map.tiles.transform.GetChild(i);
                 DestroyImmediate(t.gameObject);

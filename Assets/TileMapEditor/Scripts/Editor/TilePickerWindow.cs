@@ -14,8 +14,19 @@ namespace TileMapEditor.Editor
             X5
         }
 
+        public enum Mode
+        {
+            Impassable,
+            Penalties,
+            Units
+        }
+
         private Scale scale;
         private Vector2 currentSelection = Vector2.zero;
+        
+
+        private bool modeGroupEnabled = true;
+        private Mode currentMode;
 
         public Vector2 scrollPosition = Vector2.zero;
 
@@ -28,6 +39,55 @@ namespace TileMapEditor.Editor
             window.titleContent = title;
         }
 
+        void OnGUI()
+        {
+            var previousMode = currentMode;
+
+            GUILayout.BeginHorizontal();
+            currentMode = GUILayout.Toggle(currentMode == Mode.Impassable, new GUIContent("Impassable"), "Button") ? Mode.Impassable : currentMode;
+            currentMode = GUILayout.Toggle(currentMode == Mode.Penalties, new GUIContent("Penalty"), "Button") ? Mode.Penalties : currentMode;
+            currentMode = GUILayout.Toggle(currentMode == Mode.Units, new GUIContent("Units"), "Button") ? Mode.Units : currentMode;
+            GUILayout.EndHorizontal();
+
+            if (Selection.activeGameObject == null)
+                return;
+            var selection = Selection.activeGameObject.GetComponent<TileMap>();
+            if (selection == null)
+                return;
+
+            if (currentMode == Mode.Impassable)
+            {
+                // On mode change
+                if (previousMode != currentMode)
+                {
+                    // Create the impassable sprite, and assign it as the currently selected sprite.
+                    var boxTexture = new Texture2D((int)selection.tileSize.x, (int)selection.tileSize.y);
+                    var fillColorArray = boxTexture.GetPixels();
+
+                    for (var i = 0; i < fillColorArray.Length; i++)
+                    {
+                        fillColorArray[i] = selection.impassableColor;
+                    }
+
+                    boxTexture.SetPixels(fillColorArray);
+                    boxTexture.Apply();
+
+                    selection.selectedSprite = Sprite.Create(boxTexture, new Rect(0, 0, boxTexture.width, boxTexture.height), new Vector2(0.5f, 0.5f));
+
+                }
+                // Allow drawing impassable color.
+            }
+            else if (currentMode == Mode.Penalties)
+            {
+                
+            }
+            else if (currentMode == Mode.Units)
+            {
+                
+            }
+        }
+
+        /*
         void OnGUI()
         {
             if (Selection.activeGameObject == null)
@@ -93,5 +153,6 @@ namespace TileMapEditor.Editor
 
             GUI.EndScrollView();
         }
+        */
     }
 }

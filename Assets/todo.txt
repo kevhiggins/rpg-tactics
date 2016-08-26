@@ -1,7 +1,23 @@
+TODO Determine a way to store the sprite + other info to be used when drawn.
+
+Fix issue where brush sometimes has duplicates.
+	-Seems to happen by pressing play
+
+Center the tile map on the camera
+
+
+
+
+https://blogs.unity3d.com/2015/06/19/pixel-perfect-2d/
+
+
+Update A* math with the corresponding Passable/Penalty tiles from Tiled
+Abstract unit starting positions, so they are not tied to the unit.
+
 Cursor seems unnatural when it switched back to enemy after attack, and then immediately to the next unit
 Add Joe's fighter unit
 
-Update A* math with the corresponding Passable/Penalty tiles from Tiled
+
 
 Make sure that AI units unitinfo box is showing up on cursor selection.
 Next up, make the unit follow the specific path, instead of fly like a bird to their destination.

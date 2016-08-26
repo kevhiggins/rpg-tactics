@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace TileMapEditor.Editor
@@ -185,8 +186,8 @@ namespace TileMapEditor.Editor
 
             if (!MouseOnMap)
                 return; 
-            var id = (int) (column*map.mapSize.x + row);
-            brush.tileID = id;
+            var id = (column*map.mapSize.x + row);
+            brush.tileID = Convert.ToInt32(id);
 
             x += map.transform.position.x + tileSize/2;
             y += map.transform.position.y + tileSize/2;

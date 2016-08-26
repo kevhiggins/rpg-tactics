@@ -21,6 +21,8 @@ namespace TileMapEditor
         public float pixelsToUnits;
         public int tileID = 0;
 
+        public GameObject tiles;
+
         public Sprite CurrentTileBrush
         {
             get { return spriteReferences[tileID] as Sprite; }

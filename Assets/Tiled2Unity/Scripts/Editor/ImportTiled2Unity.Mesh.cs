@@ -87,6 +87,7 @@ namespace Tiled2Unity
         {
             foreach (XElement goXml in xml.Elements("GameObject"))
             {
+                
                 string name = ImportUtils.GetAttributeAsString(goXml, "name", "");
                 string copyFrom = ImportUtils.GetAttributeAsString(goXml, "copy", "");
 

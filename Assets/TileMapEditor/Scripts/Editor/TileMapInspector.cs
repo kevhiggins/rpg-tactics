@@ -55,36 +55,14 @@ namespace TileMapEditor.Editor
                 UpdateCalculations();
             }
 
-//            map.texture2D =
-//                (Texture2D) EditorGUILayout.ObjectField("Texture2D:", map.texture2D, typeof(Texture2D), false);
-
-            // Replace tile size detection with configuration
-
-
-//            if (map.texture2D == null)
-//            {
-//                EditorGUILayout.HelpBox("You have not selected a texture 2d yet.", MessageType.Warning);
-//            }
-
-            EditorGUILayout.LabelField("Tile Size:", map.tileSize.x + "x" + map.tileSize.y);
             EditorGUILayout.LabelField("Grid Size In Units:", map.gridSize.x + "x" + map.gridSize.y);
+
+            map.testMode = EditorGUILayout.Toggle("Test Mode:", map.testMode);
 
             if (GUILayout.Button("Update Tiles"))
             {
                 UpdateTiles();
             }
-
-//                UpdateBrush(map.CurrentTileBrush);
-
-//                if (GUILayout.Button("Clear Tiles"))
-//                {
-//                    if (EditorUtility.DisplayDialog("Clear map's tiles?", "Are you sure?", "Clear", "Do not clear"))
-//                    {
-//                        ClearMap();
-//                    }
-//                    ;
-//                }
-//            }
 
             EditorGUILayout.EndVertical();
         }
@@ -137,8 +115,18 @@ namespace TileMapEditor.Editor
                 map.tiles = gameObject;
             }
 
+            InitializeTiles();
             UpdateCalculations();
             UpdateBrush(pickerWindow.SelectedSprite, pickerWindow.SelectedUnit);
+        }
+
+        private void InitializeTiles()
+        {
+            foreach (Transform tileTransform in map.tiles.transform)
+            {
+                var tile = tileTransform.GetComponent<Tile>();
+                tile.Initialize();
+            }
         }
 
         void OnDisable()
@@ -222,8 +210,11 @@ namespace TileMapEditor.Editor
 
         void UpdateCalculations()
         {
-            map.gridSize = new Vector2(map.tileSize.x/map.pixelsToUnits*map.mapSize.x,
-                map.tileSize.y/map.pixelsToUnits*map.mapSize.y);
+            map.CalculateGridSize();
+
+            var offset = map.gridSize/2;
+
+            map.gameObject.transform.position = new Vector3(-offset.x, offset.y);
         }
 
         void UpdateHitPosition()
@@ -252,6 +243,8 @@ namespace TileMapEditor.Editor
                 return;
             var id = (column*map.mapSize.x + row);
             brush.tileID = Convert.ToInt32(id);
+            brush.x = Convert.ToInt32(row);
+            brush.y = Convert.ToInt32(column);
 
             x += map.transform.position.x + tileSize/2;
             y += map.transform.position.y + tileSize/2;
@@ -282,6 +275,9 @@ namespace TileMapEditor.Editor
             }
 
             var tileScript = tile.GetComponent<Tile>();
+            tileScript.x = brush.x;
+            tileScript.y = brush.y;
+
             pickerWindow.UpdateTile(tileScript);
 
             if (brush.renderer2D.sprite != null)

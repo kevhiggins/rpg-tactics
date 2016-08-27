@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System;
+using Rpg.Unit;
+using UnityEngine;
 
 namespace Rpg.Map
 {
@@ -42,5 +45,18 @@ namespace Rpg.Map
         /// The map height in unity units.
         /// </summary>
         float MapHeight { get; }
+
+        /// <summary>
+        /// Array of tiles on the map indexed by their x and y positions.
+        /// </summary>
+        Tile[,] Tiles { get; }
+
+        /// <summary>
+        /// The list of units on the map.
+        /// </summary>
+        List<IUnit> Units { get; }
+
+        void SetMap(Map map);
+        void ProcessTileData();
     }
 }

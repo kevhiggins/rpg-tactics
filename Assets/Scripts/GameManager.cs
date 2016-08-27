@@ -57,28 +57,14 @@ public class GameManager : MonoBehaviour
 
     void InitGame()
     {
-        foreach (var unitObject in units)
-        {
-            var unitInstance = Instantiate(unitObject, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-            var unit = unitInstance.GetComponent<AbstractUnit>();
-            if (unit == null)
-            {
-                throw new Exception("Could not find AbstractUnit script");
-            }
-            
-
-            actionQueue.UnitList.Add(unit);
-            popManager.RegisterUnit(unit);
-        }
-
         // Load the level here
         levelManager.LoadMap();
         levelManager.GetMap().OnCursorMove += CameraManager.CheckCamera;
 
-
-        foreach(var unit in actionQueue.UnitList)
+        foreach (var unit in levelManager.GetMap().TileMap.Units)
         {
-            levelManager.GetMap().PlaceUnit(unit, unit.StartPosition);
+            actionQueue.UnitList.Add(unit);
+            popManager.RegisterUnit(unit);
         }
     }
 }

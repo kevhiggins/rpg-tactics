@@ -119,18 +119,25 @@ namespace TileMapEditor.Editor
             {
                 // On mode change
 
-                    // Create the impassable sprite, and assign it as the currently selected sprite.
-                    SelectedSprite = GetFilledSprite((int)tileMap.tileSize.x, (int)tileMap.tileSize.y,
-                        tileMap.impassableColor);
-                    OnSelectionChange(SelectedSprite, null);
-
+                // Create the impassable sprite, and assign it as the currently selected sprite.
+                SelectedSprite = GetFilledSprite((int) tileMap.tileSize.x, (int) tileMap.tileSize.y,
+                    tileMap.impassableColor);
+                OnSelectionChange(SelectedSprite, null);
             }
             else if (currentMode == Mode.Penalties)
             {
                 selectedPenaltyIndex = EditorGUILayout.Popup("Penalties:", selectedPenaltyIndex, GetPenaltyOptions());
 
-                var penaltyColor = tileMap.penaltyColors[selectedPenaltyIndex].color;
-                SelectedSprite = GetFilledSprite((int)tileMap.tileSize.x, (int)tileMap.tileSize.y, penaltyColor);
+                if (tileMap.penaltyColors.Count > 0)
+                {
+                    var penaltyColor = tileMap.penaltyColors[selectedPenaltyIndex].color;
+                    SelectedSprite = GetFilledSprite((int) tileMap.tileSize.x, (int) tileMap.tileSize.y, penaltyColor);
+                }
+                else
+                {
+                    SelectedSprite = null;
+                }
+
                 OnSelectionChange(SelectedSprite, null);
             }
             else if (currentMode == Mode.Units)
@@ -142,7 +149,12 @@ namespace TileMapEditor.Editor
 
                 // Get unit
 
-                SelectedUnit = tileMap.units[selectedUnitIndex];
+                if (tileMap.units.Count > 0)
+                    SelectedUnit = tileMap.units[selectedUnitIndex];
+                else
+                {
+                    SelectedUnit = null;
+                }
 
                 OnSelectionChange(null, SelectedUnit);
             }
@@ -189,12 +201,14 @@ namespace TileMapEditor.Editor
             if (currentMode == Mode.Impassable)
             {
                 tile.passable = false;
+                tile.color = ActiveTileMap().impassableColor;
             }
             else if (currentMode == Mode.Penalties)
             {
                 var penaltyColor = GetPenaltyColor();
                 tile.passable = true;
                 tile.penalty = penaltyColor.penalty;
+                tile.color = penaltyColor.color;
             }
         }
     }

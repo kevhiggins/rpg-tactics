@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.TileMapEditor.Scripts;
+using Rpg.Map;
 using UnityEngine;
 
 namespace TileMapEditor
@@ -28,9 +29,16 @@ namespace TileMapEditor
         public List<PenaltyColor> penaltyColors = new List<PenaltyColor>();
         public List<GameObject> units = new List<GameObject>();
 
+        public bool testMode = true;
+
         public Sprite selectedSprite;
 
         public GameObject tiles;
+
+        void Awake()
+        {
+            CalculateGridSize();
+        }
 
         public Sprite CurrentTileBrush
         {
@@ -67,6 +75,12 @@ namespace TileMapEditor
             var centerY = position.y - gridSize.y/2;
 
             Gizmos.DrawWireCube(new Vector2(centerX, centerY), gridSize);
+        }
+
+        public void CalculateGridSize()
+        {
+            gridSize = new Vector2(tileSize.x/pixelsToUnits*mapSize.x,
+                tileSize.y/pixelsToUnits*mapSize.y);
         }
     }
 }

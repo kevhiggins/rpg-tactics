@@ -18,7 +18,6 @@ namespace Rpg.Map
     {
         private GameObject cursorGameObject;
         private TilePosition cursorTilePosition;
-        private Tile[,] tiles;
 
         public GameObject GameObject { get; private set; }
 
@@ -31,25 +30,15 @@ namespace Rpg.Map
         public Map(ITileMap tileMap, GameObject cursorGameObject)
         {
             TileMap = tileMap;
+            tileMap.SetMap(this);
 
             //this.mapGameObject = mapGameObject;
             GameObject = TileMap.GameObject;
             this.cursorGameObject = cursorGameObject;
+        }
 
-            // Create Tile object instances for each tile on the map.
-            tiles = new Tile[TileMap.TilesWide, TileMap.TilesHigh];
-
-            var tilesWide = TileMap.TilesWide;
-            var tilesHigh = TileMap.TilesHigh;
-
-            for (int x = 0; x < tilesWide; x++)
-            {
-                for (int y = 0; y < tilesHigh; y++)
-                {
-                    tiles[x, y] = new Tile(this, x, y);
-                }
-            }
-
+        public void InitCursor()
+        {
             // Set cursor position
             var cursorTile = GetTile(1, 1);
             cursorGameObject.transform.position = cursorTile.GetPosition();
@@ -157,7 +146,7 @@ namespace Rpg.Map
         {
             if (IsValidTilePosition(x, y))
             {
-                return tiles[x, y];
+                return TileMap.Tiles[x, y];
             }
             return null;
         }

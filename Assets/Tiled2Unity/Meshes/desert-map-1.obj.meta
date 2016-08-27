@@ -7,12 +7,18 @@ ModelImporter:
   fileIDToRecycleName:
     100000: //RootNode
     100002: mesh_0001
+    100004: mesh_tile_0031
     400000: //RootNode
     400002: mesh_0001
+    400004: mesh_tile_0031
     2300000: mesh_0001
+    2300002: mesh_tile_0031
     3300000: mesh_0001
+    3300002: mesh_tile_0031
     4300000: mesh_0001
+    4300002: mesh_tile_0031
     11400000: mesh_0001
+    11400002: mesh_tile_0031
   materials:
     importMaterials: 0
     materialName: 0

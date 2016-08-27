@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using Pathfinding;
 using Rpg.PathFinding;
 using Rpg.Unit;
+using TileMapEditor;
+using Tile = Rpg.Map.Tile;
 
 public class LevelManager : MonoBehaviour
 {
@@ -20,16 +22,15 @@ public class LevelManager : MonoBehaviour
     // TODO Look into making sure we deallocate resources when map is unloaded
     public void LoadMap()
     {
-        var mapScript = currentMap.GetComponent<TiledMap>();
-        var mapRect = mapScript.GetMapRectInPixelsScaled();
 
-        var mapInstance =
-            Instantiate(currentMap, new Vector3(0 - mapRect.width/2, mapRect.height/2, 0), Quaternion.identity) as
-                GameObject;
+
+        var mapInstance = Instantiate(currentMap);
+        var mapScript = mapInstance.GetComponent<TileMap>();
+
         var tileCursorInstance =
             Instantiate(tileSelectionCursor, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
 
-        var tileMap = new TiledMapAdapter(mapInstance);
+        var tileMap = new TileMapEditorAdapter(mapScript);
 
         loadedMap = new Map(tileMap, tileCursorInstance);
         GeneratePathfinding(tileMap);
@@ -37,6 +38,9 @@ public class LevelManager : MonoBehaviour
         // Add event handlers to update the walkabliity of nodes on the Astar graph.
         loadedMap.OnTileAddUnit += UpdateTileWalkability;
         loadedMap.OnTileRemoveUnit += UpdateTileWalkability;
+
+        tileMap.ProcessTileData();
+        loadedMap.InitCursor();
     }
 
     public Map GetMap()

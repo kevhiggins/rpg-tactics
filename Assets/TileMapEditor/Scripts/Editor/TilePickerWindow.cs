@@ -1,158 +1,201 @@
-﻿using UnityEditor;
+﻿using System;
+using System.Collections.Generic;
+using Assets.TileMapEditor.Scripts;
+using Rpg.Unit;
+using UnityEditor;
 using UnityEngine;
 
 namespace TileMapEditor.Editor
 {
     class TilePickerWindow : EditorWindow
     {
-        public enum Scale
-        {
-            X1,
-            X2,
-            X3,
-            X4,
-            X5
-        }
-
         public enum Mode
         {
+            None,
             Impassable,
             Penalties,
             Units
         }
 
-        private Scale scale;
-        private Vector2 currentSelection = Vector2.zero;
-        
+        public delegate void WindowOpenHandler(TilePickerWindow window);
 
-        private bool modeGroupEnabled = true;
+        public static event WindowOpenHandler OnWindowOpen = window => { };
+
+
+        public delegate void SelectionChangeHandler(Sprite sprite, GameObject unit);
+
+        public event SelectionChangeHandler OnSelectionChange = (sprite, unit) => { };
+
+        public delegate void BeforeDestroyHandler(TilePickerWindow window);
+
+        public event BeforeDestroyHandler BeforeDestroy = window => { };
+
+        public Sprite SelectedSprite { get; private set; }
+        public GameObject SelectedUnit { get; private set; }
+
+        public bool forceRefresh = false;
+
         private Mode currentMode;
+        private int selectedPenaltyIndex;
+        private int selectedUnitIndex;
 
-        public Vector2 scrollPosition = Vector2.zero;
+        public static TilePickerWindow Instance
+        {
+            get { return OpenTilePickerWindow(); }
+        }
 
         [MenuItem("Window/Tile Picker")]
-        public static void OpenTilePickerWindow()
+        public static TilePickerWindow OpenTilePickerWindow()
         {
-            var window = EditorWindow.GetWindow(typeof(TilePickerWindow));
-            var title = new GUIContent();
-            title.text = "Tile Picker";
-            window.titleContent = title;
+            // Open next to game view window if it exists.
+            System.Reflection.Assembly assembly = typeof(EditorWindow).Assembly;
+            var gameType = assembly.GetType("UnityEditor.GameView");
+            var window = GetWindow<TilePickerWindow>("Tile Picker", gameType);
+
+            OnWindowOpen(window);
+            return window;
+        }
+
+        void OnEnable()
+        {
+        }
+
+        string[] GetPenaltyOptions()
+        {
+            var tileMap = ActiveTileMap();
+            if (tileMap == null)
+                return new string[0];
+            var penaltyOptions = new string[tileMap.penaltyColors.Count];
+            var index = 0;
+            foreach (var penaltyColor in tileMap.penaltyColors)
+            {
+                penaltyOptions[index] = "Penalty " + penaltyColor.penalty;
+                index++;
+            }
+            return penaltyOptions;
+        }
+
+        string[] GetUnitOptions()
+        {
+            var tileMap = ActiveTileMap();
+            if (tileMap == null)
+                return new string[0];
+            var unitOptions = new string[tileMap.units.Count];
+            var index = 0;
+            foreach (var unit in tileMap.units)
+            {
+                unitOptions[index] = unit.name;
+                index++;
+            }
+            return unitOptions;
         }
 
         void OnGUI()
         {
-            var previousMode = currentMode;
+            // Return if the tilemap inspector is not open.
+            var tileMap = ActiveTileMap();
+            if (tileMap == null)
+                return;
 
             GUILayout.BeginHorizontal();
-            currentMode = GUILayout.Toggle(currentMode == Mode.Impassable, new GUIContent("Impassable"), "Button") ? Mode.Impassable : currentMode;
-            currentMode = GUILayout.Toggle(currentMode == Mode.Penalties, new GUIContent("Penalty"), "Button") ? Mode.Penalties : currentMode;
-            currentMode = GUILayout.Toggle(currentMode == Mode.Units, new GUIContent("Units"), "Button") ? Mode.Units : currentMode;
+            currentMode = GUILayout.Toggle(currentMode == Mode.Impassable, new GUIContent("Impassable"), "Button")
+                ? Mode.Impassable
+                : currentMode;
+            currentMode = GUILayout.Toggle(currentMode == Mode.Penalties, new GUIContent("Penalty"), "Button")
+                ? Mode.Penalties
+                : currentMode;
+            currentMode = GUILayout.Toggle(currentMode == Mode.Units, new GUIContent("Units"), "Button")
+                ? Mode.Units
+                : currentMode;
             GUILayout.EndHorizontal();
 
-            if (Selection.activeGameObject == null)
-                return;
-            var selection = Selection.activeGameObject.GetComponent<TileMap>();
-            if (selection == null)
-                return;
+            UpdateSelection();
+        }
 
+        public void UpdateSelection()
+        {
+            var tileMap = ActiveTileMap();
             if (currentMode == Mode.Impassable)
             {
                 // On mode change
-                if (previousMode != currentMode)
-                {
+
                     // Create the impassable sprite, and assign it as the currently selected sprite.
-                    var boxTexture = new Texture2D((int)selection.tileSize.x, (int)selection.tileSize.y);
-                    var fillColorArray = boxTexture.GetPixels();
+                    SelectedSprite = GetFilledSprite((int)tileMap.tileSize.x, (int)tileMap.tileSize.y,
+                        tileMap.impassableColor);
+                    OnSelectionChange(SelectedSprite, null);
 
-                    for (var i = 0; i < fillColorArray.Length; i++)
-                    {
-                        fillColorArray[i] = selection.impassableColor;
-                    }
-
-                    boxTexture.SetPixels(fillColorArray);
-                    boxTexture.Apply();
-
-                    selection.selectedSprite = Sprite.Create(boxTexture, new Rect(0, 0, boxTexture.width, boxTexture.height), new Vector2(0.5f, 0.5f));
-
-                }
-                // Allow drawing impassable color.
             }
             else if (currentMode == Mode.Penalties)
             {
-                
+                selectedPenaltyIndex = EditorGUILayout.Popup("Penalties:", selectedPenaltyIndex, GetPenaltyOptions());
+
+                var penaltyColor = tileMap.penaltyColors[selectedPenaltyIndex].color;
+                SelectedSprite = GetFilledSprite((int)tileMap.tileSize.x, (int)tileMap.tileSize.y, penaltyColor);
+                OnSelectionChange(SelectedSprite, null);
             }
             else if (currentMode == Mode.Units)
             {
-                
+                selectedUnitIndex = EditorGUILayout.Popup("Units:", selectedUnitIndex, GetUnitOptions());
+
+//                var penaltyColor = tileMap.penaltyColors[selectedPenaltyIndex].color;
+//                SelectedSprite = GetFilledSprite((int)tileMap.tileSize.x, (int)tileMap.tileSize.y, penaltyColor);
+
+                // Get unit
+
+                SelectedUnit = tileMap.units[selectedUnitIndex];
+
+                OnSelectionChange(null, SelectedUnit);
             }
         }
 
-        /*
-        void OnGUI()
+        private PenaltyColor GetPenaltyColor()
         {
-            if (Selection.activeGameObject == null)
-                return;
+            return ActiveTileMap().penaltyColors[selectedPenaltyIndex];
+        }
 
-            var selection = Selection.activeGameObject.GetComponent<TileMap>();
-            if (selection == null)
-                return;
+        public Sprite GetFilledSprite(int width, int height, Color color)
+        {
+            // Create the impassable sprite, and assign it as the currently selected sprite.
+            var boxTexture = new Texture2D(width, height);
+            var fillColorArray = boxTexture.GetPixels();
 
-            var texture2D = selection.texture2D;
-            if (texture2D == null)
-                return;
+            for (var i = 0; i < fillColorArray.Length; i++)
+            {
+                fillColorArray[i] = color;
+            }
 
-            scale = (Scale) EditorGUILayout.EnumPopup("Zoom", scale);
-
-            var newScale = ((int) scale) + 1;
-            var newTextureSize = new Vector2(texture2D.width, texture2D.height)*newScale;
-            var offset = new Vector2(10, 25);
-
-            var scrollBarSize = new Vector2(5, 5);
-            var viewPort = new Rect(0, 0, position.width - scrollBarSize.x, position.height - scrollBarSize.y);
-            var contentSize = new Rect(0, 0, newTextureSize.x + offset.x, newTextureSize.y + offset.y);
-
-            scrollPosition = GUI.BeginScrollView(viewPort, scrollPosition, contentSize);
-            GUI.DrawTexture(new Rect(offset.x, offset.y, newTextureSize.x, newTextureSize.y), texture2D);
-
-            // TODO Remove the + 2 for the borders, since this is due to offset/padding. Need a better way to handle this.
-            var tile = (selection.tileSize)*newScale + new Vector2(1, 1)*newScale;
-
-            var grid = new Vector2(newTextureSize.x/tile.x, newTextureSize.y/tile.y);
-
-            var selectionPosition = new Vector2(tile.x*currentSelection.x + offset.x,
-                tile.y*currentSelection.y + offset.y);
-
-
-            var boxTexture = new Texture2D(1, 1);
-            boxTexture.SetPixel(0, 0, new Color(0, 0.5f, 1f, 0.4f));
+            boxTexture.SetPixels(fillColorArray);
             boxTexture.Apply();
 
-            var style = new GUIStyle(GUI.skin.customStyles[0]);
-            style.normal.background = boxTexture;
-
-
-            GUI.Box(new Rect(selectionPosition.x, selectionPosition.y, tile.x, tile.y), "", style);
-
-            var cEvent = Event.current;
-            Vector2 mousePosition = new Vector2(cEvent.mousePosition.x, cEvent.mousePosition.y);
-            if (cEvent.type == EventType.mouseDown && cEvent.button == 0)
-            {
-                currentSelection.x = Mathf.Floor((mousePosition.x - offset.x + scrollPosition.x)/tile.x);
-                currentSelection.y = Mathf.Floor((mousePosition.y - offset.y + scrollPosition.y) / tile.y);
-
-                if (currentSelection.x > grid.x - 1)
-                    currentSelection.x = grid.x - 1;
-
-                if (currentSelection.y > grid.y - 1)
-                    currentSelection.y = grid.y - 1;
-
-                selection.tileID = (int) (currentSelection.x + (currentSelection.y*grid.x) + 1);
-
-                Repaint();
-            }
-
-            GUI.EndScrollView();
+            return Sprite.Create(boxTexture,
+                new Rect(0, 0, boxTexture.width, boxTexture.height), new Vector2(0.5f, 0.5f));
         }
-        */
+
+        private TileMap ActiveTileMap()
+        {
+            if (Selection.activeGameObject == null)
+                return null;
+            var selection = Selection.activeGameObject.GetComponent<TileMap>();
+            return selection;
+        }
+
+        void OnDestroy()
+        {
+            BeforeDestroy(this);
+        }
+
+        public void UpdateTile(Tile tile)
+        {
+            if (currentMode == Mode.Impassable)
+            {
+                tile.passable = false;
+            }
+            else if (currentMode == Mode.Penalties)
+            {
+                var penaltyColor = GetPenaltyColor();
+                tile.passable = true;
+                tile.penalty = penaltyColor.penalty;
+            }
+        }
     }
 }

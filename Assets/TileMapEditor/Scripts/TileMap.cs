@@ -26,7 +26,7 @@ namespace TileMapEditor
         public Color impassableColor = new Color(232, 75, 23, 255);
 
         public List<PenaltyColor> penaltyColors = new List<PenaltyColor>();
-
+        public List<GameObject> units = new List<GameObject>();
 
         public Sprite selectedSprite;
 

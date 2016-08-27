@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Assets.TileMapEditor.Scripts;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,8 +11,11 @@ namespace TileMapEditor.Editor
     class TileMapInspector : UnityEditor.Editor
     {
         public TileMap map;
-        public TileBrush brush;
+
+        private TileBrush brush;
+
         private Vector3 mouseHitPosition;
+        private TilePickerWindow pickerWindow;
 
         private bool MouseOnMap
         {
@@ -21,11 +27,11 @@ namespace TileMapEditor.Editor
             }
         }
 
-        protected void DisplayList()
+        protected void DisplayList(string label, string propertyName)
         {
-            var penaltyColors = serializedObject.FindProperty("penaltyColors");
+            var penaltyColors = serializedObject.FindProperty(propertyName);
 
-            EditorGUILayout.PropertyField(penaltyColors, new GUIContent("Penalty Colors:"), true);
+            EditorGUILayout.PropertyField(penaltyColors, new GUIContent(label), true);
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -41,7 +47,8 @@ namespace TileMapEditor.Editor
 
             map.impassableColor = EditorGUILayout.ColorField("Impassable Color:", map.impassableColor);
 
-            DisplayList();
+            DisplayList("Penalty Colors:", "penaltyColors");
+            DisplayList("Units:", "units");
 
             if (map.mapSize != oldSize)
             {
@@ -62,7 +69,10 @@ namespace TileMapEditor.Editor
             EditorGUILayout.LabelField("Tile Size:", map.tileSize.x + "x" + map.tileSize.y);
             EditorGUILayout.LabelField("Grid Size In Units:", map.gridSize.x + "x" + map.gridSize.y);
 
-            UpdateBrush(map.selectedSprite);
+            if (GUILayout.Button("Update Tiles"))
+            {
+                UpdateTiles();
+            }
 
 //                UpdateBrush(map.CurrentTileBrush);
 
@@ -79,9 +89,43 @@ namespace TileMapEditor.Editor
             EditorGUILayout.EndVertical();
         }
 
+        private void UpdateTiles()
+        {
+            var penaltyColors = new Dictionary<int, PenaltyColor>();
+            foreach (var penaltyColor in map.penaltyColors)
+            {
+                penaltyColors[penaltyColor.penalty] = penaltyColor;
+            }
+
+            for (var i = 0; i < map.tiles.transform.childCount; i++)
+            {
+                Transform t = map.tiles.transform.GetChild(i);
+                var tile = t.gameObject.GetComponent<Tile>();
+                if (tile.passable == false)
+                {
+                    tile.gameObject.GetComponent<SpriteRenderer>().sprite =
+                        pickerWindow.GetFilledSprite((int) map.tileSize.x, (int) map.tileSize.y, map.impassableColor);
+                }
+                else
+                {
+                    if (penaltyColors.ContainsKey(tile.penalty))
+                    {
+                        tile.gameObject.GetComponent<SpriteRenderer>().sprite =
+                            pickerWindow.GetFilledSprite((int) map.tileSize.x, (int) map.tileSize.y,
+                                penaltyColors[tile.penalty].color);
+                    }
+                }
+            }
+            pickerWindow.UpdateSelection();
+        }
+
 
         void OnEnable()
         {
+            // Hook into window open event, to keep the window up to date.
+            TilePickerWindow.OnWindowOpen += UpdateWindow;
+            pickerWindow = TilePickerWindow.Instance;
+
             map = target as TileMap;
             Tools.current = Tool.View;
 
@@ -94,14 +138,65 @@ namespace TileMapEditor.Editor
             }
 
             UpdateCalculations();
-            if (brush == null)
-                NewBrush();
+            UpdateBrush(pickerWindow.SelectedSprite, pickerWindow.SelectedUnit);
         }
 
         void OnDisable()
         {
             DestroyBrush();
+            TilePickerWindow.OnWindowOpen -= UpdateWindow;
+            if (pickerWindow != null)
+                pickerWindow.OnSelectionChange -= UpdateBrush;
         }
+
+        private void BeforeWindowDestroy(TilePickerWindow window)
+        {
+            DestroyBrush();
+            pickerWindow.BeforeDestroy -= BeforeWindowDestroy;
+            pickerWindow = null;
+        }
+
+        private void UpdateWindow(TilePickerWindow window)
+        {
+            if (pickerWindow == null)
+            {
+                window.OnSelectionChange += UpdateBrush;
+                window.BeforeDestroy += BeforeWindowDestroy;
+            }
+
+            pickerWindow = window;
+        }
+
+        public void UpdateBrush(Sprite sprite, GameObject unit)
+        {
+            // If we have a sprite, and we don't have a brush, then create it.
+            if (sprite != null || unit != null)
+            {
+                if (brush == null)
+                {
+                    GameObject gameObject = new GameObject("Brush");
+                    gameObject.transform.SetParent(map.transform);
+                    brush = gameObject.AddComponent<TileBrush>();
+                    brush.renderer2D = gameObject.AddComponent<SpriteRenderer>();
+                }
+                brush.UpdateBrush(sprite, unit);
+            }
+            else
+            {
+                // Delete the brush, since there is no selection
+                DestroyBrush();
+            }
+        }
+
+        private void DestroyBrush()
+        {
+            if (brush != null)
+            {
+                DestroyImmediate(brush.gameObject);
+                brush = null;
+            }
+        }
+
 
         void OnSceneGUI()
         {
@@ -110,7 +205,7 @@ namespace TileMapEditor.Editor
                 UpdateHitPosition();
                 MoveBrush();
 
-                if (MouseOnMap && map.selectedSprite != null)
+                if (MouseOnMap && (brush.renderer2D.sprite != null || brush.transform.childCount > 0))
                 {
                     var current = Event.current;
                     if (current.shift)
@@ -129,49 +224,6 @@ namespace TileMapEditor.Editor
         {
             map.gridSize = new Vector2(map.tileSize.x/map.pixelsToUnits*map.mapSize.x,
                 map.tileSize.y/map.pixelsToUnits*map.mapSize.y);
-        }
-
-        void CreateBrush()
-        {
-            var sprite = map.CurrentTileBrush;
-            if (sprite != null)
-            {
-                GameObject gameObject = new GameObject("Brush");
-                gameObject.transform.SetParent(map.transform);
-
-                brush = gameObject.AddComponent<TileBrush>();
-                brush.renderer2D = gameObject.AddComponent<SpriteRenderer>();
-                // Add the sprite material to the sprite renderer if its configured.
-                if (map.spriteMaterial != null)
-                    brush.renderer2D.material = map.spriteMaterial;
-
-                var pixelsToUnits = map.pixelsToUnits;
-
-                // TODO move this calculation into UpdateBrush
-                brush.brushSize = new Vector2(sprite.textureRect.width/pixelsToUnits,
-                    sprite.textureRect.height/pixelsToUnits);
-                brush.UpdateBrush(sprite);
-            }
-        }
-
-        void NewBrush()
-        {
-            if (brush == null)
-                CreateBrush();
-        }
-
-        void DestroyBrush()
-        {
-            if (brush != null)
-                DestroyImmediate(brush.gameObject);
-        }
-
-        public void UpdateBrush(Sprite sprite)
-        {
-            if (brush != null)
-            {
-                brush.UpdateBrush(sprite);
-            }
         }
 
         void UpdateHitPosition()
@@ -204,7 +256,13 @@ namespace TileMapEditor.Editor
             x += map.transform.position.x + tileSize/2;
             y += map.transform.position.y + tileSize/2;
 
+            // Pretty hacky way to keep the game object following the cursor. Find a better way.
             brush.transform.position = new Vector3(x, y, map.transform.position.z);
+            if (brush.transform.childCount > 0)
+            {
+                var child = brush.transform.GetChild(0);
+                child.position = brush.transform.position;
+            }
         }
 
         void Draw()
@@ -223,7 +281,29 @@ namespace TileMapEditor.Editor
                 tile.AddComponent<Tile>();
             }
 
-            tile.GetComponent<SpriteRenderer>().sprite = brush.renderer2D.sprite;
+            var tileScript = tile.GetComponent<Tile>();
+            pickerWindow.UpdateTile(tileScript);
+
+            if (brush.renderer2D.sprite != null)
+                tile.GetComponent<SpriteRenderer>().sprite = brush.renderer2D.sprite;
+
+            if (brush.transform.childCount > 0)
+            {
+                var children = new List<Transform>();
+                foreach (Transform childTransform in tile.transform)
+                {
+                    children.Add(childTransform);
+                }
+                foreach (var childTransform in children)
+                {
+                    DestroyImmediate(childTransform.gameObject);
+                }
+
+                var child = brush.transform.GetChild(0);
+                var unit = Instantiate(child.gameObject);
+                unit.transform.SetParent(tile.transform);
+                unit.transform.position = tile.transform.position;
+            }
         }
 
         void RemoveTile()

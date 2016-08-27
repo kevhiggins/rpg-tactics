@@ -1,4 +1,6 @@
 TODO Determine a way to store the sprite + other info to be used when drawn.
+When changing a color or value in the Tile Map inspector, make the change propogate to all existing tiles.
+If you deselect the Tile Map, change the tile picker menu, and then reselect it, it doesn't immediately pick up on the changes.
 
 Fix issue where brush sometimes has duplicates.
 	-Seems to happen by pressing play

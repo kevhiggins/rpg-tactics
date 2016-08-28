@@ -156,12 +156,16 @@ namespace TileMapEditor.Editor
                 // Get unit
 
                 if (tileMap.units.Count > 0)
+                {
                     SelectedUnit = tileMap.units[selectedUnitIndex];
+                }
                 else
                 {
                     SelectedUnit = null;
                 }
                 SelectedSprite = null;
+
+
 
                 OnSelectionChange(null, SelectedUnit);
             }

@@ -1,11 +1,13 @@
+If a unit is trapped, and cannot move, the camera sorta freaks out. Might want more delays between their actions.
+
+Menu sometimes will appear in the wrong place somehow.
+	Figure out how to reproduce
+
 Next Up:
 Set Node passability and penalties using ITileMap
 
 Tile Editor Bugs:
-Probably should still make sure any brushes are deleted before saving the prefab though.
-Having a locked inspector on something that isn't the Tile Map causes weird bugs with the editor.
-Saving prefab seems to save the brush as well.
-References to game objects are instantiated instead of pointers
+
 
 Multiple instances of the same unit don't seem to be attacking.
 

@@ -87,11 +87,6 @@ public class LevelManager : MonoBehaviour
         var astarObject = new GameObject("Astar Object");
         astarObject.AddComponent<AstarPath>();
 
-        // Set transform
-        //        var objectPosition = tileMap.GameObject.transform.position;
-        //        var astarPosition = new Vector3(objectPosition.x + tileMap.MapWidth/2, objectPosition.y - tileMap.MapHeight/2, 0);
-        //        astarObject.transform.position = astarPosition;
-
         astarPathScript = astarObject.GetComponent<AstarPath>();
 
         AstarData data = AstarPath.active.astarData;
@@ -113,22 +108,16 @@ public class LevelManager : MonoBehaviour
         gridGraph.UpdateSizeFromWidthDepth();
         AstarPath.active.Scan();
 
+        AstarPath.RegisterSafeUpdate(() =>
+        {
+            foreach (var tile in tileMap.Tiles)
+            {
+                var node = AstarPath.active.GetNearest(tile.GetPosition()).node;
+                node.Walkable = tile.IsPassable;
+                node.Penalty = (uint)tile.Penalty;
+            }
+        });
 
-        //        *AstarData data = AstarPath.active.astarData;
-        //        *
-        //        * // This creates a Grid Graph
-        //        *GridGraph gg = data.AddGraph(typeof(GridGraph)) as GridGraph;
-        //        *
-        //        * // Setup a grid graph with some values
-        //        *gg.width = 50;
-        //        *gg.depth = 50;
-        //        *gg.nodeSize = 1;
-        //        *gg.center = new Vector3(10, 0, 0);
-        //        *
-        //        * // Updates internal size from the above values
-        //        *gg.UpdateSizeFromWidthDepth();
-        //        *
-        //        * // Scans all graphs, do not call gg.Scan(), that is an internal method
-        //        *AstarPath.active.Scan();
+
     }
 }

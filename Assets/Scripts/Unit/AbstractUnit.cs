@@ -305,7 +305,7 @@ namespace Rpg.Unit
             }
         }
 
-        protected Animator GetAnimator()
+        public Animator GetAnimator()
         {
             var animator = GetGameObject().GetComponent<Animator>();
             if (animator == null)

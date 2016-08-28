@@ -94,6 +94,12 @@ namespace TileMapEditor.Editor
                                 penaltyColors[tile.penalty].color);
                     }
                 }
+
+                if (tile.transform.childCount > 0)
+                {
+                    var unit = tile.transform.GetChild(0);
+                    unit.GetComponent<Unit>().UpdateDisplay();
+                }
             }
             pickerWindow.UpdateSelection();
         }
@@ -255,7 +261,7 @@ namespace TileMapEditor.Editor
         {
             if (!MouseOnMap)
             {
-//                DestroyBrush();
+                DestroyBrush();
                 return;
             }
 

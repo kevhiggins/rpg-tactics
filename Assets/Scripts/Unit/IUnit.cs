@@ -41,6 +41,7 @@ namespace Rpg.Unit
 
         GameObject GetGameObject();
         SpriteRenderer GetSpriteRenderer();
+        Animator GetAnimator();
 
         /// <summary>
         /// Perform any operations necessary for a new clock tick.

@@ -42,7 +42,14 @@ namespace TileMapEditor
                     DestroyImmediate(transform.GetChild(0).gameObject);
                 }
 
-                var unitInstance = Instantiate(unit);
+
+                // Wrap the unit prefab in a game object, but still render it.
+                var unitInstance = new GameObject("Unit");
+                var unitScript = unitInstance.AddComponent<Unit>();
+                unitScript.unitPrefab = unit;
+                unitScript.UpdateDisplay();
+
+
                 unitInstance.transform.SetParent(gameObject.transform);
                 unitInstance.transform.position = Vector3.zero;
             }

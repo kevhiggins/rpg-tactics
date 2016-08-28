@@ -78,7 +78,10 @@ namespace Rpg.Map
             {
                 for (int y = 0; y < tilesHigh; y++)
                 {
-                    Tiles[x, y] = new Tile(map, x, y);
+                    var tile = new Tile(map, x, y);
+                    tile.IsPassable = true;
+                    tile.Penalty = 1;
+                    Tiles[x, y] = tile;
                 }
             }
 
@@ -98,8 +101,15 @@ namespace Rpg.Map
 
                 if (tileTransform.gameObject.transform.childCount > 0)
                 {
-                    var unitTransform = tileTransform.gameObject.transform.GetChild(0);
-                    var unitInstance = unitTransform.gameObject;
+                    var unitObject = tileTransform.gameObject.transform.GetChild(0).gameObject;
+                    var unitScript = unitObject.GetComponent<TileMapEditor.Unit>();
+
+                    var unitInstance = GameObject.Instantiate(unitScript.unitPrefab, tileTransform.position, Quaternion.identity) as GameObject;
+
+                    // Remove the game object attached to the tile.
+                    GameObject.Destroy(unitObject);
+
+
                     var unit = unitInstance.GetComponent<IUnit>();
                     if (unit == null)
                         throw new Exception("Could not find unit script on unit object.");

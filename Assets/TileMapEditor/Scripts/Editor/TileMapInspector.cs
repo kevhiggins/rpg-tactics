@@ -106,8 +106,6 @@ namespace TileMapEditor.Editor
             if (isPrefab)
                 return;
 
-            PrefabUtility.prefabInstanceUpdated += OnPrefabApply;
-
 
             // Hook into window open event, to keep the window up to date.
             TilePickerWindow.OnWindowOpen += UpdateWindow;
@@ -129,42 +127,6 @@ namespace TileMapEditor.Editor
             UpdateBrush(pickerWindow.SelectedSprite, pickerWindow.SelectedUnit);
         }
 
-        private void OnPrefabApply(GameObject gameObject)
-        {
-            var tileMap = gameObject.GetComponent<TileMap>();
-            if (tileMap == null)
-                return;
-
-            //            var prefab = gameObject;
-            // See if we are saving a TileMap object.
-            //            var prefab = (GameObject)PrefabUtility.GetPrefabObject(gameObject);
-            //
-
-            GameObject prefab = UnityEditor.PrefabUtility.GetPrefabParent(gameObject) as GameObject;
-            string prefabPath = AssetDatabase.GetAssetPath(prefab);
-//            UnityEngine.Debug.Log("@Prefab originPath=" + prefabPath);
-//
-            var prefabObject = AssetDatabase.LoadAssetAtPath(prefabPath,
-                typeof(GameObject)) as GameObject;
-//
-//
-//
-//            var testTransform = gameObject.transform.FindChild("Brush");
-//            if (testTransform != null)
-//            {
-//                Debug.Log("GRRR");
-//                DestroyImmediate(testTransform.gameObject, true);
-//            }
-
-
-            var brushTransform = prefabObject.transform.FindChild("Brush");
-            if (brushTransform != null)
-            {
-                Debug.Log("GRRR");
-                DestroyImmediate(brushTransform.gameObject, true);
-            }
-        }
-
         private void InitializeTiles()
         {
             foreach (Transform tileTransform in map.tiles.transform)
@@ -179,7 +141,6 @@ namespace TileMapEditor.Editor
             if (isPrefab)
                 return;
 
-            PrefabUtility.prefabInstanceUpdated -= OnPrefabApply;
             DestroyBrush();
             TilePickerWindow.OnWindowOpen -= UpdateWindow;
             if (pickerWindow != null)

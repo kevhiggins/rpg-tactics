@@ -115,6 +115,10 @@ namespace TileMapEditor.Editor
         public void UpdateSelection()
         {
             var tileMap = ActiveTileMap();
+            // If the object isn't in the scene then don't show the tilepicker info.
+            if (PrefabUtility.GetPrefabType(tileMap.gameObject) == PrefabType.Prefab)
+                return;
+
             if (currentMode == Mode.Impassable)
             {
                 // On mode change
@@ -122,6 +126,7 @@ namespace TileMapEditor.Editor
                 // Create the impassable sprite, and assign it as the currently selected sprite.
                 SelectedSprite = GetFilledSprite((int) tileMap.tileSize.x, (int) tileMap.tileSize.y,
                     tileMap.impassableColor);
+                SelectedUnit = null;
                 OnSelectionChange(SelectedSprite, null);
             }
             else if (currentMode == Mode.Penalties)
@@ -138,6 +143,7 @@ namespace TileMapEditor.Editor
                     SelectedSprite = null;
                 }
 
+                SelectedUnit = null;
                 OnSelectionChange(SelectedSprite, null);
             }
             else if (currentMode == Mode.Units)
@@ -155,6 +161,7 @@ namespace TileMapEditor.Editor
                 {
                     SelectedUnit = null;
                 }
+                SelectedSprite = null;
 
                 OnSelectionChange(null, SelectedUnit);
             }

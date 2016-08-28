@@ -24,7 +24,7 @@ namespace TileMapEditor
         public Vector2 gridSize = new Vector2();
         public int pixelsToUnits = 100;
 
-        public Color impassableColor = new Color(232, 75, 23, 255);
+        public Color impassableColor = new Color(232f/255, 75f/255, 23f/255, 1);
 
         public List<PenaltyColor> penaltyColors = new List<PenaltyColor>();
         public List<GameObject> units = new List<GameObject>();
@@ -38,6 +38,9 @@ namespace TileMapEditor
         void Awake()
         {
             CalculateGridSize();
+            var brushTransform = gameObject.transform.FindChild("Brush");
+            if(brushTransform != null)
+                Destroy(brushTransform);
         }
 
         public Sprite CurrentTileBrush

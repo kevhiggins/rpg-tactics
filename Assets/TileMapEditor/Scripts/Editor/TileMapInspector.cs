@@ -16,6 +16,7 @@ namespace TileMapEditor.Editor
 
         private Vector3 mouseHitPosition;
         private TilePickerWindow pickerWindow;
+        private bool isPrefab;
 
         private bool MouseOnMap
         {
@@ -100,11 +101,19 @@ namespace TileMapEditor.Editor
 
         void OnEnable()
         {
+            map = target as TileMap;
+            isPrefab = PrefabUtility.GetPrefabType(map.gameObject) == PrefabType.Prefab;
+            if (isPrefab)
+                return;
+
+            PrefabUtility.prefabInstanceUpdated += OnPrefabApply;
+
+
             // Hook into window open event, to keep the window up to date.
             TilePickerWindow.OnWindowOpen += UpdateWindow;
             pickerWindow = TilePickerWindow.Instance;
 
-            map = target as TileMap;
+
             Tools.current = Tool.View;
 
             if (map.tiles == null)
@@ -120,6 +129,42 @@ namespace TileMapEditor.Editor
             UpdateBrush(pickerWindow.SelectedSprite, pickerWindow.SelectedUnit);
         }
 
+        private void OnPrefabApply(GameObject gameObject)
+        {
+            var tileMap = gameObject.GetComponent<TileMap>();
+            if (tileMap == null)
+                return;
+
+            //            var prefab = gameObject;
+            // See if we are saving a TileMap object.
+            //            var prefab = (GameObject)PrefabUtility.GetPrefabObject(gameObject);
+            //
+
+            GameObject prefab = UnityEditor.PrefabUtility.GetPrefabParent(gameObject) as GameObject;
+            string prefabPath = AssetDatabase.GetAssetPath(prefab);
+//            UnityEngine.Debug.Log("@Prefab originPath=" + prefabPath);
+//
+            var prefabObject = AssetDatabase.LoadAssetAtPath(prefabPath,
+                typeof(GameObject)) as GameObject;
+//
+//
+//
+//            var testTransform = gameObject.transform.FindChild("Brush");
+//            if (testTransform != null)
+//            {
+//                Debug.Log("GRRR");
+//                DestroyImmediate(testTransform.gameObject, true);
+//            }
+
+
+            var brushTransform = prefabObject.transform.FindChild("Brush");
+            if (brushTransform != null)
+            {
+                Debug.Log("GRRR");
+                DestroyImmediate(brushTransform.gameObject, true);
+            }
+        }
+
         private void InitializeTiles()
         {
             foreach (Transform tileTransform in map.tiles.transform)
@@ -131,6 +176,10 @@ namespace TileMapEditor.Editor
 
         void OnDisable()
         {
+            if (isPrefab)
+                return;
+
+            PrefabUtility.prefabInstanceUpdated -= OnPrefabApply;
             DestroyBrush();
             TilePickerWindow.OnWindowOpen -= UpdateWindow;
             if (pickerWindow != null)
@@ -162,10 +211,21 @@ namespace TileMapEditor.Editor
             {
                 if (brush == null)
                 {
-                    GameObject gameObject = new GameObject("Brush");
-                    gameObject.transform.SetParent(map.transform);
-                    brush = gameObject.AddComponent<TileBrush>();
-                    brush.renderer2D = gameObject.AddComponent<SpriteRenderer>();
+                    // brush is null, see if there is a brush object in the scene.
+                    var brushObject = map.transform.FindChild("Brush");
+                    if (brushObject != null)
+                    {
+                        brush = brushObject.GetComponent<TileBrush>();
+                    }
+
+                    // If brush is still null, then create it.
+                    if (brush == null)
+                    {
+                        GameObject gameObject = new GameObject("Brush");
+                        gameObject.transform.SetParent(map.transform);
+                        brush = gameObject.AddComponent<TileBrush>();
+                        brush.renderer2D = gameObject.AddComponent<SpriteRenderer>();
+                    }
                 }
                 brush.UpdateBrush(sprite, unit);
             }
@@ -188,22 +248,22 @@ namespace TileMapEditor.Editor
 
         void OnSceneGUI()
         {
-            if (brush != null)
-            {
-                UpdateHitPosition();
-                MoveBrush();
+            UpdateHitPosition();
+            MoveBrush();
 
-                if (MouseOnMap && (brush.renderer2D.sprite != null || brush.transform.childCount > 0))
+            if (brush == null)
+                return;
+
+            if (MouseOnMap && (brush.renderer2D.sprite != null || brush.transform.childCount > 0))
+            {
+                var current = Event.current;
+                if (current.shift)
                 {
-                    var current = Event.current;
-                    if (current.shift)
-                    {
-                        Draw();
-                    }
-                    else if (current.alt)
-                    {
-                        RemoveTile();
-                    }
+                    Draw();
+                }
+                else if (current.alt)
+                {
+                    RemoveTile();
                 }
             }
         }
@@ -232,6 +292,20 @@ namespace TileMapEditor.Editor
 
         void MoveBrush()
         {
+            if (!MouseOnMap)
+            {
+//                DestroyBrush();
+                return;
+            }
+
+            if (brush == null)
+            {
+                UpdateBrush(pickerWindow.SelectedSprite, pickerWindow.SelectedUnit);
+            }
+
+            if (brush == null)
+                return;
+
             var tileSize = map.tileSize.x/map.pixelsToUnits;
             var x = Mathf.Floor(mouseHitPosition.x/tileSize)*tileSize;
             var y = Mathf.Floor(mouseHitPosition.y/tileSize)*tileSize;
@@ -239,8 +313,7 @@ namespace TileMapEditor.Editor
             var row = x/tileSize;
             var column = Mathf.Abs(y/tileSize) - 1;
 
-            if (!MouseOnMap)
-                return;
+
             var id = (column*map.mapSize.x + row);
             brush.tileID = Convert.ToInt32(id);
             brush.x = Convert.ToInt32(row);

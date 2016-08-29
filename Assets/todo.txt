@@ -1,7 +1,14 @@
 Bug:
 Fix issue on Kevin map 1 where carrot skips turn when both players are in choke point.
+Fix bug where you can't attack enemies who are in water, because attack distance honors penalty
+Fix issue where map tiles are over highlighted tiles
 
-Make 5 maps for next meeting.
+Fix issue where you can't see map tiles in thumbnail for prefab
+
+Fix issue where long camera panning is interrupted by AI movement cursor. Panning should finish.
+
+Change game loop to not increment time until the list of units is empty.
+
 Cleanse old code
 
 Allow walking through own units.
@@ -9,12 +16,8 @@ Add some simple SFX polish
 
 Fighter setup
 
-Fix issue where long camera panning is interrupted by AI movement cursor. Panning should finish.
-Fix issue where map tiles are over highlighted tiles
 
-Fix bug where you can't attack enemies who are in water, because attack distance honors penalty
 
-Fix issue where you can't see map tiles in thumbnail for prefab
 
 Good Maps:
 jTEST:

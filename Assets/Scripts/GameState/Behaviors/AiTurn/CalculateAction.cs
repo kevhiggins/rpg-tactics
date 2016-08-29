@@ -91,16 +91,6 @@ namespace Rpg.GameState.Behaviors.AiTurn
                 movePath.Add(nodePosition);
             }
 
-
-
-
-//            var index = shortestPath.vectorPath.Count - 1;
-//            if (ActiveUnit.MovementSpeed < shortestPath.vectorPath.Count)
-//            {
-//                index -= shortestPath.vectorPath.Count - ActiveUnit.MovementSpeed;
-//            }
-//            var movePath = shortestPath.vectorPath.Take(index + 1).ToList();
-
             // Set the movement path on the unit turn, and progress to the next state.
             GameManager.instance.UnitTurn.MovementPath = movePath;
             animator.SetTrigger("Move");

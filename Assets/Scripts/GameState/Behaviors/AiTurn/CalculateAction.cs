@@ -78,7 +78,7 @@ namespace Rpg.GameState.Behaviors.AiTurn
             }
 
             // Remove the final path node, since that's where the target is.
-            var nodePositionList = shortestPath.vectorPath.Take(shortestPath.vectorPath.Count - 1);
+            var nodePositionList = shortestPath.vectorPath;
             var distance = 0;
             var movePath = new List<Vector3>();
 
@@ -90,6 +90,8 @@ namespace Rpg.GameState.Behaviors.AiTurn
                     break;
                 movePath.Add(nodePosition);
             }
+
+
 
 
 //            var index = shortestPath.vectorPath.Count - 1;

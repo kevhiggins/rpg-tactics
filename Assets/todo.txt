@@ -1,10 +1,31 @@
+Bug:
+Fix issue on Kevin map 1 where carrot skips turn when both players are in choke point.
+
 Make 5 maps for next meeting.
 Cleanse old code
 
+Allow walking through own units.
+Add some simple SFX polish
+
 Fighter setup
 
-AI Pathfinding is not honoring tile penalties
-Nearest node doesn't appear to be properly honoring penalties
+Fix issue where long camera panning is interrupted by AI movement cursor. Panning should finish.
+Fix issue where map tiles are over highlighted tiles
+
+Fix bug where you can't attack enemies who are in water, because attack distance honors penalty
+
+Fix issue where you can't see map tiles in thumbnail for prefab
+
+Good Maps:
+jTEST:
+8
+7
+Diagnoally ones
+
+Kev
+4
+
+
 
 If a unit is trapped, and cannot move, the camera sorta freaks out. Might want more delays between their actions.
 	Seems like it may also cause the menus to freak out on player turnw

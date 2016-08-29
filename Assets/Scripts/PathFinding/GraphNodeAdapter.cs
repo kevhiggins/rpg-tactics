@@ -51,5 +51,13 @@ namespace Rpg.PathFinding
         {
             return targetNode.Penalty;
         }
+
+        public IGraphNode Clone()
+        {
+            var node = new GraphNodeAdapter(GraphNode);
+            node.IsVisited = IsVisited;
+            node.TentativeDistance = TentativeDistance;
+            return node;
+        }
     }
 }

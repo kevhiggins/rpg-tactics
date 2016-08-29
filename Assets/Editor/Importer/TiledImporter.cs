@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace Rpg.Importer
@@ -20,7 +19,6 @@ namespace Rpg.Importer
 
         public void CustomizePrefab(GameObject prefab)
         {
-            Debug.Log("GRR");
         }
     }
 }

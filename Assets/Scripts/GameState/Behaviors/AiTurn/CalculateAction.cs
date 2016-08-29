@@ -78,12 +78,26 @@ namespace Rpg.GameState.Behaviors.AiTurn
             }
 
             // Remove the final path node, since that's where the target is.
-            var index = shortestPath.vectorPath.Count - 1;
-            if (ActiveUnit.MovementSpeed < shortestPath.vectorPath.Count)
+            var nodePositionList = shortestPath.vectorPath.Take(shortestPath.vectorPath.Count - 1);
+            var distance = 0;
+            var movePath = new List<Vector3>();
+
+            foreach (var nodePosition in nodePositionList)
             {
-                index -= shortestPath.vectorPath.Count - ActiveUnit.MovementSpeed;
+                var node = AstarPath.active.GetNearest(nodePosition).node;
+                distance += (int)node.Penalty;
+                if (distance > ActiveUnit.MovementSpeed)
+                    break;
+                movePath.Add(nodePosition);
             }
-            var movePath = shortestPath.vectorPath.Take(index + 1).ToList();
+
+
+//            var index = shortestPath.vectorPath.Count - 1;
+//            if (ActiveUnit.MovementSpeed < shortestPath.vectorPath.Count)
+//            {
+//                index -= shortestPath.vectorPath.Count - ActiveUnit.MovementSpeed;
+//            }
+//            var movePath = shortestPath.vectorPath.Take(index + 1).ToList();
 
             // Set the movement path on the unit turn, and progress to the next state.
             GameManager.instance.UnitTurn.MovementPath = movePath;

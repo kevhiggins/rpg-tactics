@@ -1,4 +1,19 @@
+Make 5 maps for next meeting.
+Cleanse old code
+
+Fighter setup
+
+AI Pathfinding is not honoring tile penalties
+Nearest node doesn't appear to be properly honoring penalties
+
 If a unit is trapped, and cannot move, the camera sorta freaks out. Might want more delays between their actions.
+	Seems like it may also cause the menus to freak out on player turnw
+
+Bug: Fix penalty
+
+Add test mode:
+	Show grid and make tiles for empty tiles.
+
 
 Menu sometimes will appear in the wrong place somehow.
 	Figure out how to reproduce

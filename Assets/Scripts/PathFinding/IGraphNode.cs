@@ -12,5 +12,7 @@ namespace Rpg.PathFinding
         bool IsVisited { get; set; }
         List<IGraphNode> FindNeighbors(NNConstraint pathConstraint);
         uint GetConnectionDistance(IGraphNode targetNode);
+
+        IGraphNode Clone();
     }
 }

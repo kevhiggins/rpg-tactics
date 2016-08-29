@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Pathfinding;
+using UnityEngine;
 
 namespace Rpg.PathFinding
 {
     class NodeFinder
     {
-        public List<IGraphNode> FindNodesInRange(IGraphNode startNode, float maxDistance, NNConstraint pathConstraint)
+        public List<IGraphNode> FindNodesInRange(IGraphNode startNode, uint maxDistance, NNConstraint pathConstraint)
         {
             var nodesInRange = new SortedList<int, IGraphNode>();
 
@@ -22,6 +23,15 @@ namespace Rpg.PathFinding
             while ((currentNode = GetNextUnvisitedNode(nodesInRange)) != null)
             {
                 var unvisitedNeighbors = FindUnvisitedNeighbors(currentNode, nodesInRange, pathConstraint);
+
+//                if (currentNode.Id == 88)
+//                {
+//                    foreach (var node in unvisitedNeighbors)
+//                    {
+//                        Debug.Log(node.Id);
+//                    }
+//                }
+
                 foreach (var unvisitedNeighbor in unvisitedNeighbors)
                 {
                     unvisitedNeighbor.IsVisited = false;
@@ -30,9 +40,22 @@ namespace Rpg.PathFinding
                     var distanceFromStartNode = currentNode.TentativeDistance + distanceFromCurrentNode;
                     unvisitedNeighbor.TentativeDistance = distanceFromStartNode;
 
+//                    if (currentNode.Id == 88)
+//                    {
+//                        Debug.Log(currentNode.TentativeDistance);
+//                        Debug.Log(unvisitedNeighbor.TentativeDistance);
+//                    }
+
+                    // Bug - if we continue at this point, we never see what the best tentative distance was.
+
                     // If the nodes tentative distance exceeds the maxDistance, then do not add it to the node list.
                     if (unvisitedNeighbor.TentativeDistance > maxDistance)
                         continue;
+
+                    if (unvisitedNeighbor.Id == 88)
+                    {
+                        Debug.Log(unvisitedNeighbor.TentativeDistance);
+                    }
 
                     // If the node already exists on the list, then assign the tentative distance as the min of the existing, and the newly found.
                     // Otherwise, add the node to the list.
@@ -71,7 +94,7 @@ namespace Rpg.PathFinding
                     var existingNeighbor = graphNodes[neighbor.Id];
                     if (existingNeighbor.IsVisited == false)
                     {
-                        unvisitedNeighbors.Add(existingNeighbor);
+                        unvisitedNeighbors.Add(existingNeighbor.Clone());
                     }
                 }
                 else

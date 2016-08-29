@@ -188,7 +188,7 @@ namespace Rpg.Map
             Debug.Log(targetNode.position);
             var nodeFinder = new NodeFinder();
             var nodeAdapter = new GraphNodeAdapter(targetNode);
-            var graphNodes = nodeFinder.FindNodesInRange(nodeAdapter, range, pathConstraint);
+            var graphNodes = nodeFinder.FindNodesInRange(nodeAdapter, (uint)range, pathConstraint);
 
             var tilesInRange = new List<TilePosition>();
 

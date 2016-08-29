@@ -15,8 +15,6 @@ public class GameManager : MonoBehaviour
 
     public int pixelsToUnits = 100;
 
-    public GameObject[] units;
-
     [HideInInspector] public LevelManager levelManager;
     [HideInInspector] public InputManager inputManager;
     [HideInInspector] public IActionQueue actionQueue;

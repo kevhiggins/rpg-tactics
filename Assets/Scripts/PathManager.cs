@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Pathfinding;
 using Rpg.PathFinding;
@@ -18,16 +19,16 @@ namespace Rpg
         private void FindNearestPath(List<Path> paths, Action<Path> onComplete)
         {
             Path shortestPath = null;
+            int shortestDistance = 0;
 
             foreach (var path in paths)
             {
-                if (shortestPath == null)
+                var distance = PathDistance(path.vectorPath);
+
+                if (shortestPath == null || shortestDistance > distance)
                 {
                     shortestPath = path;
-                }
-                else if (shortestPath.vectorPath.Count > path.vectorPath.Count)
-                {
-                    shortestPath = path;
+                    shortestDistance = distance;
                 }
             }
 
@@ -37,6 +38,18 @@ namespace Rpg
             }
 
             onComplete(shortestPath);
+        }
+
+        private int PathDistance(List<Vector3> vectorPaths)
+        {
+            int distance = 0;
+            var nodePositions = vectorPaths.Skip(1);
+            foreach (var nodePosition in nodePositions)
+            {
+                var node = AstarPath.active.GetNearest(nodePosition).node;
+                distance += (int) node.Penalty;
+            }
+            return distance;
         }
     }
 }

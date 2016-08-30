@@ -23,6 +23,10 @@ namespace Rpg
 
             foreach (var path in paths)
             {
+                // If there are no positions in the path, then we should skip it since, that means there is no path to the target.
+                if (path.vectorPath.Count == 0)
+                    continue;
+
                 var distance = PathDistance(path.vectorPath);
 
                 if (shortestPath == null || shortestDistance > distance)

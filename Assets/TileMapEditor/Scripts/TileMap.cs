@@ -35,12 +35,32 @@ namespace TileMapEditor
 
         public GameObject tiles;
 
+        /// <summary>
+        /// Keeps track of if the game object has been initialized in the scene yet. (Editor Only)
+        /// </summary>
+        private bool isInitializedEditor = false;
+
         void Awake()
         {
             CalculateGridSize();
             var brushTransform = gameObject.transform.FindChild("Brush");
             if(brushTransform != null)
                 Destroy(brushTransform);
+        }
+
+        void OnValidate()
+        {
+            var tilesTransform = gameObject.transform.FindChild("Tiles");
+            if (tilesTransform == null)
+            {
+                return;
+            }
+            
+            foreach (Transform tileTransform in tilesTransform)
+            {
+                var tile = tileTransform.GetComponent<Tile>();
+                tile.Initialize();
+            }
         }
 
         public Sprite CurrentTileBrush

@@ -128,18 +128,8 @@ namespace TileMapEditor.Editor
                 map.tiles = gameObject;
             }
 
-            InitializeTiles();
             UpdateCalculations();
             UpdateBrush(pickerWindow.SelectedSprite, pickerWindow.SelectedUnit);
-        }
-
-        private void InitializeTiles()
-        {
-            foreach (Transform tileTransform in map.tiles.transform)
-            {
-                var tile = tileTransform.GetComponent<Tile>();
-                tile.Initialize();
-            }
         }
 
         void OnDisable()

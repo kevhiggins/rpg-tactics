@@ -10,10 +10,12 @@ namespace Rpg.GameState.Behaviors
             var actionQueue = GameManager.instance.actionQueue;
 
             IUnit unit;
-            do
+
+            // Get the active unit. If there is no valid active unit, increment time, until one is found.
+            while((unit = actionQueue.GetActiveUnit()) == null)
             {
                 actionQueue.ClockTick();
-            } while ((unit = actionQueue.GetActiveUnit()) == null);
+            }
 
             // Start the active units turn.
             GameManager.instance.UnitTurn = new UnitTurn(unit);

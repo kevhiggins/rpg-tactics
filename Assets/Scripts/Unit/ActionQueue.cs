@@ -15,7 +15,6 @@ namespace Rpg.Unit
 
         private List<IUnit> unitList = new List<IUnit>();
         private IComparer<IUnit> unitComparer = new SortUnitsByCT();
-        private IUnit activeUnit;
 
         public List<IUnit> UnitList
         {
@@ -39,34 +38,26 @@ namespace Rpg.Unit
         /// <returns></returns>
         public IUnit GetActiveUnit()
         {
-            if (activeUnit != null)
-            {
-                return activeUnit;
-            }
+            // Sort the unit list to determine which unit is currently next in line.
+            unitList.Sort(unitComparer);
 
-            var nextUnit = unitList.First();
+            var nextUnit = unitList.FirstOrDefault();
 
             if (nextUnit == null)
             {
                 return null;
             }
 
-            return activeUnit = nextUnit.ChargeTime >= CTThreshold ? nextUnit : null;
+            return nextUnit.ChargeTime >= CTThreshold ? nextUnit : null;
         }
 
         public void ClockTick()
         {
-            // Null out the active unit.
-            activeUnit = null;
-
             // Progress time for each unit in the unit list.
             foreach(IUnit unit in unitList)
             {
                 unit.ClockTick();
             }
-
-            // Sort the unit list to determine which unit is currently next in line.
-            unitList.Sort(unitComparer);
         }
 
         public List<IUnit> GetEnemyUnits(int friendlyTeamId)

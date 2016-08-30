@@ -1,17 +1,25 @@
 Bug:
-Fix issue on Kevin map 1 where carrot skips turn when both players are in choke point.
-Fix bug where you can't attack enemies who are in water, because attack distance honors penalty
-Fix issue where map tiles are over highlighted tiles
+Problem:
+Moving to next state should wait for the camera to finish centering on the cursor.
+	Fix issue where long camera panning is interrupted by AI movement cursor. Panning should finish.
 
-Fix issue where you can't see map tiles in thumbnail for prefab
+Situations where the camera can move:
+-Switching the active unit
+-Returning to the active unit after cancelling the explore state
+-AI selecting movement destination/Attack
 
-Fix issue where long camera panning is interrupted by AI movement cursor. Panning should finish.
+Solutions:
+Create a method for moving the cursor that has an onComplete built in.
+Whenever we change the cursor position, we should be using that method instead, to avoid weirdness on cursor moves.
 
-Change game loop to not increment time until the list of units is empty.
+Make the unit follow the specific path, instead of fly like a bird to their destination.
+Make sure that AI units unitinfo box is showing up on cursor selection.
+
+When fighter attacks a unit, they should have a lower zindex
 
 Cleanse old code
-
 Allow walking through own units.
+
 Add some simple SFX polish
 
 Fighter setup
@@ -23,17 +31,11 @@ Good Maps:
 jTEST:
 8
 7
-Diagnoally ones
+Diagonal ones
 
 Kev
 4
 
-
-
-If a unit is trapped, and cannot move, the camera sorta freaks out. Might want more delays between their actions.
-	Seems like it may also cause the menus to freak out on player turnw
-
-Bug: Fix penalty
 
 Add test mode:
 	Show grid and make tiles for empty tiles.
@@ -42,42 +44,9 @@ Add test mode:
 Menu sometimes will appear in the wrong place somehow.
 	Figure out how to reproduce
 
-Next Up:
-Set Node passability and penalties using ITileMap
-
-Tile Editor Bugs:
-
-
-Multiple instances of the same unit don't seem to be attacking.
-
-TODO Determine a way to store the sprite + other info to be used when drawn.
-When changing a color or value in the Tile Map inspector, make the change propogate to all existing tiles.
-If you deselect the Tile Map, change the tile picker menu, and then reselect it, it doesn't immediately pick up on the changes.
-
-Fix issue where brush sometimes has duplicates.
-	-Seems to happen by pressing play
-
-Center the tile map on the camera
-
-
 
 
 https://blogs.unity3d.com/2015/06/19/pixel-perfect-2d/
-
-
-Update A* math with the corresponding Passable/Penalty tiles from Tiled
-Abstract unit starting positions, so they are not tied to the unit.
-
-Cursor seems unnatural when it switched back to enemy after attack, and then immediately to the next unit
-Add Joe's fighter unit
-
-
-
-Make sure that AI units unitinfo box is showing up on cursor selection.
-Next up, make the unit follow the specific path, instead of fly like a bird to their destination.
-Also, make the movement speed standardized per tile. (Make this configurable.)
-
-When fighter attacks a unit, they should have a lower zindex
 
 
 LEARNING:
@@ -91,11 +60,8 @@ Consider making sure that the AnimationManager script is always attached to the 
 
 
 
-
-Look into saving previous menu states when cancelling an action.
-
-
 Low Priority:
 Add bloop when menu confirms
 Setup XBox Controller
 Look into proper garbage collection
+Look into saving previous menu states when cancelling an action.

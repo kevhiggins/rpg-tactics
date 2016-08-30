@@ -14,9 +14,8 @@ namespace Rpg.Widgets
 
         public HighlightAttackWidget(IUnit unit)
         {
-            var attackRange = 1;
             var map = GameManager.instance.levelManager.GetMap();
-            AttackTilePositions = map.GetTilePositionsInRange(unit.GetTile().tilePosition, attackRange, PathNNConstraint.Default);
+            AttackTilePositions = GetAdjacentTilePositions(unit.GetTile().tilePosition);
             AttackTilePositions.Remove(unit.GetTile().tilePosition);
 
 
@@ -35,6 +34,28 @@ namespace Rpg.Widgets
 
         public void HandleInput()
         {
+        }
+
+        protected List<TilePosition> GetAdjacentTilePositions(TilePosition tilePosition)
+        {
+            var validAdjacentTilePositions = new List<TilePosition>();
+            var map = GameManager.instance.levelManager.GetMap();
+
+            var tiles = new List<Tile>();
+
+            tiles.Add(map.GetTile(tilePosition.x - 1, tilePosition.y));
+            tiles.Add(map.GetTile(tilePosition.x + 1, tilePosition.y));
+            tiles.Add(map.GetTile(tilePosition.x, tilePosition.y - 1));
+            tiles.Add(map.GetTile(tilePosition.x, tilePosition.y + 1));
+
+            foreach(var tile in tiles)
+            {
+                if (tile == null || !tile.IsPassable)
+                    continue;
+                validAdjacentTilePositions.Add(tile.tilePosition);
+            }
+
+            return validAdjacentTilePositions;
         }
     }
 }

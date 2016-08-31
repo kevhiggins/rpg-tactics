@@ -15,9 +15,10 @@ namespace Rpg.GameState.Behaviors.AiTurn.Move
 
             var map = GameManager.instance.levelManager.GetMap();
             var tile = map.FindTileAtPosition(finalPosition);
-            GameManager.instance.levelManager.GetMap().SetTileCursor(tile.tilePosition);
-
-            animator.SetTrigger("State Complete");
+            GameManager.instance.levelManager.GetMap().SetTileCursor(tile.tilePosition, () =>
+            {
+                animator.SetTrigger("State Complete");
+            });
         }
 
         public override void Disable(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

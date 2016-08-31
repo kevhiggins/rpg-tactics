@@ -9,26 +9,27 @@ namespace Rpg.GameState.Behaviors.AiTurn
     {
         public override void Enable(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            GameManager.instance.levelManager.GetMap().SetTileCursor(ActiveUnit.GetTile().tilePosition);
-
-            // Determine the target positions from all enemy units.
-            var targetPositions = new List<Vector3>();
-            var enemyUnits = GameManager.instance.actionQueue.GetEnemyUnits(ActiveUnit.TeamId);
-
-            // If there are no enemy units, have the current unit wait.
-            if (enemyUnits.Count < 1)
+            GameManager.instance.levelManager.GetMap().SetTileCursor(ActiveUnit.GetTile().tilePosition, () =>
             {
-                animator.SetTrigger("Wait");
-                return;
-            }
+                // Determine the target positions from all enemy units.
+                var targetPositions = new List<Vector3>();
+                var enemyUnits = GameManager.instance.actionQueue.GetEnemyUnits(ActiveUnit.TeamId);
 
-            // Otherwise, find the nearest path to a target, and move/attack appropriately.
-            foreach (var enemyUnit in enemyUnits)
-            {
-                targetPositions.Add(enemyUnit.GetGameObject().transform.position);
-            }
-            var activeUnitPosition = ActiveUnit.GetGameObject().transform.position;
-            GameManager.instance.PathManager.FindNearestTargetPath(activeUnitPosition, targetPositions, path => ProcessNearestEnemyPath(path, animator));
+                // If there are no enemy units, have the current unit wait.
+                if (enemyUnits.Count < 1)
+                {
+                    animator.SetTrigger("Wait");
+                    return;
+                }
+
+                // Otherwise, find the nearest path to a target, and move/attack appropriately.
+                foreach (var enemyUnit in enemyUnits)
+                {
+                    targetPositions.Add(enemyUnit.GetGameObject().transform.position);
+                }
+                var activeUnitPosition = ActiveUnit.GetGameObject().transform.position;
+                GameManager.instance.PathManager.FindNearestTargetPath(activeUnitPosition, targetPositions, path => ProcessNearestEnemyPath(path, animator));
+            });
         }
 
         public override void Disable(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

@@ -9,10 +9,11 @@ namespace Rpg.GameState.Behaviors.AiTurn.Act
         {
             RegisterWidget(new HighlightAttackWidget(ActiveUnit));
             var targetTile = GameManager.instance.UnitTurn.ActTargetTile;
-            GameManager.instance.levelManager.GetMap().SetTileCursor(targetTile.tilePosition);
-            RegisterWidget(new UnitInfoWidget(targetTile.GetUnit()));
-            
-            animator.SetTrigger("State Complete");
+            GameManager.instance.levelManager.GetMap().SetTileCursor(targetTile.tilePosition, () =>
+            {
+                RegisterWidget(new UnitInfoWidget(targetTile.GetUnit()));
+                animator.SetTrigger("State Complete");
+            });
         }
 
         public override void Disable(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

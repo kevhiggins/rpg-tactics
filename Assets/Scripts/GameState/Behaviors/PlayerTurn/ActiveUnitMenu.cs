@@ -9,32 +9,15 @@ namespace Rpg.GameState.Behaviors.PlayerTurn
     class ActiveUnitMenu : AbstractActiveUnitStateBehavior
     {
         private ActionMenuWidget actionMenu;
-        private bool waitingForCamera = false;
 
         public override void Enable(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             // Set the tile cursor to the active unit's position.
-            GameManager.instance.levelManager.GetMap().SetTileCursor(ActiveUnit.GetTile().tilePosition);
-
-            // If the camera is moving, wait until it's finished to display the widgets.
-            var cameraManager = GameManager.instance.CameraManager;
-            if (cameraManager.IsMoving)
-            {
-                waitingForCamera = true;
-                cameraManager.OnMoveComplete += Initialize;
-            }
-            else
-            {
-                Initialize();
-            }
+            GameManager.instance.levelManager.GetMap().SetTileCursor(ActiveUnit.GetTile().tilePosition, Initialize);
         }
 
         private void Initialize()
         {
-            if (waitingForCamera)
-            {
-                GameManager.instance.CameraManager.OnMoveComplete -= Initialize;
-            }
             actionMenu = new ActionMenuWidget(ActiveUnit);
             RegisterWidget(actionMenu);
             RegisterWidget(new UnitInfoWidget(ActiveUnit));

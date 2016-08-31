@@ -45,9 +45,28 @@ namespace Rpg.Map
             cursorTilePosition = cursorTile.tilePosition;
         }
 
-        public void SetTileCursor(TilePosition tilePosition)
+        public void SetTileCursor(TilePosition tilePosition, Action onComplete)
         {
+
             MoveTileCursor(tilePosition.x - cursorTilePosition.x, tilePosition.y - cursorTilePosition.y);
+            // Register the onComplete to occur after the camera is done moving.
+            HandleMoveComplete handler = null;
+            var cameraManager = GameManager.instance.CameraManager;
+
+            // Only use the camera manager callback if the camera is actually moving.
+            if (cameraManager.IsMoving)
+            {
+                cameraManager.OnMoveComplete += handler = () =>
+                {
+                    onComplete();
+                    cameraManager.OnMoveComplete -= handler;
+                };
+            }
+            else
+            {
+                onComplete();
+            }
+
         }
 
         /// <summary>

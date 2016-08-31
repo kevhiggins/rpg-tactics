@@ -1,31 +1,15 @@
 Bug:
-Problem:
-Moving to next state should wait for the camera to finish centering on the cursor.
-	Fix issue where long camera panning is interrupted by AI movement cursor. Panning should finish.
-
-Situations where the camera can move:
--Switching the active unit
--Returning to the active unit after cancelling the explore state
--AI selecting movement destination/Attack
-
-Solutions:
-Create a method for moving the cursor that has an onComplete built in.
-Whenever we change the cursor position, we should be using that method instead, to avoid weirdness on cursor moves.
-
 Make the unit follow the specific path, instead of fly like a bird to their destination.
-Make sure that AI units unitinfo box is showing up on cursor selection.
+Allow walking through own units.
 
 When fighter attacks a unit, they should have a lower zindex
 
 Cleanse old code
-Allow walking through own units.
+
 
 Add some simple SFX polish
 
 Fighter setup
-
-
-
 
 Good Maps:
 jTEST:
@@ -39,11 +23,6 @@ Kev
 
 Add test mode:
 	Show grid and make tiles for empty tiles.
-
-
-Menu sometimes will appear in the wrong place somehow.
-	Figure out how to reproduce
-
 
 
 https://blogs.unity3d.com/2015/06/19/pixel-perfect-2d/

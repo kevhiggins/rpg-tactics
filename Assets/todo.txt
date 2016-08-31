@@ -1,8 +1,20 @@
-Bug:
-Make the unit follow the specific path, instead of fly like a bird to their destination.
+Figure out if it's possible to chain animation stuff together so that we can see the full picture.
+Think the tackle example.
+	Tackle Triggered
+	Animation starts
+	On hitting the enemy, sparks come out.
+
+Setup Base animation controller for units
+
+Make the fighter live.
+
 Allow walking through own units.
+Make the unit follow the specific path, instead of fly like a bird to their destination.
+
 
 When fighter attacks a unit, they should have a lower zindex
+
+Figure out how to make particle effects appear and disappear
 
 Cleanse old code
 

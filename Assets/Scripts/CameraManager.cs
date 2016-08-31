@@ -10,7 +10,7 @@ namespace Rpg
     public class CameraManager : MonoBehaviour
     {
         public int panTileThreshold = 2;
-        public float cameraPanTilesPerSecond = 0.2f;
+        public float cameraPanTilesPerSecond = 0.1f;
 
         public bool IsMoving { get; private set; }
 

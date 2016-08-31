@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using Pathfinding;
+using Rpg.Widgets;
 using UnityEngine;
 
 namespace Rpg.GameState.Behaviors.AiTurn
@@ -11,6 +12,8 @@ namespace Rpg.GameState.Behaviors.AiTurn
         {
             GameManager.instance.levelManager.GetMap().SetTileCursor(ActiveUnit.GetTile().tilePosition, () =>
             {
+                RegisterWidget(new UnitInfoWidget(ActiveUnit));
+
                 // Determine the target positions from all enemy units.
                 var targetPositions = new List<Vector3>();
                 var enemyUnits = GameManager.instance.actionQueue.GetEnemyUnits(ActiveUnit.TeamId);

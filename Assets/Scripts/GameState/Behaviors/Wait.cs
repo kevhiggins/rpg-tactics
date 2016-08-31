@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Rpg.Widgets;
+using UnityEngine;
 
 namespace Rpg.GameState.Behaviors
 {
@@ -7,6 +8,7 @@ namespace Rpg.GameState.Behaviors
         public override void Enable(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             ActiveUnit.Wait();
+            RegisterWidget(new UnitInfoWidget(ActiveUnit));
             animator.SetTrigger("State Complete");
         }
 

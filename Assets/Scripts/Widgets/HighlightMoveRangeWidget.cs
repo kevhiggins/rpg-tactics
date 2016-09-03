@@ -17,7 +17,7 @@ namespace Rpg.Widgets
             var map = GameManager.instance.levelManager.GetMap();
 
             // Find the tiles in the current units range, and highlight them to show which are available.
-            HighlightedTilePositions = map.GetTilePositionsInRange(unit.GetTile().tilePosition, unit.MovementSpeed, PathConstraint.OnlyEmptySpaces);
+            HighlightedTilePositions = map.GetTilePositionsInRange(unit.GetTile().tilePosition, unit.MovementSpeed);
 
             // Remove the units current tile position.
             HighlightedTilePositions.Remove(unit.GetTile().tilePosition);

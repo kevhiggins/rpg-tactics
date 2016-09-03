@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Rpg.PathFinding;
 using Rpg.Unit;
 using UnityEngine;
 
@@ -9,13 +11,14 @@ namespace Rpg.Map
         public TilePosition tilePosition { get; private set; }
         public bool IsPassable { get; set; }
         public int Penalty { get; set; }
+        public GraphNodeTile GraphNode { get; set; }
 
-        private Map map;
+        public Map Map { get; private set; }
         private IUnit unit;
 
         public Tile(Map map, int x, int y)
         {
-            this.map = map;
+            this.Map = map;
             tilePosition = new TilePosition(x, y);
         }
 
@@ -27,7 +30,7 @@ namespace Rpg.Map
             }
             unit = targetUnit;
             targetUnit.SetTile(this);
-            map.TileAddUnit(this, targetUnit);
+            Map.TileAddUnit(this, targetUnit);
         }
 
         /// <summary>
@@ -40,7 +43,7 @@ namespace Rpg.Map
                 var tmpUnit = unit;
                 unit.SetTile(null);
                 unit = null;
-                map.TileRemoveUnit(this, tmpUnit);
+                Map.TileRemoveUnit(this, tmpUnit);
             }
         }
 
@@ -57,12 +60,26 @@ namespace Rpg.Map
         // TODO rename this, it sounds too similar to tilePosition attribute
         public Vector3 GetPosition()
         {
-            var currentMapPosition = map.GameObject.transform.position;
-            var tileWidthScaled = map.TileMap.TileWidth;
-            var tileHeightScaled = map.TileMap.TileHeight;
-            var xPosition = currentMapPosition.x + tilePosition.x * tileWidthScaled + tileWidthScaled / 2;
-            var yPosition = currentMapPosition.y + -tilePosition.y * tileHeightScaled - tileHeightScaled / 2;
+            var currentMapPosition = Map.GameObject.transform.position;
+            var tileWidthScaled = Map.TileMap.TileWidth;
+            var tileHeightScaled = Map.TileMap.TileHeight;
+            var xPosition = currentMapPosition.x + tilePosition.x*tileWidthScaled + tileWidthScaled/2;
+            var yPosition = currentMapPosition.y + -tilePosition.y*tileHeightScaled - tileHeightScaled/2;
             return new Vector3(xPosition, yPosition, 0);
+        }
+
+        public List<Tile> GetNeighbors()
+        {
+            var neighbors = new List<Tile>
+            {
+                Map.GetTile(tilePosition.x - 1, tilePosition.y),
+                Map.GetTile(tilePosition.x + 1, tilePosition.y),
+                Map.GetTile(tilePosition.x, tilePosition.y - 1),
+                Map.GetTile(tilePosition.x, tilePosition.y + 1)
+            };
+            neighbors.RemoveAll(item => item == null);
+
+            return neighbors;
         }
     }
 }

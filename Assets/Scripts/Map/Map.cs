@@ -3,6 +3,7 @@ using Rpg.Unit;
 using Tiled2Unity;
 using UnityEngine;
 using System.Collections.Generic;
+using GraphPathfinding;
 using Pathfinding;
 using Rpg.PathFinding;
 
@@ -198,26 +199,21 @@ namespace Rpg.Map
             return GetTile(x, y);
         }
 
-        public List<TilePosition> GetTilePositionsInRange(TilePosition targetTilePosition, int range, NNConstraint pathConstraint)
+        public List<TilePosition> GetTilePositionsInRange(TilePosition targetTilePosition, int range)
         {
             var targetTile = GetTile(targetTilePosition);
 
-            var targetNode = AstarPath.active.GetNearest(targetTile.GetPosition()).node;
-            Debug.Log(targetTile.GetPosition());
-            Debug.Log(targetNode.position);
-            var nodeFinder = new NodeFinder();
-            var nodeAdapter = new GraphNodeAdapter(targetNode);
-            var graphNodes = nodeFinder.FindNodesInRange(nodeAdapter, (uint)range, pathConstraint);
+            var pathFinder = new AStarPathfinder();
+            var nodesInRange = pathFinder.FindNodesInCostRange(targetTile.GraphNode, range);
 
-            var tilesInRange = new List<TilePosition>();
-
-            foreach (var graphNode in graphNodes)
+            var tilePositions = new List<TilePosition>();
+            foreach (var node in nodesInRange)
             {
-                var tile = FindTileAtPosition((Vector3) graphNode.GraphNode.position);
-                tilesInRange.Add(tile.tilePosition);
+                var tileNode = (GraphNodeTile) node;
+                tilePositions.Add(tileNode.Tile.tilePosition);
             }
 
-            return tilesInRange;
+            return tilePositions;
         }
 
         public void TileAddUnit(Tile tile, IUnit unit)

@@ -1,14 +1,25 @@
+Allow walking through own units.
+	User Movement is straight forward
+	AI Movement, is a little harder.
+
+Algorithm Example:
+Find the shortest path to the target ignoring friendly units as obstacles
+Perform a movement check to see if the unit can move along the path, taking into account the friendly unit possitions at the end point of the path
+If unit can move along path, keep checking the path to see if the unit can sanely move all the way to the end.
+
 Figure out if it's possible to chain animation stuff together so that we can see the full picture.
 Think the tackle example.
 	Tackle Triggered
 	Animation starts
 	On hitting the enemy, sparks come out.
 
-Setup Base animation controller for units
 
-Make the fighter live.
+trigger attack/death complete automatically, so that we don't have to set it for each animation
 
-Allow walking through own units.
+Add editor menu item for creating a unit game object with the correct scripts attached
+Seems like there are game hiccups at certain points. Look into why.
+
+
 Make the unit follow the specific path, instead of fly like a bird to their destination.
 
 
@@ -17,6 +28,9 @@ When fighter attacks a unit, they should have a lower zindex
 Figure out how to make particle effects appear and disappear
 
 Cleanse old code
+	Start position from unit.
+
+
 
 
 Add some simple SFX polish

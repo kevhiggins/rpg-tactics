@@ -33,13 +33,17 @@ public class LevelManager : MonoBehaviour
         var tileMap = new TileMapEditorAdapter(mapScript);
 
         loadedMap = new Map(tileMap, tileCursorInstance);
-        GeneratePathfinding(tileMap);
+        
 
         // Add event handlers to update the walkabliity of nodes on the Astar graph.
-        loadedMap.OnTileAddUnit += UpdateTileWalkability;
-        loadedMap.OnTileRemoveUnit += UpdateTileWalkability;
+//        loadedMap.OnTileAddUnit += UpdateTileWalkability;
+//        loadedMap.OnTileRemoveUnit += UpdateTileWalkability;
 
+        // TODO pull this into constructor
         tileMap.ProcessTileData();
+
+        GeneratePathfinding(tileMap);
+
         loadedMap.InitCursor();
     }
 
@@ -65,59 +69,23 @@ public class LevelManager : MonoBehaviour
 
     protected void UpdateTileWalkability(Tile tile, IUnit unit)
     {
-        // Find the GraphNode
-        var node = AstarPath.active.GetNearest(tile.GetPosition()).node;
-
-        AstarPath.RegisterSafeUpdate(() =>
-        {
-            if (tile.HasUnit())
-            {
-                node.Tag = PathConstraint.TagHasUnit;
-            }
-            else
-            {
-                node.Tag = PathConstraint.TagNone;
-            }
-        });
     }
 
     protected void GeneratePathfinding(ITileMap tileMap)
     {
-        // Create a game object
-        var astarObject = new GameObject("Astar Object");
-        astarObject.AddComponent<AstarPath>();
-
-        astarPathScript = astarObject.GetComponent<AstarPath>();
-
-        AstarData data = AstarPath.active.astarData;
-        var gridGraph = data.AddGraph(typeof(GridGraph)) as GridGraph;
-        if (gridGraph == null)
+        foreach (var tile in tileMap.Tiles)
         {
-            throw new Exception("Could not create grid graph.");
+            var graphNode = new GraphNodeTile(tile);
+            tile.GraphNode = graphNode;
         }
 
-        gridGraph.Width = tileMap.TilesWide;
-        gridGraph.Depth = tileMap.TilesHigh;
-        gridGraph.nodeSize = tileMap.TileWidth;
-        gridGraph.neighbours = NumNeighbours.Four;
-        gridGraph.initialPenalty = 1;
-        gridGraph.rotation = new Vector3(90, 0 , 0);
-        gridGraph.collision.collisionCheck = false;
-        gridGraph.collision.heightCheck = false;
-
-        gridGraph.UpdateSizeFromWidthDepth();
-        AstarPath.active.Scan();
-
-        AstarPath.RegisterSafeUpdate(() =>
+        foreach (var tile in tileMap.Tiles)
         {
-            foreach (var tile in tileMap.Tiles)
+            var neighbors = tile.GetNeighbors();
+            foreach (var neighbor in neighbors)
             {
-                var node = AstarPath.active.GetNearest(tile.GetPosition()).node;
-                node.Walkable = tile.IsPassable;
-                node.Penalty = (uint)tile.Penalty;
+                tile.GraphNode.AddNeighbor(neighbor.GraphNode);
             }
-        });
-
-
+        }
     }
 }

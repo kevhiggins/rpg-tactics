@@ -22,6 +22,18 @@ namespace Rpg.Widgets
             // Remove the units current tile position.
             HighlightedTilePositions.Remove(unit.GetTile().tilePosition);
 
+            var deletePositions = new List<TilePosition>();
+            foreach (var tilePosition in HighlightedTilePositions)
+            {
+                if(map.GetTile(tilePosition).HasUnit())
+                    deletePositions.Add(tilePosition);
+            }
+
+            foreach (var position in deletePositions)
+            {
+                HighlightedTilePositions.Remove(position);
+            }
+
             var levelManager = GameManager.instance.levelManager;
             highlightedTiles = levelManager.HighlightTiles(HighlightedTilePositions, levelManager.highlightedTile);
         }

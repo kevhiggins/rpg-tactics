@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace GraphPathfinding
 {
     public delegate int MovementCostFunction(IGraphNode sourceNode, IGraphNode destinationNode);
+
     public delegate int CostFunction(IGraphNode node);
+
     public delegate int HeuristicFunction(IGraphNode node, IGraphNode goalNode);
 
     // TODO decouple this from Unity A* pathfinder
@@ -31,22 +34,27 @@ namespace GraphPathfinding
             // If specified, use the override functions. Otherwise, use their defaults.
             if (movementCostFunction == null)
                 movementCost = ManhattanDistance;
-            if(heuristicFunction == null)
+            else
+                movementCost = movementCostFunction;
+
+            if (heuristicFunction == null)
                 heuristic = ManhattanDistance;
+            else
+                heuristic = heuristicFunction;
         }
 
         public Path FindPath(IGraphNode startNode, IGraphNode destinationNode)
         {
-            heuristic = (a, b) => 0;
-            var result = Run(startNode, destinationNode, 0);
-            heuristic = ManhattanDistance;
-
-            return result.first;
+            return Run(startNode, destinationNode, 0).first;
         }
 
         public HashSet<IGraphNode> FindNodesInCostRange(IGraphNode startNode, int cost)
         {
-            return Run(startNode, null, cost).second;
+            var oldHeuristic = heuristic;
+            heuristic = (a, b) => 0;
+            var result = Run(startNode, null, cost).second;
+            heuristic = oldHeuristic;
+            return result;
         }
 
         protected Tuple<Path, HashSet<IGraphNode>> Run(IGraphNode sourceNode, IGraphNode destinationNode, int maxCost)
@@ -83,7 +91,13 @@ namespace GraphPathfinding
                 var neighbors = currentNode.FindNeighbors();
                 foreach (var neighbor in neighbors)
                 {
-                    var cost = currentNode.TentativeCost + movementCost(currentNode, neighbor);
+                    var movementCostValue = movementCost(currentNode, neighbor);
+                    if (movementCostValue == -1)
+                    {
+                        continue;
+                    }
+
+                    var cost = currentNode.TentativeCost + movementCostValue;
                     if (openNodes.ContainsKey(neighbor) && cost < neighbor.TentativeCost)
                         openNodes.Remove(neighbor);
                     if (closedNodes.Contains(neighbor) && cost < neighbor.TentativeCost)
@@ -101,20 +115,19 @@ namespace GraphPathfinding
 
             if (destinationNode != null && pathFound)
             {
-                
-                    path = new Path();
-                    var tmpNode = currentNode;
-                    var nodeList = new List<IGraphNode>();
+                path = new Path();
+                var tmpNode = currentNode;
+                var nodeList = new List<IGraphNode>();
 
-                    do
-                    {
-                        nodeList.Add(tmpNode);
-                        tmpNode = tmpNode.ParentNode;
-                    } while (tmpNode != null);
+                do
+                {
+                    nodeList.Add(tmpNode);
+                    tmpNode = tmpNode.ParentNode;
+                } while (tmpNode != null);
 
-                    // Reverse list so it goes from start node to goal node.
-                    nodeList.Reverse();
-                    path.nodes = nodeList;
+                // Reverse list so it goes from start node to goal node.
+                nodeList.Reverse();
+                path.nodes = nodeList;
             }
             else
             {
@@ -137,7 +150,7 @@ namespace GraphPathfinding
             var dx = Math.Abs(startNode.X - endNode.X);
             var dy = Math.Abs(startNode.Y - endNode.Y);
             var d = 1;
-            return d * (dx + dy);
+            return d*(dx + dy);
         }
     }
 }

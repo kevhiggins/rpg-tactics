@@ -52,6 +52,11 @@ namespace Rpg.Map
             return unit != null;
         }
 
+        public bool HasObstacle()
+        {
+            return HasUnit() || !IsPassable;
+        }
+
         public IUnit GetUnit()
         {
             return unit;

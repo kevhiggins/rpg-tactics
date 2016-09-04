@@ -4,7 +4,7 @@ namespace TileMapEditor
 {
     public class Tile : MonoBehaviour
     {
-        public int penalty = 1;
+        public int penalty = 0;
         public bool passable = true;
         public int x;
         public int y;

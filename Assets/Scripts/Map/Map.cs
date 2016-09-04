@@ -48,7 +48,6 @@ namespace Rpg.Map
 
         public void SetTileCursor(TilePosition tilePosition, Action onComplete)
         {
-
             MoveTileCursor(tilePosition.x - cursorTilePosition.x, tilePosition.y - cursorTilePosition.y);
             // Register the onComplete to occur after the camera is done moving.
             HandleMoveComplete handler = null;
@@ -67,7 +66,6 @@ namespace Rpg.Map
             {
                 onComplete();
             }
-
         }
 
         /// <summary>
@@ -202,8 +200,65 @@ namespace Rpg.Map
         public List<TilePosition> GetTilePositionsInRange(TilePosition targetTilePosition, int range)
         {
             var targetTile = GetTile(targetTilePosition);
+            var activeUnit = GameManager.instance.UnitTurn.ActiveUnit;
 
-            var pathFinder = new AStarPathfinder();
+            MovementCostFunction movementCostFunction = (sourceNode, destinationNode) =>
+            {
+                var destinationTileNode = (GraphNodeTile) destinationNode;
+                if (!destinationTileNode.Tile.IsPassable)
+                    return -1;
+
+                var manhattanCost = AStarPathfinder.ManhattanDistance(sourceNode, destinationNode);
+
+                var cost = manhattanCost + destinationTileNode.Tile.Penalty;
+
+                if (destinationTileNode.Tile.HasUnit())
+                {
+                    // If the destination has an enemy unit, then it is not passable.
+                    if(destinationTileNode.Tile.GetUnit().TeamId != activeUnit.TeamId)
+                    {
+                        return -1;
+                    }
+
+                    // If it is a friendly unit, it is not passable if this is the last tile in a units turn. Add additional cost if it is possible to reach on a future turn.
+                    if((sourceNode.TentativeCost + cost) % activeUnit.MovementSpeed == 0)
+                    {
+                        // Moving the full movement amount this turn will take us exactly to this spot. Need to find an empty space on the path, and increase this nodes cost.
+                        var previousParent = (GraphNodeTile)destinationNode;
+                        var parentNode = (GraphNodeTile)sourceNode.ParentNode;
+                        var foundEmptyTile = false;
+                        var backtrackCost = 0;
+
+                        while (parentNode != null)
+                        {
+                            // TODO alternatively, this could be the difference between the node's tentative costs. It's just weird for the latest tile that does not have one yet.
+                            backtrackCost += AStarPathfinder.ManhattanDistance(parentNode, previousParent) + previousParent.Tile.Penalty;
+                            if (!parentNode.Tile.HasObstacle())
+                            {
+                                foundEmptyTile = true;
+                                break;
+                            }
+
+                            previousParent = parentNode;
+                            parentNode = (GraphNodeTile)parentNode.ParentNode;
+                        }
+
+                        if (foundEmptyTile && backtrackCost != activeUnit.MovementSpeed)
+                        {
+                            cost += backtrackCost;
+                        }
+                        else
+                        {
+                            // The destination is unreachable using this path.
+                            return -1;
+                        }
+                    }
+                }
+
+                return cost;
+            };
+
+            var pathFinder = new AStarPathfinder(movementCostFunction, null);
             var nodesInRange = pathFinder.FindNodesInCostRange(targetTile.GraphNode, range);
 
             var tilePositions = new List<TilePosition>();

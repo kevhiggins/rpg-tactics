@@ -22,5 +22,10 @@ namespace GraphPathfinding
         {
             neighbors.Add(node);
         }
+
+        public override int GetHashCode()
+        {
+            return Id;
+        }
     }
 }

@@ -86,6 +86,7 @@ namespace Rpg.GameState.Behaviors.AiTurn
             var distance = 0;
             var movePath = new List<Vector3>();
 
+            // TODO FIX THIS DOESNT WORK ANYMORE
             foreach (var nodePosition in nodePositionList)
             {
                 var node = AstarPath.active.GetNearest(nodePosition).node;

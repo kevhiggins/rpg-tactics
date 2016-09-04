@@ -80,7 +80,7 @@ namespace Rpg.Map
                 {
                     var tile = new Tile(map, x, y);
                     tile.IsPassable = true;
-                    tile.Penalty = 1;
+                    tile.Penalty = 0;
                     Tiles[x, y] = tile;
                 }
             }

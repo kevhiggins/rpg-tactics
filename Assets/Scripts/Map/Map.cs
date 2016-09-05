@@ -1,10 +1,8 @@
 ﻿using System;
 using Rpg.Unit;
-using Tiled2Unity;
 using UnityEngine;
 using System.Collections.Generic;
 using GraphPathfinding;
-using Pathfinding;
 using Rpg.PathFinding;
 
 namespace Rpg.Map

@@ -1,9 +1,6 @@
-﻿using System;
-using Tiled2Unity;
-using UnityEngine;
+﻿using UnityEngine;
 using Rpg.Map;
 using System.Collections.Generic;
-using Pathfinding;
 using Rpg.PathFinding;
 using Rpg.Unit;
 using TileMapEditor;
@@ -17,8 +14,7 @@ public class LevelManager : MonoBehaviour
     public GameObject attackHighlightedTile;
 
     private Map loadedMap;
-    private AstarPath astarPathScript;
-
+    
     // TODO Look into making sure we deallocate resources when map is unloaded
     public void LoadMap()
     {

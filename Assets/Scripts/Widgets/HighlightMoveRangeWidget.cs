@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using Pathfinding;
 using Rpg.Map;
-using Rpg.PathFinding;
 using Rpg.Unit;
 using UnityEngine;
 

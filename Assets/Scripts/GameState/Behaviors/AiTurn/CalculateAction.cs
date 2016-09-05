@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-using Pathfinding;
+﻿using System.Collections.Generic;
 using Rpg.Widgets;
 using UnityEngine;
 

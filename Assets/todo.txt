@@ -1,7 +1,11 @@
 There will be a bug where if there is a unit right next to the target unit, the pathfinding will think you can stop at that tile even though it's occupied
 	Add a callback for when you find the last tile, to invalidate that path, and make it keep trying.
 
-Remove Friendly and Enemey classes. Create a UnitClass
+Need to make sure that the path cost doesn't take into account moving to the final node.
+
+
+
+Remove Friendly and Enemy classes. Create a UnitClass
 
 Look into unity compile issue that occur due to unity editor not being recognized.
 

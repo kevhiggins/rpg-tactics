@@ -13,8 +13,7 @@ namespace Rpg.GameState.Behaviors.AiTurn.Move
             var movementPath = GameManager.instance.UnitTurn.MovementPath;
             var finalPosition = movementPath.Last();
 
-            var map = GameManager.instance.levelManager.GetMap();
-            var tile = map.FindTileAtPosition(finalPosition);
+            var tile = finalPosition.Tile;
             GameManager.instance.levelManager.GetMap().SetTileCursor(tile.tilePosition, () =>
             {
                 animator.SetTrigger("State Complete");

@@ -10,7 +10,7 @@ namespace GraphPathfinding
 
     public delegate int HeuristicFunction(IGraphNode node, IGraphNode goalNode);
 
-    public delegate bool FoundNodeValidFunction(IGraphNode node);
+    public delegate bool FoundNodeValidFunction(IGraphNode sourceNode, IGraphNode destinationNode);
 
     // TODO decouple this from Unity A* pathfinder
     public class AStarPathfinder
@@ -18,6 +18,8 @@ namespace GraphPathfinding
         protected MovementCostFunction movementCost;
         protected HeuristicFunction heuristic;
         protected FoundNodeValidFunction foundNodeValid;
+
+        public bool includeDestinationNodeInPathCost = true;
 
         /// <summary>
         /// Create pathfinder class with default functionality.
@@ -46,7 +48,7 @@ namespace GraphPathfinding
                 heuristic = heuristicFunction;
 
             if (foundNodeValid == null)
-                this.foundNodeValid = node => true;
+                this.foundNodeValid = (sourceNode, destinationNode) => true;
             else
                 this.foundNodeValid = foundNodeValid;
         }
@@ -90,7 +92,7 @@ namespace GraphPathfinding
                     if (currentNode.Id == destinationNode.Id)
                     {
                         // IF the found node function approves of the node, than we've found the correct node. Otherwise, this node is invalid, so we continue to the next open node.
-                        if (foundNodeValid(currentNode))
+                        if (foundNodeValid(sourceNode, currentNode))
                         {
                             pathFound = true;
                             break;
@@ -129,19 +131,19 @@ namespace GraphPathfinding
 
             if (destinationNode != null && pathFound)
             {
-                
+                var finalNode = includeDestinationNodeInPathCost ? currentNode : currentNode.ParentNode;
                 var tmpNode = currentNode;
                 var nodeList = new List<IGraphNode>();
 
-                do
+                while (tmpNode != null)
                 {
                     nodeList.Add(tmpNode);
                     tmpNode = tmpNode.ParentNode;
-                } while (tmpNode != null);
+                }
 
                 // Reverse list so it goes from start node to goal node.
                 nodeList.Reverse();
-                path = new Path(nodeList, currentNode.TentativeCost);
+                path = nodeList.Any() ? new Path(nodeList, finalNode.TentativeCost) : null;
             }
             else
             {

@@ -3,6 +3,8 @@ using Rpg.Widgets;
 using UnityEngine;
 using Rpg.Map;
 using GraphPathfinding;
+using System.Linq;
+using Rpg.PathFinding;
 
 namespace Rpg.GameState.Behaviors.AiTurn
 {
@@ -46,63 +48,66 @@ namespace Rpg.GameState.Behaviors.AiTurn
 
         private void ProcessNearestEnemyPath(Path shortestPath, Animator animator)
         {
-            var map = GameManager.instance.levelManager.GetMap();
-            
-            // TODO change to use the new Path object.
-            /*
             // Remove the first position, since it is the unit's current location.
-            if(shortestPath.vectorPath.Any())
-                shortestPath.vectorPath.RemoveAt(0);
+            if(shortestPath != null && shortestPath.nodes.Any())
+                shortestPath.nodes.RemoveAt(0);
 
             // If there are no nodes other than the sourceUnit node, then we should wait, since the unit is trapped, or has 0 movement.
-            if (shortestPath.vectorPath.Any() == false)
+            if (shortestPath == null || !shortestPath.nodes.Any())
             {
                 animator.SetTrigger("Wait");
                 return;
             }
 
             // Remove the last position, because we only want to move the enemy next to the target.
-            var targetIndex = shortestPath.vectorPath.Count - 1;
-            var targetPosition = shortestPath.vectorPath[targetIndex];
-            shortestPath.vectorPath.RemoveAt(targetIndex);
+            var targetIndex = shortestPath.nodes.Count - 1;
+            var targetNode = (GraphNodeTile)shortestPath.nodes[targetIndex];
+            shortestPath.nodes.RemoveAt(targetIndex);
 
             // If the unit is already where it wants to be, and has not acted then perform an action.
-            if (shortestPath.vectorPath.Count == 0 && ActiveUnit.HasActed == false)
+            if (!shortestPath.nodes.Any() && ActiveUnit.HasActed == false)
             {
                 // Get the target tile's unit and attack it.
-                var unitTile = map.FindTileAtPosition(targetPosition);
+                var unitTile = targetNode.Tile;
 
                 GameManager.instance.UnitTurn.ActTargetTile = unitTile;
                 animator.SetTrigger("Act");
                 return;
             }
 
-            // If we have a unit in range, but have already acted, then wait.
-            if (shortestPath.vectorPath.Count == 0 || ActiveUnit.HasMoved)
+            // If we have a unit in range, but have already acted and moved, then wait.
+            if (!shortestPath.nodes.Any() || ActiveUnit.HasMoved)
             {
                 animator.SetTrigger("Wait");
                 return;
             }
 
-            // Remove the final path node, since that's where the target is.
-            var nodePositionList = shortestPath.vectorPath;
+            var nodes = shortestPath.nodes;
             var distance = 0;
-            var movePath = new List<Vector3>();
+            var movePath = new List<GraphNodeTile>();
+
+            // TODO we need a way to determine the costs
+
 
             // TODO FIX THIS DOESNT WORK ANYMORE
-            foreach (var nodePosition in nodePositionList)
+            foreach (GraphNodeTile node in nodes)
             {
-                var node = AstarPath.active.GetNearest(nodePosition).node;
-                distance += (int)node.Penalty;
+                // Add one, since the distance between each tile is 1 unit.
+                distance++;
+              
+                // Add the node penalty
+                distance += node.Tile.Penalty;
+                
+                // If the distance traveled after adding this node exceeds the unit move speed, than don't add the node to the list, and break out of loop.
                 if (distance > ActiveUnit.MovementSpeed)
                     break;
-                movePath.Add(nodePosition);
+
+                movePath.Add(node);
             }
 
             // Set the movement path on the unit turn, and progress to the next state.
             GameManager.instance.UnitTurn.MovementPath = movePath;
             animator.SetTrigger("Move");
-            */
         }
     }
 }

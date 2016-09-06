@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace GraphPathfinding
 {
@@ -11,16 +10,19 @@ namespace GraphPathfinding
 
     public delegate int HeuristicFunction(IGraphNode node, IGraphNode goalNode);
 
+    public delegate bool FoundNodeValidFunction(IGraphNode node);
+
     // TODO decouple this from Unity A* pathfinder
     public class AStarPathfinder
     {
         protected MovementCostFunction movementCost;
         protected HeuristicFunction heuristic;
+        protected FoundNodeValidFunction foundNodeValid;
 
         /// <summary>
         /// Create pathfinder class with default functionality.
         /// </summary>
-        public AStarPathfinder() : this(null, null)
+        public AStarPathfinder() : this(null, null, null)
         {
         }
 
@@ -29,7 +31,8 @@ namespace GraphPathfinding
         /// </summary>
         /// <param name="movementCostFunction"></param>
         /// <param name="heuristicFunction"></param>
-        public AStarPathfinder(MovementCostFunction movementCostFunction, HeuristicFunction heuristicFunction)
+        /// <param name="foundNodeValid"></param>
+        public AStarPathfinder(MovementCostFunction movementCostFunction, HeuristicFunction heuristicFunction, FoundNodeValidFunction foundNodeValid)
         {
             // If specified, use the override functions. Otherwise, use their defaults.
             if (movementCostFunction == null)
@@ -41,6 +44,11 @@ namespace GraphPathfinding
                 heuristic = ManhattanDistance;
             else
                 heuristic = heuristicFunction;
+
+            if (foundNodeValid == null)
+                this.foundNodeValid = node => true;
+            else
+                this.foundNodeValid = foundNodeValid;
         }
 
         public Path FindPath(IGraphNode startNode, IGraphNode destinationNode)

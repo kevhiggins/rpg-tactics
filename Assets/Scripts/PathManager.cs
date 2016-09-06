@@ -1,59 +1,50 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using Pathfinding;
 using Rpg.PathFinding;
 using UnityEngine;
+using Rpg.Map;
+using GraphPathfinding;
 
 namespace Rpg
 {
     public class PathManager : MonoBehaviour
     {
-        public void FindNearestTargetPath(Vector3 sourcePosition, List<Vector3> targetPositions, Action<Path> onComplete)
+        public Path FindNearestTargetPath(TilePosition sourcePosition, List<TilePosition> targetPositions)
         {
-            var pathFinder = new PathFinder();
-            pathFinder.FindTargetPaths(sourcePosition, targetPositions,
-                paths => { FindNearestPath(paths, onComplete); });
-        }
+            List<Path> paths = new List<Path>();
 
-        private void FindNearestPath(List<Path> paths, Action<Path> onComplete)
-        {
-            Path shortestPath = null;
-            int shortestDistance = 0;
+            // TODO add overrides for delegates
+            var pathFinder = new AStarPathfinder();
+            var map = GameManager.instance.levelManager.GetMap();
 
-            foreach (var path in paths)
+            var sourceTile = map.GetTile(sourcePosition);
+
+            foreach(var targetPosition in targetPositions)
             {
-                // If there are no positions in the path, then we should skip it since, that means there is no path to the target.
-                if (path.vectorPath.Count == 0)
-                    continue;
-
-                var distance = PathDistance(path.vectorPath);
-
-                if (shortestPath == null || shortestDistance > distance)
+                var targetTile = map.GetTile(targetPosition);
+                var targetPath = pathFinder.FindPath(sourceTile.GraphNode, targetTile.GraphNode);
+                if(targetPath != null)
                 {
-                    shortestPath = path;
-                    shortestDistance = distance;
+                    paths.Add(targetPath);
                 }
             }
 
-            if (shortestPath == null)
-            {
-                throw new Exception("Could not find shortest path.");
-            }
-
-            onComplete(shortestPath);
+            return FindNearestPath(paths);
         }
 
-        private int PathDistance(List<Vector3> vectorPaths)
+        private Path FindNearestPath(List<Path> paths)
         {
-            int distance = 0;
-            var nodePositions = vectorPaths.Skip(1);
-            foreach (var nodePosition in nodePositions)
+            if(!paths.Any())
             {
-                var node = AstarPath.active.GetNearest(nodePosition).node;
-                distance += (int) node.Penalty;
+                return null;
             }
-            return distance;
+
+            return paths.Aggregate((shortestPath, currentPath) =>
+            {
+                return (currentPath.Cost < shortestPath.Cost ? currentPath : shortestPath);
+            });
         }
+
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Rpg.Widgets;
 using UnityEngine;
+using Rpg.Map;
+using GraphPathfinding;
 
 namespace Rpg.GameState.Behaviors.AiTurn
 {
@@ -13,7 +15,7 @@ namespace Rpg.GameState.Behaviors.AiTurn
                 RegisterWidget(new UnitInfoWidget(ActiveUnit));
 
                 // Determine the target positions from all enemy units.
-                var targetPositions = new List<Vector3>();
+                var targetPositions = new List<TilePosition>();
                 var enemyUnits = GameManager.instance.actionQueue.GetEnemyUnits(ActiveUnit.TeamId);
 
                 // If there are no enemy units, have the current unit wait.
@@ -26,10 +28,11 @@ namespace Rpg.GameState.Behaviors.AiTurn
                 // Otherwise, find the nearest path to a target, and move/attack appropriately.
                 foreach (var enemyUnit in enemyUnits)
                 {
-                    targetPositions.Add(enemyUnit.GetGameObject().transform.position);
+                    targetPositions.Add(enemyUnit.GetTile().tilePosition);
                 }
-                var activeUnitPosition = ActiveUnit.GetGameObject().transform.position;
-                GameManager.instance.PathManager.FindNearestTargetPath(activeUnitPosition, targetPositions, path => ProcessNearestEnemyPath(path, animator));
+
+                var shortestPath = GameManager.instance.PathManager.FindNearestTargetPath(ActiveUnit.GetTile().tilePosition, targetPositions);
+                ProcessNearestEnemyPath(shortestPath, animator);
             });
         }
 
@@ -45,6 +48,8 @@ namespace Rpg.GameState.Behaviors.AiTurn
         {
             var map = GameManager.instance.levelManager.GetMap();
             
+            // TODO change to use the new Path object.
+            /*
             // Remove the first position, since it is the unit's current location.
             if(shortestPath.vectorPath.Any())
                 shortestPath.vectorPath.RemoveAt(0);
@@ -97,6 +102,7 @@ namespace Rpg.GameState.Behaviors.AiTurn
             // Set the movement path on the unit turn, and progress to the next state.
             GameManager.instance.UnitTurn.MovementPath = movePath;
             animator.SetTrigger("Move");
+            */
         }
     }
 }

@@ -256,7 +256,7 @@ namespace Rpg.Map
                 return cost;
             };
 
-            var pathFinder = new AStarPathfinder(movementCostFunction, null);
+            var pathFinder = new AStarPathfinder(movementCostFunction, null, null);
             var nodesInRange = pathFinder.FindNodesInCostRange(targetTile.GraphNode, range);
 
             var tilePositions = new List<TilePosition>();

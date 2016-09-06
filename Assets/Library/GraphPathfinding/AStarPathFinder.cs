@@ -79,20 +79,26 @@ namespace GraphPathfinding
             {
                 currentNode = DequeueNextItem(openNodes);
 
+                // If a max cost is configured, then use it.
+                if (maxCost > 0 && currentNode.TentativeCost > maxCost)
+                    continue;
+
                 // If we are trying to find a path to a destination, then compare the current node to the destination.
                 if (destinationNode != null)
                 {
                     // If current node is the destination node, then break out of loop.
                     if (currentNode.Id == destinationNode.Id)
                     {
-                        pathFound = true;
-                        break;
+                        // IF the found node function approves of the node, than we've found the correct node. Otherwise, this node is invalid, so we continue to the next open node.
+                        if (foundNodeValid(currentNode))
+                        {
+                            pathFound = true;
+                            break;
+                        }
+                        else
+                            continue;
                     }
                 }
-
-                // If a max cost is configured, then use it.
-                if (maxCost > 0 && currentNode.TentativeCost > maxCost)
-                    continue;
 
                 closedNodes.Add(currentNode);
 
@@ -119,11 +125,11 @@ namespace GraphPathfinding
                 }
             }
 
-            Path path = new Path();
+            Path path;
 
             if (destinationNode != null && pathFound)
             {
-                path = new Path();
+                
                 var tmpNode = currentNode;
                 var nodeList = new List<IGraphNode>();
 
@@ -135,11 +141,11 @@ namespace GraphPathfinding
 
                 // Reverse list so it goes from start node to goal node.
                 nodeList.Reverse();
-                path.nodes = nodeList;
+                path = new Path(nodeList, currentNode.TentativeCost);
             }
             else
             {
-                path.nodes = new List<IGraphNode>();
+                path = null;
             }
 
             return new Tuple<Path, HashSet<IGraphNode>>(path, closedNodes);

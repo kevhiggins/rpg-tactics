@@ -1,22 +1,18 @@
-There will be a bug where if there is a unit right next to the target unit, the pathfinding will think you can stop at that tile even though it's occupied
-	Add a callback for when you find the last tile, to invalidate that path, and make it keep trying.
+Prioritize skill stuff next
+Fireball
 
-Need to make sure that the path cost doesn't take into account moving to the final node.
+Bugs:
+Fix layer overlap issue for units:
+	Move first guy on jMap 7 Test to above the guy to his right
 
+Features:
+Make the unit follow the specific path, instead of fly like a bird to their destination.
 
-
+Cleanup:
 Remove Friendly and Enemy classes. Create a UnitClass
 
-Look into unity compile issue that occur due to unity editor not being recognized.
 
-Allow walking through own units.
-	User Movement is straight forward
-	AI Movement, is a little harder.
 
-Algorithm Example:
-Find the shortest path to the target ignoring friendly units as obstacles
-Perform a movement check to see if the unit can move along the path, taking into account the friendly unit possitions at the end point of the path
-If unit can move along path, keep checking the path to see if the unit can sanely move all the way to the end.
 
 Figure out if it's possible to chain animation stuff together so that we can see the full picture.
 Think the tackle example.
@@ -31,7 +27,7 @@ Add editor menu item for creating a unit game object with the correct scripts at
 Seems like there are game hiccups at certain points. Look into why.
 
 
-Make the unit follow the specific path, instead of fly like a bird to their destination.
+
 
 
 When fighter attacks a unit, they should have a lower zindex

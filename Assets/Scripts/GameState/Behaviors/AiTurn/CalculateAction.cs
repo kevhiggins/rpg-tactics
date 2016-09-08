@@ -86,10 +86,6 @@ namespace Rpg.GameState.Behaviors.AiTurn
             var distance = 0;
             var movePath = new List<GraphNodeTile>();
 
-            // TODO we need a way to determine the costs
-
-
-            // TODO FIX THIS DOESNT WORK ANYMORE
             foreach (GraphNodeTile node in nodes)
             {
                 // Add one, since the distance between each tile is 1 unit.

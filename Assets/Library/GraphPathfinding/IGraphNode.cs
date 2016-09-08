@@ -9,8 +9,5 @@ namespace GraphPathfinding
         int Y { get; }
 
         List<IGraphNode> FindNeighbors();
-
-        IGraphNode ParentNode { get; set; }
-        int TentativeCost { get; set; }
     }
 }

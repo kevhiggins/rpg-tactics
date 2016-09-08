@@ -15,43 +15,14 @@ namespace GraphPathfinding
     // TODO decouple this from Unity A* pathfinder
     public class AStarPathfinder
     {
-        protected MovementCostFunction movementCost;
-        protected HeuristicFunction heuristic;
-        protected FoundNodeValidFunction foundNodeValid;
+        public MovementCostFunction movementCost = ManhattanDistance;
+        public HeuristicFunction heuristic = ManhattanDistance;
+        public FoundNodeValidFunction foundNodeValid = (sourceNode, destinationNode) => true;
 
         public bool includeDestinationNodeInPathCost = true;
 
-        /// <summary>
-        /// Create pathfinder class with default functionality.
-        /// </summary>
-        public AStarPathfinder() : this(null, null, null)
-        {
-        }
-
-        /// <summary>
-        /// Configure the cost functions and heuristic to use a different implementation.
-        /// </summary>
-        /// <param name="movementCostFunction"></param>
-        /// <param name="heuristicFunction"></param>
-        /// <param name="foundNodeValid"></param>
-        public AStarPathfinder(MovementCostFunction movementCostFunction, HeuristicFunction heuristicFunction, FoundNodeValidFunction foundNodeValid)
-        {
-            // If specified, use the override functions. Otherwise, use their defaults.
-            if (movementCostFunction == null)
-                movementCost = ManhattanDistance;
-            else
-                movementCost = movementCostFunction;
-
-            if (heuristicFunction == null)
-                heuristic = ManhattanDistance;
-            else
-                heuristic = heuristicFunction;
-
-            if (foundNodeValid == null)
-                this.foundNodeValid = (sourceNode, destinationNode) => true;
-            else
-                this.foundNodeValid = foundNodeValid;
-        }
+        private Dictionary<IGraphNode, int> nodeCosts = new Dictionary<IGraphNode, int>();
+        private Dictionary<IGraphNode, IGraphNode> nodeParents = new Dictionary<IGraphNode, IGraphNode>();
 
         public Path FindPath(IGraphNode startNode, IGraphNode destinationNode)
         {
@@ -67,22 +38,47 @@ namespace GraphPathfinding
             return result;
         }
 
+        protected void SetNodeCost(IGraphNode node, int cost)
+        {
+            nodeCosts[node] = cost;
+        }
+
+        protected void SetNodeParent(IGraphNode node, IGraphNode parent)
+        {
+            nodeParents[node] = parent;
+        }
+
+        public int GetNodeCost(IGraphNode node)
+        {
+            return nodeCosts[node];
+        }
+
+        public IGraphNode GetNodeParent(IGraphNode node)
+        {
+            if (!nodeParents.ContainsKey(node))
+                return null;
+            return nodeParents[node];
+        }
+
         protected Tuple<Path, HashSet<IGraphNode>> Run(IGraphNode sourceNode, IGraphNode destinationNode, int maxCost)
         {
             var openNodes = new Dictionary<IGraphNode, int>();
             var closedNodes = new HashSet<IGraphNode>();
 
             openNodes[sourceNode] = 0;
-            sourceNode.TentativeCost = 0;
+            SetNodeCost(sourceNode, 0);
             var currentNode = sourceNode;
 
             var pathFound = false;
+
             while (openNodes.Any())
             {
                 currentNode = DequeueNextItem(openNodes);
 
+                var currentNodeCost = GetNodeCost(currentNode);
+
                 // If a max cost is configured, then use it.
-                if (maxCost > 0 && currentNode.TentativeCost > maxCost)
+                if (maxCost > 0 && currentNodeCost > maxCost)
                     continue;
 
                 // If we are trying to find a path to a destination, then compare the current node to the destination.
@@ -113,16 +109,16 @@ namespace GraphPathfinding
                         continue;
                     }
 
-                    var cost = currentNode.TentativeCost + movementCostValue;
-                    if (openNodes.ContainsKey(neighbor) && cost < neighbor.TentativeCost)
+                    var cost = currentNodeCost + movementCostValue;
+                    if (openNodes.ContainsKey(neighbor) && cost < GetNodeCost(neighbor))
                         openNodes.Remove(neighbor);
-                    if (closedNodes.Contains(neighbor) && cost < neighbor.TentativeCost)
+                    if (closedNodes.Contains(neighbor) && cost < GetNodeCost(neighbor))
                         closedNodes.Remove(neighbor);
                     if (!openNodes.ContainsKey(neighbor) && !closedNodes.Contains(neighbor))
                     {
-                        neighbor.TentativeCost = cost;
+                        SetNodeCost(neighbor, cost);
                         openNodes.Add(neighbor, cost + heuristic(neighbor, destinationNode));
-                        neighbor.ParentNode = currentNode;
+                        SetNodeParent(neighbor, currentNode);
                     }
                 }
             }
@@ -131,19 +127,19 @@ namespace GraphPathfinding
 
             if (destinationNode != null && pathFound)
             {
-                var finalNode = includeDestinationNodeInPathCost ? currentNode : currentNode.ParentNode;
+                var finalNode = includeDestinationNodeInPathCost ? currentNode : GetNodeParent(currentNode);
                 var tmpNode = currentNode;
                 var nodeList = new List<IGraphNode>();
 
                 while (tmpNode != null)
                 {
                     nodeList.Add(tmpNode);
-                    tmpNode = tmpNode.ParentNode;
+                    tmpNode = GetNodeParent(tmpNode);
                 }
 
                 // Reverse list so it goes from start node to goal node.
                 nodeList.Reverse();
-                path = nodeList.Any() ? new Path(nodeList, finalNode.TentativeCost) : null;
+                path = nodeList.Any() ? new Path(nodeList, GetNodeCost(finalNode)) : null;
             }
             else
             {

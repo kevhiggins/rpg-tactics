@@ -202,9 +202,13 @@ namespace Rpg.Map
             var targetTile = GetTile(targetTilePosition);
             var activeUnit = GameManager.instance.UnitTurn.ActiveUnit;
 
-            MovementCostFunction movementCostFunction = PathManager.GenerateMovementCostFunction(activeUnit);
+            var pathFinder = new AStarPathfinder();
 
-            var pathFinder = new AStarPathfinder(movementCostFunction, null, null);
+
+            MovementCostFunction movementCostFunction = PathManager.GenerateMovementCostFunction(pathFinder, activeUnit);
+
+            pathFinder.movementCost = movementCostFunction;
+            
             var nodesInRange = pathFinder.FindNodesInCostRange(targetTile.GraphNode, range);
 
             var tilePositions = new List<TilePosition>();

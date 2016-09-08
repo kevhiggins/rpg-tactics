@@ -16,19 +16,27 @@ namespace Rpg
 
             var sourceUnit = GameManager.instance.levelManager.GetMap().GetTile(sourcePosition).GetUnit();
             
+
+
+            var pathFinder = new AStarPathfinder();
+
             // Customize the movement cost function, and the found node valid function.
-            var movementCostFunction = GenerateMovementCostFunction(sourceUnit);
+            var movementCostFunction = GenerateMovementCostFunction(pathFinder, sourceUnit);
 
             // Make sure that when a node is found, that if the parent node is occupied, that we will not mark the path as a success.
             FoundNodeValidFunction foundNodeValidFunction = (sourceNode, destinationNode) => {
-                var destinationParent = (GraphNodeTile)destinationNode.ParentNode;
+                var destinationParent = (GraphNodeTile)pathFinder.GetNodeParent(destinationNode);
                 if (destinationParent.Id == sourceNode.Id)
                     return true;
                 return !destinationParent.Tile.HasUnit();
             };
 
-            var pathFinder = new AStarPathfinder(movementCostFunction, null, foundNodeValidFunction);
+
+            pathFinder.movementCost = movementCostFunction;
+            pathFinder.foundNodeValid = foundNodeValidFunction;
             pathFinder.includeDestinationNodeInPathCost = false;
+
+
             var map = GameManager.instance.levelManager.GetMap();
 
             var sourceTile = map.GetTile(sourcePosition);
@@ -59,7 +67,7 @@ namespace Rpg
             });
         }
 
-        public static MovementCostFunction GenerateMovementCostFunction(IUnit activeUnit)
+        public static MovementCostFunction GenerateMovementCostFunction(AStarPathfinder pathFinder, IUnit activeUnit)
         {
             return (sourceNode, destinationNode) =>
             {
@@ -80,11 +88,11 @@ namespace Rpg
                     }
 
                     // If it is a friendly unit, it is not passable if this is the last tile in a units turn. Add additional cost if it is possible to reach on a future turn.
-                    if ((sourceNode.TentativeCost + cost) % activeUnit.MovementSpeed == 0)
+                    if ((pathFinder.GetNodeCost(sourceNode) + cost) % activeUnit.MovementSpeed == 0)
                     {
                         // Moving the full movement amount this turn will take us exactly to this spot. Need to find an empty space on the path, and increase this nodes cost.
                         var previousParent = (GraphNodeTile)destinationNode;
-                        var parentNode = (GraphNodeTile)sourceNode.ParentNode;
+                        var parentNode = (GraphNodeTile)pathFinder.GetNodeParent(sourceNode);
                         var foundEmptyTile = false;
                         var backtrackCost = 0;
 

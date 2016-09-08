@@ -24,17 +24,18 @@ namespace Rpg
             var movementCostFunction = GenerateMovementCostFunction(pathFinder, sourceUnit);
 
             // Make sure that when a node is found, that if the parent node is occupied, that we will not mark the path as a success.
-            FoundNodeValidFunction foundNodeValidFunction = (sourceNode, destinationNode) => {
-                var destinationParent = (GraphNodeTile)pathFinder.GetNodeParent(destinationNode);
-                if (destinationParent.Id == sourceNode.Id)
+            FoundNodeValidFunction foundNodeValidFunction = (sourceNode, destinationNode) =>
+            {
+                var destinationNodeTile = (GraphNodeTile) destinationNode;
+                if (destinationNode.Id == sourceNode.Id)
                     return true;
-                return !destinationParent.Tile.HasUnit();
+                return !destinationNodeTile.Tile.HasUnit();
             };
 
 
             pathFinder.movementCost = movementCostFunction;
             pathFinder.foundNodeValid = foundNodeValidFunction;
-            pathFinder.includeDestinationNodeInPathCost = false;
+            pathFinder.findNodeAdjacentToDestination = true;
 
 
             var map = GameManager.instance.levelManager.GetMap();

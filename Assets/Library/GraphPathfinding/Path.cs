@@ -6,11 +6,13 @@ namespace GraphPathfinding
     {
         public List<IGraphNode> nodes;
         public int Cost { get; private set; }
+        public IGraphNode DestinationNode { get; private set; }
 
-        public Path(List<IGraphNode> nodes, int cost)
+        public Path(List<IGraphNode> nodes, int cost, IGraphNode destinationNode)
         {
             this.nodes = nodes;
             Cost = cost;
+            DestinationNode = destinationNode;
         }
     }
 }

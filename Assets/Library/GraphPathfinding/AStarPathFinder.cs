@@ -19,7 +19,7 @@ namespace GraphPathfinding
         public HeuristicFunction heuristic = ManhattanDistance;
         public FoundNodeValidFunction foundNodeValid = (sourceNode, destinationNode) => true;
 
-        public bool includeDestinationNodeInPathCost = true;
+        public bool findNodeAdjacentToDestination = false;
 
         private Dictionary<IGraphNode, int> nodeCosts = new Dictionary<IGraphNode, int>();
         private Dictionary<IGraphNode, IGraphNode> nodeParents = new Dictionary<IGraphNode, IGraphNode>();
@@ -62,6 +62,9 @@ namespace GraphPathfinding
 
         protected Tuple<Path, HashSet<IGraphNode>> Run(IGraphNode sourceNode, IGraphNode destinationNode, int maxCost)
         {
+            nodeParents = new Dictionary<IGraphNode, IGraphNode>();
+            nodeCosts = new Dictionary<IGraphNode, int>();
+
             var openNodes = new Dictionary<IGraphNode, int>();
             var closedNodes = new HashSet<IGraphNode>();
 
@@ -82,7 +85,7 @@ namespace GraphPathfinding
                     continue;
 
                 // If we are trying to find a path to a destination, then compare the current node to the destination.
-                if (destinationNode != null)
+                if (!findNodeAdjacentToDestination && destinationNode != null)
                 {
                     // If current node is the destination node, then break out of loop.
                     if (currentNode.Id == destinationNode.Id)
@@ -90,11 +93,9 @@ namespace GraphPathfinding
                         // IF the found node function approves of the node, than we've found the correct node. Otherwise, this node is invalid, so we continue to the next open node.
                         if (foundNodeValid(sourceNode, currentNode))
                         {
-                            pathFound = true;
-                            break;
+                            return new Tuple<Path, HashSet<IGraphNode>>(GeneratePath(currentNode, destinationNode), closedNodes);
                         }
-                        else
-                            continue;
+                        continue;
                     }
                 }
 
@@ -103,6 +104,13 @@ namespace GraphPathfinding
                 var neighbors = currentNode.FindNeighbors();
                 foreach (var neighbor in neighbors)
                 {
+                    if (findNodeAdjacentToDestination && destinationNode != null && neighbor.Id == destinationNode.Id)
+                    {
+                        if (foundNodeValid(sourceNode, currentNode))
+                            return new Tuple<Path, HashSet<IGraphNode>>(GeneratePath(currentNode, destinationNode), closedNodes);
+                        continue;
+                    }
+
                     var movementCostValue = movementCost(currentNode, neighbor);
                     if (movementCostValue == -1)
                     {
@@ -123,30 +131,23 @@ namespace GraphPathfinding
                 }
             }
 
-            Path path;
+            return new Tuple<Path, HashSet<IGraphNode>>(null, closedNodes);
+        }
 
-            if (destinationNode != null && pathFound)
+        protected Path GeneratePath(IGraphNode currentNode, IGraphNode destinationNode)
+        {
+            var tmpNode = currentNode;
+            var nodeList = new List<IGraphNode>();
+
+            while (tmpNode != null)
             {
-                var finalNode = includeDestinationNodeInPathCost ? currentNode : GetNodeParent(currentNode);
-                var tmpNode = currentNode;
-                var nodeList = new List<IGraphNode>();
-
-                while (tmpNode != null)
-                {
-                    nodeList.Add(tmpNode);
-                    tmpNode = GetNodeParent(tmpNode);
-                }
-
-                // Reverse list so it goes from start node to goal node.
-                nodeList.Reverse();
-                path = nodeList.Any() ? new Path(nodeList, GetNodeCost(finalNode)) : null;
-            }
-            else
-            {
-                path = null;
+                nodeList.Add(tmpNode);
+                tmpNode = GetNodeParent(tmpNode);
             }
 
-            return new Tuple<Path, HashSet<IGraphNode>>(path, closedNodes);
+            // Reverse list so it goes from start node to goal node.
+            nodeList.Reverse();
+            return new Path(nodeList, GetNodeCost(currentNode), destinationNode);
         }
 
 

@@ -48,21 +48,18 @@ namespace Rpg.GameState.Behaviors.AiTurn
 
         private void ProcessNearestEnemyPath(Path shortestPath, Animator animator)
         {
-            // Remove the first position, since it is the unit's current location.
-            if(shortestPath != null && shortestPath.nodes.Any())
-                shortestPath.nodes.RemoveAt(0);
-
-            // If there are no nodes other than the sourceUnit node, then we should wait, since the unit is trapped, or has 0 movement.
-            if (shortestPath == null || !shortestPath.nodes.Any())
+            // If the path is null, then there is no way to get to a target. The unit should wait.
+            if (shortestPath == null)
             {
                 animator.SetTrigger("Wait");
                 return;
             }
 
-            // Remove the last position, because we only want to move the enemy next to the target.
-            var targetIndex = shortestPath.nodes.Count - 1;
-            var targetNode = (GraphNodeTile)shortestPath.nodes[targetIndex];
-            shortestPath.nodes.RemoveAt(targetIndex);
+            // Remove the first position, since it is the unit's current location.
+            if (shortestPath.nodes.Any())
+                shortestPath.nodes.RemoveAt(0);
+
+            var targetNode = (GraphNodeTile) shortestPath.DestinationNode;
 
             // If the unit is already where it wants to be, and has not acted then perform an action.
             if (!shortestPath.nodes.Any() && ActiveUnit.HasActed == false)

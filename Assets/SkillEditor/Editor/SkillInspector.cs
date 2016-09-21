@@ -17,15 +17,24 @@ namespace SkillEditor.Editor
             skill = target as Skill;
         }
 
+        protected void DisplayList(string label, string propertyName)
+        {
+            var penaltyColors = serializedObject.FindProperty(propertyName);
+
+            EditorGUILayout.PropertyField(penaltyColors, new GUIContent(label), true);
+            serializedObject.ApplyModifiedProperties();
+        }
+
         public override void OnInspectorGUI()
         {
             EditorGUILayout.BeginVertical();
-            skill.effect =
-                (GameObject) EditorGUILayout.ObjectField("Effect", skill.effect, typeof(GameObject), false, null);
+
             skill.source =
                 (GameObject) EditorGUILayout.ObjectField("Source", skill.source, typeof(GameObject), false, null);
             skill.target =
                 (GameObject) EditorGUILayout.ObjectField("Target", skill.target, typeof(GameObject), false, null);
+
+            DisplayList("Object Triggers:", "objectTriggers");
 
             if (GUILayout.Button("Test"))
             {
@@ -68,17 +77,8 @@ namespace SkillEditor.Editor
         private void PlayTest()
         {
             var gameObject = new GameObject("Skill Test");
-            var skillSource = Instantiate(skill.source);
-            skillSource.transform.position = new Vector3(0, 0, 0);
-            skillSource.transform.parent = gameObject.transform;
-
-            var skillTarget = Instantiate(skill.target);
-            skillTarget.transform.position = new Vector3(1, 0, 0);
-            skillTarget.transform.parent = gameObject.transform;
-
-            var skillEffect = Instantiate(skill.effect);
-            skillEffect.transform.position = new Vector3(0, 0, 0);
-            skillEffect.transform.parent = gameObject.transform;
+            var skillTest = gameObject.AddComponent<SkillTest>();
+            skillTest.skill = skill;
         }
     }
 }

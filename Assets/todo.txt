@@ -1,3 +1,5 @@
+Bug: Fix issue where boolean for isTest isn't saving.
+
 Prioritize skill stuff next
 Fireball
 

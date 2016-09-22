@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Assets.SkillEditor.Scripts;
 using TileMapEditor;
 using UnityEditor;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace SkillEditor.Editor
         {
             GameObject gameObject = new GameObject("Skill");
             gameObject.AddComponent<Skill>();
+            gameObject.AddComponent<SkillRenderer>();
         }
     }
 }

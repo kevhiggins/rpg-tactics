@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Assets.SkillEditor.Scripts;
 using Rpg.Unit;
 using UnityEngine;
 
@@ -12,28 +13,51 @@ namespace SkillEditor
         // Testing attributes
         public GameObject source;
         public GameObject target;
+        public bool isTest;
+
+        // TODO Add checkbox to enable testing
 
         public List<ObjectTrigger> objectTriggers = new List<ObjectTrigger>();
 
-        public delegate void TriggerObjectHandler(string triggerName);
-        public event TriggerObjectHandler OnTriggerObject = triggerName => { };
+        private SkillRenderer skillRenderer;
 
-        public delegate void EndSkillHanlder();
-        public event EndSkillHanlder OnEndSkill = () => { };
-
-        public void TriggerObject(string triggerName)
+        public void Awake()
         {
-            OnTriggerObject(triggerName);
-
-            // Make this into an event
-            // Inspector hooks into event
-            // On event trigger, 
-
         }
 
-        public void EndSkill()
+        public void Start()
         {
-            OnEndSkill();
+            // If test, then run the skill with the test params.
+            if (isTest)
+            {
+                var skillSource = Instantiate(source);
+                skillSource.transform.position = new Vector3(0, 0, 0);
+                skillSource.transform.parent = gameObject.transform;
+
+                var skillTarget = Instantiate(target);
+                skillTarget.transform.position = new Vector3(1, 0, 0);
+                skillTarget.transform.parent = gameObject.transform;
+
+                var sourceUnit = skillSource.GetComponent<IUnit>();
+                var targetUnits = new List<IUnit>();
+                targetUnits.Add(skillTarget.GetComponent<IUnit>());
+                var skillTargetObject = new SkillTarget(target.transform.position, targetUnits);
+
+                Cast(sourceUnit, skillTargetObject);
+            }
+        }
+
+        public void Cast(IUnit sourceUnit, ISkillTarget skillTarget)
+        {
+            skillRenderer = GetComponent<SkillRenderer>();
+
+            skillRenderer.skill = this;
+            skillRenderer.skillTarget = skillTarget;
+            skillRenderer.sourceUnit = sourceUnit;
+
+            var animator = GetComponent<Animator>();
+            animator.SetTrigger("StartCast");
+           
         }
     }
 }

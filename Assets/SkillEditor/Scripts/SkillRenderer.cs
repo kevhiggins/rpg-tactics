@@ -1,0 +1,102 @@
+﻿using System;
+using System.Collections.Generic;
+using Rpg.Unit;
+using SkillEditor;
+using UnityEngine;
+
+namespace Assets.SkillEditor.Scripts
+{
+    public class SkillRenderer : MonoBehaviour
+    {
+        [HideInInspector]
+        public Skill skill;
+        [HideInInspector]
+        public IUnit sourceUnit;
+        [HideInInspector]
+        public ISkillTarget skillTarget;
+
+        private Dictionary<string, List<GameObject>> triggeredObjects = new Dictionary<string, List<GameObject>>();
+
+        public void OnDestroy()
+        {
+            // TODO Destroy all trigger objects
+        }
+
+        public void TriggerObject(string triggerName)
+        {
+            var triggerObject = FindTriggerObject(triggerName);
+            if (triggerObject == null)
+                throw new Exception("Could not find trigger object with name " + triggerName);
+
+            var prefab = triggerObject.triggerableItem;
+
+
+            if (triggerObject.parent == TriggerParent.Source)
+            {
+                CreateTriggerObject(triggerName, prefab, sourceUnit.GetGameObject().transform.position, sourceUnit.GetGameObject());
+            }
+            else if (triggerObject.parent == TriggerParent.Destination)
+            {
+                foreach (var targetUnit in skillTarget.Units)
+                {
+                    CreateTriggerObject(triggerName, prefab, targetUnit.GetGameObject().transform.position, targetUnit.GetGameObject());
+                }
+            }
+        }
+
+        protected void CreateTriggerObject(string triggerName, GameObject prefab, Vector3 parentPosition, GameObject parent)
+        {
+            var triggerObject = Instantiate(prefab);
+
+            if (!triggeredObjects.ContainsKey(triggerName))
+            {
+                triggeredObjects[triggerName] = new List<GameObject>();
+            }
+            triggeredObjects[triggerName].Add(triggerObject);
+
+            // Offset the position of the GameObject based on the parentPosition
+            triggerObject.transform.position = parentPosition + triggerObject.transform.position;
+            if (parent != null)
+            {
+                triggerObject.transform.parent = parent.transform;
+            }
+        }
+
+        public void DestroyObject(string triggerName)
+        {
+            if (triggeredObjects.ContainsKey(triggerName))
+            {
+                foreach (var item in triggeredObjects[triggerName])
+                {
+                    Destroy(item);
+                }
+                triggeredObjects[triggerName].Clear();
+                triggeredObjects.Remove(triggerName);
+            }
+        }
+
+        public void EndSkill()
+        {
+            foreach (KeyValuePair<string, List<GameObject>> entry in triggeredObjects)
+            {
+                foreach (var item in entry.Value)
+                {
+                    Destroy(item);
+                }
+                entry.Value.Clear();
+            }
+            triggeredObjects.Clear();
+        }
+
+
+        protected ObjectTrigger FindTriggerObject(string name)
+        {
+            foreach (var objectTrigger in skill.objectTriggers)
+            {
+                if (objectTrigger.name == name)
+                    return objectTrigger;
+            }
+            return null;
+        }
+    }
+}

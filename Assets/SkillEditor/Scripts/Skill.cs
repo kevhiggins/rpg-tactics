@@ -27,37 +27,44 @@ namespace SkillEditor
 
         public void Start()
         {
+            skillRenderer = GetComponent<SkillRenderer>();
             // If test, then run the skill with the test params.
             if (isTest)
             {
-                var skillSource = Instantiate(source);
-                skillSource.transform.position = new Vector3(0, 0, 0);
-                skillSource.transform.parent = gameObject.transform;
-
-                var skillTarget = Instantiate(target);
-                skillTarget.transform.position = new Vector3(1, 0, 0);
-                skillTarget.transform.parent = gameObject.transform;
-
-                var sourceUnit = skillSource.GetComponent<IUnit>();
-                var targetUnits = new List<IUnit>();
-                targetUnits.Add(skillTarget.GetComponent<IUnit>());
-                var skillTargetObject = new SkillTarget(target.transform.position, targetUnits);
-
-                Cast(sourceUnit, skillTargetObject);
+                Test();
             }
+        }
+
+        public void Test()
+        {
+            var skillSource = Instantiate(source);
+            skillSource.transform.position = new Vector3(0, 0, 0);
+            skillSource.transform.parent = gameObject.transform;
+
+            var skillTarget = Instantiate(target);
+            skillTarget.transform.position = new Vector3(1, 0, 0);
+            skillTarget.transform.parent = gameObject.transform;
+
+            var sourceUnit = skillSource.GetComponent<IUnit>();
+            var targetUnits = new List<IUnit>();
+            targetUnits.Add(skillTarget.GetComponent<IUnit>());
+            var skillTargetObject = new SkillTarget(target.transform.position, targetUnits);
+
+            // Recast skill whenever it ends.
+            skillRenderer.OnAfterEndSkill += () => { Cast(sourceUnit, skillTargetObject); };
+            
+            // Start casting skill.
+            Cast(sourceUnit, skillTargetObject);
         }
 
         public void Cast(IUnit sourceUnit, ISkillTarget skillTarget)
         {
-            skillRenderer = GetComponent<SkillRenderer>();
-
             skillRenderer.skill = this;
             skillRenderer.skillTarget = skillTarget;
             skillRenderer.sourceUnit = sourceUnit;
 
             var animator = GetComponent<Animator>();
             animator.SetTrigger("StartCast");
-           
         }
     }
 }

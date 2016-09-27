@@ -1,4 +1,23 @@
-Bug: Fix issue where boolean for isTest isn't saving.
+Control hits
+Make multiple targets possible
+Make sure you can target empty tiles
+
+
+
+Research shaders (How do they work?)
+
+Wishlist:
+Camera movement (Screen shake)
+
+
+Talk to Joe
+Spell hits/dmg
+	over time
+	direct
+	aoe
+		Allow specifying cross/line etc
+
+
 
 Prioritize skill stuff next
 Fireball

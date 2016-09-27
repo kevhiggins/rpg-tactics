@@ -27,6 +27,7 @@ namespace SkillEditor.Editor
 
         public override void OnInspectorGUI()
         {
+//            serializedObject.Update();
             EditorGUILayout.BeginVertical();
 
             skill.source =
@@ -39,6 +40,12 @@ namespace SkillEditor.Editor
             DisplayList("Object Triggers:", "objectTriggers");
 
             EditorGUILayout.EndVertical();
+
+            // Save any changes to the Skill
+            if (GUI.changed)
+            {
+                EditorUtility.SetDirty(skill);
+            }
         }
     }
 }

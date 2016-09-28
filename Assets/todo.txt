@@ -1,3 +1,6 @@
+Test target unit
+Contemplate how to do a move like Life Drain
+
 Control hits
 Make multiple targets possible
 Make sure you can target empty tiles

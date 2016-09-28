@@ -18,6 +18,7 @@ namespace SkillEditor
         // TODO Add checkbox to enable testing
 
         public List<ObjectTrigger> objectTriggers = new List<ObjectTrigger>();
+        public List<Hit> hits = new List<Hit>();
 
         private SkillRenderer skillRenderer;
 

@@ -38,6 +38,7 @@ namespace SkillEditor.Editor
             skill.isTest = EditorGUILayout.Toggle("Enable Test Mode", skill.isTest);
 
             DisplayList("Object Triggers:", "objectTriggers");
+            DisplayList("Hits", "hits");
 
             EditorGUILayout.EndVertical();
 

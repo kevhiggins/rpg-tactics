@@ -1,3 +1,8 @@
+Create Menu for selecting skills
+Make sure that the script for selecting a target is generalized to work for both skills and attack
+See if the battle system can be generalized for both skills and attack.
+
+
 Test target unit
 Contemplate how to do a move like Life Drain
 

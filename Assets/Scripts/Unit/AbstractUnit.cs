@@ -1,13 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
 using Assets.Scripts.Unity;
 using DG.Tweening;
 using Rpg.Map;
+using SkillEditor;
 using UnityEngine;
 
 namespace Rpg.Unit
 {
     public abstract class AbstractUnit : MonoBehaviour, IUnit
     {
+        public List<GameObject> skills;
+        private List<Skill> skillsCache;
+        public List<Skill> Skills
+        {
+            get
+            {
+                if (skillsCache == null)
+                {
+                    skillsCache = new List<Skill>();
+                    foreach (var skill in skills)
+                    {
+                        skillsCache.Add(skill.GetComponent<Skill>());
+                    }
+                }
+                return skillsCache;
+            }
+        }
+
         public string unitName = "UNNAMED";
         public int currentHp = 20;
         public int maxHp = 20;

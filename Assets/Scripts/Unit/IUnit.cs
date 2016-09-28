@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Rpg.Map;
+using SkillEditor;
 
 namespace Rpg.Unit
 {
@@ -32,7 +34,8 @@ namespace Rpg.Unit
         bool IsAi { get; }
         int TeamId { get; }
 
-
+        List<Skill> Skills { get; }
+        
         bool HasMoved { get; }
         bool HasActed { get; }
 

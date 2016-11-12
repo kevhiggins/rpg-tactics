@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public GameObject targetActionBox;
     public GameObject wizardHitEffect;
     public GameObject wizardCastEffect;
+    public GameObject unitHitSfx;
     public Animator GameStateMachine { get; private set; }
     
 

@@ -25,6 +25,8 @@ namespace Rpg
             AttackHitHandler attackHitHandler = null;
             sourceUnit.OnAttackHit += attackHitHandler = () =>
             {
+                Destroy(Instantiate(GameManager.instance.unitHitSfx), 2);
+
                 // Unregister the callback
                 sourceUnit.OnAttackHit -= attackHitHandler;
 

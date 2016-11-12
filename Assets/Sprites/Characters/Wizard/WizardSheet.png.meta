@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 41d5af66c621176409f4b039170e3af9
-timeCreated: 1478981269
+timeCreated: 1478983727
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -82,7 +82,7 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 9
-      pivot: {x: 0.5, y: 0.23}
+      pivot: {x: 0.4, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: -1
@@ -95,7 +95,7 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 9
-      pivot: {x: 0.5, y: 0.23}
+      pivot: {x: 0.4, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: -1
@@ -108,7 +108,7 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 9
-      pivot: {x: 0.5, y: 0.23}
+      pivot: {x: 0.4, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: -1
@@ -121,7 +121,7 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 9
-      pivot: {x: 0.5, y: 0.23}
+      pivot: {x: 0.4, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: -1
@@ -134,7 +134,7 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 9
-      pivot: {x: 0.5, y: 0.23}
+      pivot: {x: 0.4, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: -1
@@ -147,7 +147,7 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 9
-      pivot: {x: 0.5, y: 0.23}
+      pivot: {x: 0.4, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: -1
@@ -155,12 +155,12 @@ TextureImporter:
       name: WizardSheet_6
       rect:
         serializedVersion: 2
-        x: 130
+        x: 131
         y: 130
         width: 64
         height: 64
       alignment: 9
-      pivot: {x: 0.5, y: 0.23}
+      pivot: {x: 0.4, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: -1
@@ -173,7 +173,7 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 9
-      pivot: {x: 0.5, y: 0.23}
+      pivot: {x: 0.4, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: -1
@@ -186,7 +186,7 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 9
-      pivot: {x: 0.5, y: 0.23}
+      pivot: {x: 0.4, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: -1
@@ -199,7 +199,7 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 9
-      pivot: {x: 0.5, y: 0.38}
+      pivot: {x: 0.5, y: 0.41}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: -1
@@ -207,12 +207,12 @@ TextureImporter:
       name: WizardSheet_10
       rect:
         serializedVersion: 2
-        x: 130
+        x: 129
         y: 65
         width: 64
         height: 64
       alignment: 9
-      pivot: {x: 0.5, y: 0.23}
+      pivot: {x: 0.4, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: -1
@@ -225,7 +225,7 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 9
-      pivot: {x: 0.5, y: 0.23}
+      pivot: {x: 0.4, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: -1
@@ -238,7 +238,7 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 9
-      pivot: {x: 0.5, y: 0.23}
+      pivot: {x: 0.4, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: -1
@@ -251,7 +251,7 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 9
-      pivot: {x: 0.5, y: 0.23}
+      pivot: {x: 0.4, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: -1
@@ -264,7 +264,7 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 9
-      pivot: {x: 0.5, y: 0.23}
+      pivot: {x: 0.4, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: -1
@@ -277,7 +277,7 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 9
-      pivot: {x: 0.5, y: 0.23}
+      pivot: {x: 0.4, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: -1

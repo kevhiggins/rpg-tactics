@@ -117,6 +117,12 @@ namespace Rpg.Map
                     Units.Add(unit);
                 }
             }
+
+            var editorMap = GameObject.GetComponent<TileMap>();
+            if (!editorMap.testMode)
+            {
+                GameObject.DestroyImmediate(tiles.gameObject);
+            }
         }
     }
 }

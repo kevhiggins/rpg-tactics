@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using GraphPathfinding;
 using Rpg.Map;
+using Rpg.PathFinding;
 using Rpg.Unit;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -14,7 +17,7 @@ namespace Rpg.Widgets
         public HighlightAttackWidget(IUnit unit)
         {
             var map = GameManager.instance.levelManager.GetMap();
-            AttackTilePositions = GetAdjacentTilePositions(unit.GetTile().tilePosition);
+            AttackTilePositions = GetAdjacentTilePositions(unit);
             AttackTilePositions.Remove(unit.GetTile().tilePosition);
 
 
@@ -35,19 +38,21 @@ namespace Rpg.Widgets
         {
         }
 
-        protected List<TilePosition> GetAdjacentTilePositions(TilePosition tilePosition)
+        protected List<TilePosition> GetAdjacentTilePositions(IUnit unit)
         {
             var validAdjacentTilePositions = new List<TilePosition>();
-            var map = GameManager.instance.levelManager.GetMap();
+
+            var pathFinder = new AStarPathfinder();
+            var nodesInRange = pathFinder.FindNodesInCostRange(unit.GetTile().GraphNode, unit.AttackRange);
 
             var tiles = new List<Tile>();
+            foreach (var node in nodesInRange)
+            {
+                var tileNode = (GraphNodeTile)node;
+                tiles.Add(tileNode.Tile);
+            }
 
-            tiles.Add(map.GetTile(tilePosition.x - 1, tilePosition.y));
-            tiles.Add(map.GetTile(tilePosition.x + 1, tilePosition.y));
-            tiles.Add(map.GetTile(tilePosition.x, tilePosition.y - 1));
-            tiles.Add(map.GetTile(tilePosition.x, tilePosition.y + 1));
-
-            foreach(var tile in tiles)
+            foreach (var tile in tiles)
             {
                 if (tile == null || !tile.IsPassable)
                     continue;

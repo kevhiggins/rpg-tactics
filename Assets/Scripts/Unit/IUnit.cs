@@ -31,6 +31,7 @@ namespace Rpg.Unit
         bool IsDead { get; }
         bool IsAi { get; }
         int TeamId { get; }
+        int AttackRange { get; }
 
 
         bool HasMoved { get; }

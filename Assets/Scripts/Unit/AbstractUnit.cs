@@ -20,6 +20,7 @@ namespace Rpg.Unit
         public int experienceToLevel = 30;
         public bool isAi = false;
         public int teamID = 1;
+        public int attackRange = 1;
 
         public Vector2 startPosition;
         public GameObject deathSound;
@@ -107,6 +108,7 @@ namespace Rpg.Unit
 
         public bool IsDead { get; private set; }
 
+        public int AttackRange { get { return attackRange; } }
         public bool HasMoved { get; private set; }
         public bool HasActed { get; private set; }
 

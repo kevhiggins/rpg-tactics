@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public GameObject activeUnitMenu;
     public GameObject unitInfoBox;
     public GameObject targetActionBox;
+    public GameObject wizardHitEffect;
+    public GameObject wizardCastEffect;
     public Animator GameStateMachine { get; private set; }
     
 

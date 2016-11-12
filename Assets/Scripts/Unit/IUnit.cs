@@ -32,6 +32,8 @@ namespace Rpg.Unit
         bool IsAi { get; }
         int TeamId { get; }
         int AttackRange { get; }
+        bool DoSpellAttack { get; }
+        float SpellDelay { get; }
 
 
         bool HasMoved { get; }

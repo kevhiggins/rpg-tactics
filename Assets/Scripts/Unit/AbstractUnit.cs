@@ -21,6 +21,9 @@ namespace Rpg.Unit
         public bool isAi = false;
         public int teamID = 1;
         public int attackRange = 1;
+        public bool doSpellAttack = false;
+        public float spellDelay = .5f;
+
 
         public Vector2 startPosition;
         public GameObject deathSound;
@@ -109,6 +112,8 @@ namespace Rpg.Unit
         public bool IsDead { get; private set; }
 
         public int AttackRange { get { return attackRange; } }
+        public bool DoSpellAttack { get { return doSpellAttack; } }
+        public float SpellDelay { get { return spellDelay; } }
         public bool HasMoved { get; private set; }
         public bool HasActed { get; private set; }
 

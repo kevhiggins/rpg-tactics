@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Assets.Scripts.Unity;
 using Rpg.Unit;
 using UnityEngine;
@@ -12,6 +13,14 @@ namespace Rpg
 
         public void AttackUnit(IUnit sourceUnit, IUnit targetUnit, Action onComplete)
         {
+            if (sourceUnit.DoSpellAttack)
+            {
+                var wizardCastEffect = Instantiate(GameManager.instance.wizardCastEffect,
+                    sourceUnit.GetGameObject().transform.position, Quaternion.identity);
+                Destroy(wizardCastEffect, 5);
+                StartCoroutine(SpellHit(sourceUnit, targetUnit));
+            }
+
             // When the hit lands, apply damage to the target unit.
             AttackHitHandler attackHitHandler = null;
             sourceUnit.OnAttackHit += attackHitHandler = () =>
@@ -58,6 +67,14 @@ namespace Rpg
             // Otherwise, just end the turn after the attack.
 
             sourceUnit.Attack(targetUnit.GetTile().tilePosition);
+        }
+
+        protected IEnumerator SpellHit(IUnit sourceUnit, IUnit targetUnit)
+        {
+            yield return new WaitForSeconds(sourceUnit.SpellDelay);
+            var wizardHitEffect = Instantiate(GameManager.instance.wizardHitEffect,
+                targetUnit.GetGameObject().transform.position, Quaternion.identity);
+            Destroy(wizardHitEffect, 5);
         }
     }
 }
